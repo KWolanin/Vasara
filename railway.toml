@@ -1,0 +1,7 @@
+[builds]
+  [[builds]]
+  # Definiujemy frontend
+  path = "vasara/vasaraF"
+  build = "npm run build"
+  start = "npm run serve"
+  env = { "CI" = "true" }
