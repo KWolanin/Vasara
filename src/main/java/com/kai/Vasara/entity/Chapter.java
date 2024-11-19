@@ -17,6 +17,6 @@ public class Chapter {
     private String chapterTitle;
     @Lob
     private String content;
-    private long authorId;
+    //private long authorId;
     private long storyId;
 }

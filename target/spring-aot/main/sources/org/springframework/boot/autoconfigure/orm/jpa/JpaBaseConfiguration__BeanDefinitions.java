@@ -33,7 +33,7 @@ public class JpaBaseConfiguration__BeanDefinitions {
      * Get the bean instance for 'persistenceManagedTypes'.
      */
     private static PersistenceManagedTypes getPersistenceManagedTypesInstance() {
-      List<String> managedClassNames = List.of("com.kai.Vasara.entity.Chapter");
+      List<String> managedClassNames = List.of("com.kai.Vasara.entity.Author", "com.kai.Vasara.entity.Chapter", "com.kai.Vasara.entity.Story");
       List<String> managedPackages = List.of();
       return PersistenceManagedTypes.of(managedClassNames, managedPackages);
     }

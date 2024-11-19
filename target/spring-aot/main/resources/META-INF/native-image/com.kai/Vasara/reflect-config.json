@@ -93,10 +93,66 @@
     "queryAllDeclaredMethods": true
   },
   {
+    "name": "com.kai.Vasara.controller.AuthorController",
+    "queryAllPublicMethods": true,
+    "queryAllDeclaredMethods": true,
+    "methods": [
+      {
+        "name": "addAuthor",
+        "parameterTypes": [
+          "com.kai.Vasara.entity.Author"
+        ]
+      },
+      {
+        "name": "getAuthor",
+        "parameterTypes": [
+          "java.lang.Long"
+        ]
+      },
+      {
+        "name": "getAuthorName",
+        "parameterTypes": [
+          "java.lang.Long"
+        ]
+      },
+      {
+        "name": "getAuthors",
+        "parameterTypes": [ ]
+      }
+    ],
+    "queriedMethods": [
+      {
+        "name": "<init>",
+        "parameterTypes": [
+          "com.kai.Vasara.service.AuthorService"
+        ]
+      }
+    ]
+  },
+  {
     "name": "com.kai.Vasara.controller.ChapterController",
     "queryAllPublicMethods": true,
     "queryAllDeclaredMethods": true,
     "methods": [
+      {
+        "name": "addChapter",
+        "parameterTypes": [
+          "com.kai.Vasara.entity.Chapter"
+        ]
+      },
+      {
+        "name": "getChapter",
+        "parameterTypes": [
+          "java.lang.Long"
+        ]
+      },
+      {
+        "name": "getChapterByStoryAndNumber",
+        "parameterTypes": [
+          "java.lang.Long",
+          "java.lang.Long"
+        ]
+      },
       {
         "name": "getChapters",
         "parameterTypes": [ ]
@@ -112,14 +168,94 @@
     ]
   },
   {
-    "name": "com.kai.Vasara.entity.Chapter",
+    "name": "com.kai.Vasara.controller.StoryController",
+    "queryAllPublicMethods": true,
+    "queryAllDeclaredMethods": true,
+    "methods": [
+      {
+        "name": "addStory",
+        "parameterTypes": [
+          "com.kai.Vasara.entity.Story"
+        ]
+      },
+      {
+        "name": "getMyStories",
+        "parameterTypes": [
+          "java.lang.Long"
+        ]
+      },
+      {
+        "name": "getStories",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getStory",
+        "parameterTypes": [
+          "java.lang.Long"
+        ]
+      }
+    ],
+    "queriedMethods": [
+      {
+        "name": "<init>",
+        "parameterTypes": [
+          "com.kai.Vasara.service.StoryService"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "com.kai.Vasara.entity.Author",
     "allDeclaredFields": true,
     "allDeclaredConstructors": true,
     "methods": [
       {
-        "name": "getAuthorId",
+        "name": "getId",
         "parameterTypes": [ ]
       },
+      {
+        "name": "getLogin",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getPassword",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getUsername",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "setId",
+        "parameterTypes": [
+          "java.lang.Long"
+        ]
+      },
+      {
+        "name": "setLogin",
+        "parameterTypes": [
+          "java.lang.String"
+        ]
+      },
+      {
+        "name": "setPassword",
+        "parameterTypes": [
+          "java.lang.String"
+        ]
+      },
+      {
+        "name": "setUsername",
+        "parameterTypes": [
+          "java.lang.String"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "com.kai.Vasara.entity.Chapter",
+    "allDeclaredFields": true,
+    "allDeclaredConstructors": true,
+    "methods": [
       {
         "name": "getChapterNo",
         "parameterTypes": [ ]
@@ -139,12 +275,6 @@
       {
         "name": "getStoryId",
         "parameterTypes": [ ]
-      },
-      {
-        "name": "setAuthorId",
-        "parameterTypes": [
-          "long"
-        ]
       },
       {
         "name": "setChapterNo",
@@ -179,18 +309,494 @@
     ]
   },
   {
+    "name": "com.kai.Vasara.entity.Story",
+    "allDeclaredFields": true,
+    "allDeclaredConstructors": true,
+    "methods": [
+      {
+        "name": "getAuthorId",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getDescription",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getFandoms",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getId",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getPublishDt",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getTags",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getTitle",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getUpdateDt",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "isFinished",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "setAuthorId",
+        "parameterTypes": [
+          "long"
+        ]
+      },
+      {
+        "name": "setDescription",
+        "parameterTypes": [
+          "java.lang.String"
+        ]
+      },
+      {
+        "name": "setFandoms",
+        "parameterTypes": [
+          "java.util.List"
+        ]
+      },
+      {
+        "name": "setFinished",
+        "parameterTypes": [
+          "boolean"
+        ]
+      },
+      {
+        "name": "setId",
+        "parameterTypes": [
+          "java.lang.Long"
+        ]
+      },
+      {
+        "name": "setPublishDt",
+        "parameterTypes": [
+          "java.time.ZonedDateTime"
+        ]
+      },
+      {
+        "name": "setTags",
+        "parameterTypes": [
+          "java.util.List"
+        ]
+      },
+      {
+        "name": "setTitle",
+        "parameterTypes": [
+          "java.lang.String"
+        ]
+      },
+      {
+        "name": "setUpdateDt",
+        "parameterTypes": [
+          "java.time.ZonedDateTime"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "com.kai.Vasara.model.AuthorDAO",
+    "allDeclaredFields": true,
+    "allDeclaredConstructors": true,
+    "queryAllPublicMethods": true,
+    "queryAllDeclaredMethods": true,
+    "methods": [
+      {
+        "name": "getChapters",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getId",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getStories",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getUsername",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "setChapters",
+        "parameterTypes": [
+          "java.util.List"
+        ]
+      },
+      {
+        "name": "setId",
+        "parameterTypes": [
+          "long"
+        ]
+      },
+      {
+        "name": "setStories",
+        "parameterTypes": [
+          "java.util.List"
+        ]
+      },
+      {
+        "name": "setUsername",
+        "parameterTypes": [
+          "java.lang.String"
+        ]
+      }
+    ],
+    "queriedMethods": [
+      {
+        "name": "<init>",
+        "parameterTypes": [ ]
+      }
+    ]
+  },
+  {
+    "name": "com.kai.Vasara.model.ChapterDAO",
+    "allDeclaredFields": true,
+    "allDeclaredConstructors": true,
+    "queryAllPublicMethods": true,
+    "queryAllDeclaredMethods": true,
+    "methods": [
+      {
+        "name": "getChapterNo",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getChapterTitle",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getContent",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getId",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getStoryId",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "setChapterNo",
+        "parameterTypes": [
+          "int"
+        ]
+      },
+      {
+        "name": "setChapterTitle",
+        "parameterTypes": [
+          "java.lang.String"
+        ]
+      },
+      {
+        "name": "setContent",
+        "parameterTypes": [
+          "java.lang.String"
+        ]
+      },
+      {
+        "name": "setId",
+        "parameterTypes": [
+          "long"
+        ]
+      },
+      {
+        "name": "setStoryId",
+        "parameterTypes": [
+          "long"
+        ]
+      }
+    ],
+    "queriedMethods": [
+      {
+        "name": "<init>",
+        "parameterTypes": [ ]
+      }
+    ]
+  },
+  {
+    "name": "com.kai.Vasara.model.StoryDAO",
+    "allDeclaredFields": true,
+    "allDeclaredConstructors": true,
+    "queryAllPublicMethods": true,
+    "queryAllDeclaredMethods": true,
+    "fields": [
+      {
+        "name": "authorService"
+      },
+      {
+        "name": "chapterService"
+      }
+    ],
+    "methods": [
+      {
+        "name": "getAuthorName",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getAuthorService",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getChapters",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getChapterService",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getChaptersNumber",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getDescription",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getFandoms",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getId",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getPublishDt",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getTags",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getTitle",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getUpdateDt",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "isFinished",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "setAuthorName",
+        "parameterTypes": [
+          "java.lang.String"
+        ]
+      },
+      {
+        "name": "setAuthorService",
+        "parameterTypes": [
+          "com.kai.Vasara.service.AuthorService"
+        ]
+      },
+      {
+        "name": "setChapters",
+        "parameterTypes": [
+          "java.util.List"
+        ]
+      },
+      {
+        "name": "setChapterService",
+        "parameterTypes": [
+          "com.kai.Vasara.service.ChapterService"
+        ]
+      },
+      {
+        "name": "setChaptersNumber",
+        "parameterTypes": [
+          "int"
+        ]
+      },
+      {
+        "name": "setDescription",
+        "parameterTypes": [
+          "java.lang.String"
+        ]
+      },
+      {
+        "name": "setFandoms",
+        "parameterTypes": [
+          "java.util.List"
+        ]
+      },
+      {
+        "name": "setFinished",
+        "parameterTypes": [
+          "boolean"
+        ]
+      },
+      {
+        "name": "setId",
+        "parameterTypes": [
+          "long"
+        ]
+      },
+      {
+        "name": "setPublishDt",
+        "parameterTypes": [
+          "java.time.ZonedDateTime"
+        ]
+      },
+      {
+        "name": "setTags",
+        "parameterTypes": [
+          "java.util.List"
+        ]
+      },
+      {
+        "name": "setTitle",
+        "parameterTypes": [
+          "java.lang.String"
+        ]
+      },
+      {
+        "name": "setUpdateDt",
+        "parameterTypes": [
+          "java.time.ZonedDateTime"
+        ]
+      }
+    ],
+    "queriedMethods": [
+      {
+        "name": "<init>",
+        "parameterTypes": [ ]
+      }
+    ]
+  },
+  {
+    "name": "com.kai.Vasara.repository.AuthorRepository",
+    "allPublicMethods": true
+  },
+  {
     "name": "com.kai.Vasara.repository.ChapterRepository",
     "allPublicMethods": true
   },
   {
+    "name": "com.kai.Vasara.repository.StoryRepository",
+    "allPublicMethods": true
+  },
+  {
+    "name": "com.kai.Vasara.SecurityConfig",
+    "queryAllPublicMethods": true,
+    "queryAllDeclaredMethods": true,
+    "allPublicMethods": true,
+    "allDeclaredMethods": true,
+    "queriedMethods": [
+      {
+        "name": "<init>",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "securityFilterChain",
+        "parameterTypes": [
+          "org.springframework.security.config.annotation.web.builders.HttpSecurity"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "com.kai.Vasara.SecurityConfig$$SpringCGLIB$$0",
+    "allDeclaredFields": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "queriedMethods": [
+      {
+        "name": "<init>",
+        "parameterTypes": [ ]
+      }
+    ]
+  },
+  {
+    "name": "com.kai.Vasara.SecurityConfig$$SpringCGLIB$$FastClass$$0",
+    "allDeclaredConstructors": true
+  },
+  {
+    "name": "com.kai.Vasara.SecurityConfig$$SpringCGLIB$$FastClass$$1",
+    "allDeclaredConstructors": true
+  },
+  {
+    "name": "com.kai.Vasara.service.AuthorService",
+    "allDeclaredFields": true,
+    "allDeclaredConstructors": true,
+    "queryAllPublicMethods": true,
+    "queryAllDeclaredMethods": true,
+    "methods": [
+      {
+        "name": "getAll",
+        "parameterTypes": [ ]
+      }
+    ],
+    "queriedMethods": [
+      {
+        "name": "<init>",
+        "parameterTypes": [
+          "com.kai.Vasara.repository.AuthorRepository"
+        ]
+      }
+    ]
+  },
+  {
     "name": "com.kai.Vasara.service.ChapterService",
+    "allDeclaredFields": true,
+    "allDeclaredConstructors": true,
+    "queryAllPublicMethods": true,
+    "queryAllDeclaredMethods": true,
+    "allPublicMethods": true,
+    "allDeclaredMethods": true,
+    "methods": [
+      {
+        "name": "getAll",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getChapterByStoryIdAndNumber",
+        "parameterTypes": [
+          "java.lang.Long",
+          "java.lang.Long"
+        ]
+      }
+    ],
+    "queriedMethods": [
+      {
+        "name": "<init>",
+        "parameterTypes": [
+          "com.kai.Vasara.repository.ChapterRepository"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "com.kai.Vasara.service.ChapterService$$SpringCGLIB$$0",
+    "allDeclaredFields": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "com.kai.Vasara.service.StoryService",
     "queryAllPublicMethods": true,
     "queryAllDeclaredMethods": true,
     "queriedMethods": [
       {
         "name": "<init>",
         "parameterTypes": [
-          "com.kai.Vasara.repository.ChapterRepository"
+          "com.kai.Vasara.repository.StoryRepository",
+          "com.kai.Vasara.service.AuthorService",
+          "com.kai.Vasara.service.ChapterService"
         ]
       }
     ]
@@ -226,6 +832,31 @@
       "typeReachable": "com.kai.Vasara.VasaraApplication"
     },
     "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": [ ]
+      }
+    ]
+  },
+  {
+    "name": "com.kai.Vasara.WebConfig",
+    "queryAllPublicMethods": true,
+    "queryAllDeclaredMethods": true,
+    "allPublicMethods": true,
+    "allDeclaredMethods": true,
+    "queriedMethods": [
+      {
+        "name": "<init>",
+        "parameterTypes": [ ]
+      }
+    ]
+  },
+  {
+    "name": "com.kai.Vasara.WebConfig$$SpringCGLIB$$0",
+    "allDeclaredFields": true,
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "queriedMethods": [
       {
         "name": "<init>",
         "parameterTypes": [ ]
@@ -731,6 +1362,9 @@
     ]
   },
   {
+    "name": "java.lang.Boolean"
+  },
+  {
     "name": "java.lang.Enum",
     "methods": [
       {
@@ -763,8 +1397,17 @@
     "allDeclaredConstructors": true
   },
   {
+    "name": "java.net.InetSocketAddress"
+  },
+  {
+    "name": "java.net.SocketAddress"
+  },
+  {
     "name": "java.net.URI",
     "allDeclaredConstructors": true
+  },
+  {
+    "name": "java.nio.charset.Charset"
   },
   {
     "name": "java.sql.Date",
@@ -789,6 +1432,15 @@
     "queryAllPublicMethods": true
   },
   {
+    "name": "java.time.Duration"
+  },
+  {
+    "name": "java.time.Instant"
+  },
+  {
+    "name": "java.time.ZonedDateTime"
+  },
+  {
     "name": "java.util.concurrent.Executor",
     "queryAllPublicMethods": true
   },
@@ -804,11 +1456,20 @@
     "name": "java.util.List"
   },
   {
+    "name": "java.util.Locale"
+  },
+  {
+    "name": "java.util.Locale$LanguageRange"
+  },
+  {
     "name": "java.util.Map"
   },
   {
     "name": "java.util.Properties",
     "allPublicMethods": true
+  },
+  {
+    "name": "java.util.Set"
   },
   {
     "name": "javax.inject.Inject"
@@ -2547,23 +3208,6 @@
       {
         "name": "<init>",
         "parameterTypes": [ ]
-      }
-    ]
-  },
-  {
-    "name": "org.springframework.boot.autoconfigure.security.servlet.SpringBootWebSecurityConfiguration$SecurityFilterChainConfiguration",
-    "queryAllPublicMethods": true,
-    "queryAllDeclaredMethods": true,
-    "queriedMethods": [
-      {
-        "name": "<init>",
-        "parameterTypes": [ ]
-      },
-      {
-        "name": "defaultSecurityFilterChain",
-        "parameterTypes": [
-          "org.springframework.security.config.annotation.web.builders.HttpSecurity"
-        ]
       }
     ]
   },
@@ -8729,6 +9373,17 @@
     "queryAllDeclaredMethods": true
   },
   {
+    "name": "org.springframework.http.CacheControl",
+    "allDeclaredFields": true,
+    "allDeclaredConstructors": true,
+    "methods": [
+      {
+        "name": "getHeaderValue",
+        "parameterTypes": [ ]
+      }
+    ]
+  },
+  {
     "name": "org.springframework.http.client.AbstractClientHttpRequestFactoryWrapper",
     "fields": [
       {
@@ -8769,6 +9424,57 @@
       "typeReachable": "org.springframework.http.codec.CodecConfigurerFactory"
     },
     "allPublicConstructors": true
+  },
+  {
+    "name": "org.springframework.http.ContentDisposition",
+    "allDeclaredFields": true,
+    "allDeclaredConstructors": true,
+    "methods": [
+      {
+        "name": "getCharset",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getCreationDate",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getFilename",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getModificationDate",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getName",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getReadDate",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getSize",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getType",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "isAttachment",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "isFormData",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "isInline",
+        "parameterTypes": [ ]
+      }
+    ]
   },
   {
     "name": "org.springframework.http.converter.GenericHttpMessageConverter",
@@ -8812,7 +9518,493 @@
     "queryAllDeclaredMethods": true
   },
   {
+    "name": "org.springframework.http.HttpEntity",
+    "allDeclaredFields": true,
+    "allDeclaredConstructors": true,
+    "methods": [
+      {
+        "name": "getBody",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getHeaders",
+        "parameterTypes": [ ]
+      }
+    ]
+  },
+  {
+    "name": "org.springframework.http.HttpHeaders",
+    "allDeclaredFields": true,
+    "allDeclaredConstructors": true,
+    "methods": [
+      {
+        "name": "getAccept",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getAcceptCharset",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getAcceptLanguage",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getAcceptLanguageAsLocales",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getAcceptPatch",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getAccessControlAllowCredentials",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getAccessControlAllowHeaders",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getAccessControlAllowMethods",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getAccessControlAllowOrigin",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getAccessControlExposeHeaders",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getAccessControlMaxAge",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getAccessControlRequestHeaders",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getAccessControlRequestMethod",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getAllow",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getCacheControl",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getConnection",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getContentDisposition",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getContentLanguage",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getContentLength",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getContentType",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getDate",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getETag",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getExpires",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getHost",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getIfMatch",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getIfModifiedSince",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getIfNoneMatch",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getIfUnmodifiedSince",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getLastModified",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getLocation",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getOrigin",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getPragma",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getRange",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getUpgrade",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getVary",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "isEmpty",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "setAccept",
+        "parameterTypes": [
+          "java.util.List"
+        ]
+      },
+      {
+        "name": "setAcceptCharset",
+        "parameterTypes": [
+          "java.util.List"
+        ]
+      },
+      {
+        "name": "setAcceptLanguage",
+        "parameterTypes": [
+          "java.util.List"
+        ]
+      },
+      {
+        "name": "setAcceptLanguageAsLocales",
+        "parameterTypes": [
+          "java.util.List"
+        ]
+      },
+      {
+        "name": "setAcceptPatch",
+        "parameterTypes": [
+          "java.util.List"
+        ]
+      },
+      {
+        "name": "setAccessControlAllowCredentials",
+        "parameterTypes": [
+          "boolean"
+        ]
+      },
+      {
+        "name": "setAccessControlAllowHeaders",
+        "parameterTypes": [
+          "java.util.List"
+        ]
+      },
+      {
+        "name": "setAccessControlAllowMethods",
+        "parameterTypes": [
+          "java.util.List"
+        ]
+      },
+      {
+        "name": "setAccessControlAllowOrigin",
+        "parameterTypes": [
+          "java.lang.String"
+        ]
+      },
+      {
+        "name": "setAccessControlExposeHeaders",
+        "parameterTypes": [
+          "java.util.List"
+        ]
+      },
+      {
+        "name": "setAccessControlMaxAge",
+        "parameterTypes": [
+          "java.time.Duration"
+        ]
+      },
+      {
+        "name": "setAccessControlMaxAge",
+        "parameterTypes": [
+          "long"
+        ]
+      },
+      {
+        "name": "setAccessControlRequestHeaders",
+        "parameterTypes": [
+          "java.util.List"
+        ]
+      },
+      {
+        "name": "setAccessControlRequestMethod",
+        "parameterTypes": [
+          "org.springframework.http.HttpMethod"
+        ]
+      },
+      {
+        "name": "setAll",
+        "parameterTypes": [
+          "java.util.Map"
+        ]
+      },
+      {
+        "name": "setAllow",
+        "parameterTypes": [
+          "java.util.Set"
+        ]
+      },
+      {
+        "name": "setBasicAuth",
+        "parameterTypes": [
+          "java.lang.String"
+        ]
+      },
+      {
+        "name": "setBearerAuth",
+        "parameterTypes": [
+          "java.lang.String"
+        ]
+      },
+      {
+        "name": "setCacheControl",
+        "parameterTypes": [
+          "java.lang.String"
+        ]
+      },
+      {
+        "name": "setCacheControl",
+        "parameterTypes": [
+          "org.springframework.http.CacheControl"
+        ]
+      },
+      {
+        "name": "setConnection",
+        "parameterTypes": [
+          "java.lang.String"
+        ]
+      },
+      {
+        "name": "setConnection",
+        "parameterTypes": [
+          "java.util.List"
+        ]
+      },
+      {
+        "name": "setContentDisposition",
+        "parameterTypes": [
+          "org.springframework.http.ContentDisposition"
+        ]
+      },
+      {
+        "name": "setContentLanguage",
+        "parameterTypes": [
+          "java.util.Locale"
+        ]
+      },
+      {
+        "name": "setContentLength",
+        "parameterTypes": [
+          "long"
+        ]
+      },
+      {
+        "name": "setContentType",
+        "parameterTypes": [
+          "org.springframework.http.MediaType"
+        ]
+      },
+      {
+        "name": "setDate",
+        "parameterTypes": [
+          "java.time.Instant"
+        ]
+      },
+      {
+        "name": "setDate",
+        "parameterTypes": [
+          "java.time.ZonedDateTime"
+        ]
+      },
+      {
+        "name": "setDate",
+        "parameterTypes": [
+          "long"
+        ]
+      },
+      {
+        "name": "setETag",
+        "parameterTypes": [
+          "java.lang.String"
+        ]
+      },
+      {
+        "name": "setExpires",
+        "parameterTypes": [
+          "java.time.Instant"
+        ]
+      },
+      {
+        "name": "setExpires",
+        "parameterTypes": [
+          "java.time.ZonedDateTime"
+        ]
+      },
+      {
+        "name": "setExpires",
+        "parameterTypes": [
+          "long"
+        ]
+      },
+      {
+        "name": "setHost",
+        "parameterTypes": [
+          "java.net.InetSocketAddress"
+        ]
+      },
+      {
+        "name": "setIfMatch",
+        "parameterTypes": [
+          "java.lang.String"
+        ]
+      },
+      {
+        "name": "setIfMatch",
+        "parameterTypes": [
+          "java.util.List"
+        ]
+      },
+      {
+        "name": "setIfModifiedSince",
+        "parameterTypes": [
+          "java.time.Instant"
+        ]
+      },
+      {
+        "name": "setIfModifiedSince",
+        "parameterTypes": [
+          "java.time.ZonedDateTime"
+        ]
+      },
+      {
+        "name": "setIfModifiedSince",
+        "parameterTypes": [
+          "long"
+        ]
+      },
+      {
+        "name": "setIfNoneMatch",
+        "parameterTypes": [
+          "java.lang.String"
+        ]
+      },
+      {
+        "name": "setIfNoneMatch",
+        "parameterTypes": [
+          "java.util.List"
+        ]
+      },
+      {
+        "name": "setIfUnmodifiedSince",
+        "parameterTypes": [
+          "java.time.Instant"
+        ]
+      },
+      {
+        "name": "setIfUnmodifiedSince",
+        "parameterTypes": [
+          "java.time.ZonedDateTime"
+        ]
+      },
+      {
+        "name": "setIfUnmodifiedSince",
+        "parameterTypes": [
+          "long"
+        ]
+      },
+      {
+        "name": "setLastModified",
+        "parameterTypes": [
+          "java.time.Instant"
+        ]
+      },
+      {
+        "name": "setLastModified",
+        "parameterTypes": [
+          "java.time.ZonedDateTime"
+        ]
+      },
+      {
+        "name": "setLastModified",
+        "parameterTypes": [
+          "long"
+        ]
+      },
+      {
+        "name": "setLocation",
+        "parameterTypes": [
+          "java.net.URI"
+        ]
+      },
+      {
+        "name": "setOrigin",
+        "parameterTypes": [
+          "java.lang.String"
+        ]
+      },
+      {
+        "name": "setPragma",
+        "parameterTypes": [
+          "java.lang.String"
+        ]
+      },
+      {
+        "name": "setRange",
+        "parameterTypes": [
+          "java.util.List"
+        ]
+      },
+      {
+        "name": "setUpgrade",
+        "parameterTypes": [
+          "java.lang.String"
+        ]
+      },
+      {
+        "name": "setVary",
+        "parameterTypes": [
+          "java.util.List"
+        ]
+      }
+    ]
+  },
+  {
     "name": "org.springframework.http.HttpMethod",
+    "allDeclaredFields": true,
+    "allDeclaredConstructors": true,
     "methods": [
       {
         "name": "valueOf",
@@ -8821,6 +10013,11 @@
         ]
       }
     ]
+  },
+  {
+    "name": "org.springframework.http.HttpRange",
+    "allDeclaredFields": true,
+    "allDeclaredConstructors": true
   },
   {
     "name": "org.springframework.http.HttpStatus",
@@ -8860,7 +10057,40 @@
     ]
   },
   {
+    "name": "org.springframework.http.HttpStatusCode",
+    "allDeclaredFields": true,
+    "allDeclaredConstructors": true,
+    "methods": [
+      {
+        "name": "is1xxInformational",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "is2xxSuccessful",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "is3xxRedirection",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "is4xxClientError",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "is5xxServerError",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "isError",
+        "parameterTypes": [ ]
+      }
+    ]
+  },
+  {
     "name": "org.springframework.http.MediaType",
+    "allDeclaredFields": true,
+    "allDeclaredConstructors": true,
     "methods": [
       {
         "name": "getQualityValue",
@@ -8942,6 +10172,21 @@
         "parameterTypes": [
           "java.net.URI"
         ]
+      }
+    ]
+  },
+  {
+    "name": "org.springframework.http.ResponseEntity",
+    "allDeclaredFields": true,
+    "allDeclaredConstructors": true,
+    "methods": [
+      {
+        "name": "getStatusCode",
+        "parameterTypes": [ ]
+      },
+      {
+        "name": "getStatusCodeValue",
+        "parameterTypes": [ ]
       }
     ]
   },
@@ -9696,6 +10941,8 @@
   },
   {
     "name": "org.springframework.util.MimeType",
+    "allDeclaredFields": true,
+    "allDeclaredConstructors": true,
     "methods": [
       {
         "name": "getCharset",
