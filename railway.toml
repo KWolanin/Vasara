@@ -2,7 +2,7 @@
   # Definiujemy frontend
   path = "vasara/vasaraF"
   build = "npm run build"
-  start = "serve -s dist/spa"
+  start = "serve -s dist/spa -l $PORT"  # Railway ustawi zmienną PORT na odpowiedni port
   env = { "CI" = "true" }
 
 [[builds]]
