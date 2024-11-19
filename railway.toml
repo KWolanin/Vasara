@@ -5,3 +5,10 @@
   build = "npm run build"
   start = "npm run serve"
   env = { "CI" = "true" }
+  
+  # Definiujemy backend
+  [[builds]]
+  path = "vasara/src"
+  build = "mvn clean install"  # Zmień to na odpowiednią komendę build w zależności od tego, jak budujesz backend (np. Maven)
+  start = "java -jar target/vasara.jar"  # Zmień to na odpowiednią komendę uruchamiającą backend
+  env = { "CI" = "true" }
