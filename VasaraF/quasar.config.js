@@ -10,7 +10,7 @@
 
 const { configure } = require("quasar/wrappers");
 
-module.exports = configure(function (/* ctx */) {
+module.exports = configure(function (ctx) {
   return {
     // https://v2.quasar.dev/quasar-cli-vite/prefetch-feature
     // preFetch: true,
@@ -53,7 +53,11 @@ module.exports = configure(function (/* ctx */) {
 
       // publicPath: '/',
       // analyze: true,
-      // env: {},
+      env: {
+        VUE_APP_API_URL: ctx.dev
+          ? "http://localhost:8080/api"
+          : "https://http://vasara-production.up.railway.app/api",
+      },
       // rawDefine: {}
       // ignorePublicFolder: true,
       // minify: false,

@@ -7,7 +7,6 @@ export default ({ app }) => {
       const currentLang = "pl";
       el.addEventListener("input", async (event) => {
         const quote = quotes[currentLang];
-        console.log(quote);
         if (quote) {
           const sel = window.getSelection();
           const node = sel.focusNode;

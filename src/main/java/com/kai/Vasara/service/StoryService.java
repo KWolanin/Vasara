@@ -66,8 +66,8 @@ public class StoryService {
         s.setAuthorName(authorService.getAuthorName(story.getAuthorId()));
         s.setDescription(story.getDescription());
         s.setTitle(story.getTitle());
-        s.setTags(story.getTags());
-        s.setFandoms(story.getFandoms());
+        s.setTags(splitAndRemoveQuotes(story.getTags()));
+        s.setFandoms(splitAndRemoveQuotes(story.getFandoms()));
         s.setFinished(story.isFinished());
         s.setPublishDt(story.getPublishDt());
         s.setUpdateDt(story.getUpdateDt());
@@ -82,5 +82,15 @@ public class StoryService {
             daos.add(from(s));
         });
         return daos;
+    }
+
+    public static List<String> splitAndRemoveQuotes(String input) {
+        input = input.substring(1, input.length() - 1);
+        String[] parts = input.split(",");
+        List<String> resultList = new ArrayList<>();
+        for (String part : parts) {
+            resultList.add(part.replace("\"", "").trim());
+        }
+        return resultList;
     }
 }

@@ -13,7 +13,6 @@ export const fetchAuthors = async () => {
 export const getAuthorNameById = async (id) => {
   try {
     const response = await api.get(`/authors/${id}/name`);
-    console.log(response);
     return response.data;
   } catch (error) {
     console.error("Error fetching authors:", error);

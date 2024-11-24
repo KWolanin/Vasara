@@ -2,7 +2,6 @@ import { api } from "../boot/axios";
 
 export const createChapter = async (chapterData) => {
   try {
-    console.log(chapterData);
     const response = await api.post("/chapters/add", chapterData);
     return response.data;
   } catch (error) {

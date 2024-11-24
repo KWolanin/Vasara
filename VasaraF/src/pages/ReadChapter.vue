@@ -26,9 +26,7 @@ const data = ref(null);
 onMounted(() => {
   fetchChapter(props.storyId, props.chapterNo)
     .then((response) => {
-      console.log(response);
       data.value = response;
-      console.log(data.value);
     })
     .catch((error) => {
       console.error(error);

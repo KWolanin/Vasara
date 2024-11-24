@@ -67,7 +67,6 @@ const createNewStory = () => {
 
   createStory(story)
     .then((response) => {
-      console.log(response);
       clearForm();
       router.push("/mines");
     })
