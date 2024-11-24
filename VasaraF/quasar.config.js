@@ -57,7 +57,7 @@ module.exports = configure(function (ctx) {
         VUE_APP_API_URL:
           process.env.NODE_ENV !== "production"
             ? "http://localhost:8080/api"
-            : "https://http://vasara-production.up.railway.app:8080/api",
+            : "https://vasara-production.up.railway.app:8080/api",
       },
       // rawDefine: {}
       // ignorePublicFolder: true,
