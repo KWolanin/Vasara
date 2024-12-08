@@ -22,7 +22,7 @@ public class AuthorController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<Author>> getAuthors() {
+    public ResponseEntity<List<AuthorDAO>> getAuthors() {
         return new ResponseEntity<>(authorService.getAll(), HttpStatus.OK);
     }
 

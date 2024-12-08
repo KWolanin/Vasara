@@ -1,6 +1,5 @@
 package com.kai.Vasara.controller;
 
-import com.kai.Vasara.entity.Story;
 import com.kai.Vasara.model.StoryDAO;
 import com.kai.Vasara.service.StoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +31,8 @@ public class StoryController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Boolean> addStory(@RequestBody Story story) {
-        return new ResponseEntity<>(storyService.saveStory(story), HttpStatus.OK);
+    public ResponseEntity<Boolean> addStory(@RequestBody StoryDAO storyDAO) {
+        return new ResponseEntity<>(storyService.saveStory(storyDAO), HttpStatus.OK);
     }
 
     @GetMapping("/my/{id}")

@@ -1,7 +1,6 @@
 package com.kai.Vasara.repository;
 
 import com.kai.Vasara.entity.Chapter;
-import com.kai.Vasara.model.ChapterDAO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

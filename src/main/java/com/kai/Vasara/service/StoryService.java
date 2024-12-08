@@ -6,6 +6,7 @@ import com.kai.Vasara.repository.StoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,16 +41,14 @@ public class StoryService {
         return opt.map(this::from).orElse(null);
     }
 
-    public Boolean saveStory(Story story) {
+    public Boolean saveStory(StoryDAO story) {
         try {
-            storyRepository.save(story);
+            storyRepository.save(from(story));
             return true;
         } catch (Exception e) {
             return false;
         }
     }
-
-
 
 
     public List<StoryDAO> getMyStories(Long id) {
@@ -58,7 +57,6 @@ public class StoryService {
         stories.forEach(story -> daos.add(from(story)));
         return daos;
     }
-
 
     public StoryDAO from(Story story) {
         StoryDAO s = new StoryDAO();
@@ -75,6 +73,19 @@ public class StoryService {
         return s;
     }
 
+    public Story from(StoryDAO storyDAO) {
+        Story story = new Story();
+        story.setAuthorId(storyDAO.getAuthorId());
+        story.setDescription(storyDAO.getDescription());
+        story.setTitle(storyDAO.getTitle());
+        story.setTags(String.join(",", storyDAO.getTags()));
+        story.setFandoms(String.join(",", storyDAO.getFandoms()));
+        story.setFinished(storyDAO.isFinished());
+        story.setPublishDt(storyDAO.getPublishDt());
+        story.setUpdateDt(storyDAO.getUpdateDt());
+        return story;
+    }
+
     public List<StoryDAO> getStoriesByAuthor(Long id) {
         List<StoryDAO> daos = new ArrayList<>();
         List<Story> stories = storyRepository.findAllByAuthorId(id);
@@ -85,11 +96,13 @@ public class StoryService {
     }
 
     public static List<String> splitAndRemoveQuotes(String input) {
-        input = input.substring(1, input.length() - 1);
-        String[] parts = input.split(",");
         List<String> resultList = new ArrayList<>();
-        for (String part : parts) {
-            resultList.add(part.replace("\"", "").trim());
+        if (StringUtils.hasLength(input)) {
+            input = input.substring(1, input.length() - 1);
+            String[] parts = input.split(",");
+            for (String part : parts) {
+                resultList.add(part.replace("\"", "").trim());
+            }
         }
         return resultList;
     }

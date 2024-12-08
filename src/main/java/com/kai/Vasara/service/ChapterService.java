@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Component
@@ -23,22 +24,24 @@ public class ChapterService {
     @Autowired
     public ChapterService(ChapterRepository chapterRepository) {
         this.chapterRepository = chapterRepository;
-        //this.storyService = storyService;
-        //this.authorService = authorService;
     }
 
-    public List<Chapter> getAll() {
-        return chapterRepository.findAll();
+    public List<ChapterDAO> getAll() {
+        return chapterRepository.findAll()
+                .stream()
+                .map(this::from)
+                .collect(Collectors.toList());
     }
 
-    public Chapter getChapter(Long id) {
+    public ChapterDAO getChapter(Long id) {
          Optional<Chapter> opt = chapterRepository.findById(id);
-        return opt.orElse(null);
+         if (opt.isPresent()) return from(opt.get());
+        else return new ChapterDAO();
     }
 
-    public Boolean saveChapter(Chapter chapter) {
+    public Boolean saveChapter(ChapterDAO chapterDAO) {
         try {
-            chapterRepository.save(chapter);
+            chapterRepository.save(from(chapterDAO));
             return true;
         } catch (Exception e) {
             return false;
@@ -51,21 +54,26 @@ public class ChapterService {
 
     @Transactional
     public ChapterDAO getChapterByStoryIdAndNumber(Long storyId, Long chapterNo) {
-        Chapter c = chapterRepository.findByStoryIdAndNumberNo(storyId, chapterNo);
-        return from(c);
+        return from(chapterRepository.findByStoryIdAndNumberNo(storyId, chapterNo));
     }
 
-    private ChapterDAO from(Chapter chapter) {
-        ChapterDAO c = new ChapterDAO();
-        c.setId(chapter.getId());
-        c.setChapterNo(chapter.getChapterNo());
-        c.setChapterTitle(chapter.getChapterTitle());
-        c.setContent(chapter.getContent());
+    public Chapter from(ChapterDAO chapterDAO) {
+        Chapter chapter = new Chapter();
+        chapter.setId(chapterDAO.getId());
+        chapter.setChapterNo(chapterDAO.getChapterNo());
+        chapter.setChapterTitle(chapterDAO.getChapterTitle());
+        chapter.setContent(chapterDAO.getContent());
+        chapter.setStoryId(chapterDAO.getStoryId());
+        return chapter;
+    }
 
-       // c.setAuthor(authorService.getAuthor(chapter.getAuthorId()));
-        //c.setStory(storyService.getStory(chapter.getStoryId()));
-        c.setStoryId(chapter.getStoryId());
-
-        return c;
+    public ChapterDAO from(Chapter chapter) {
+        ChapterDAO chapterDAO = new ChapterDAO();
+        chapterDAO.setId(chapter.getId());
+        chapterDAO.setChapterNo(chapter.getChapterNo());
+        chapterDAO.setChapterTitle(chapter.getChapterTitle());
+        chapterDAO.setContent(chapter.getContent());
+        chapterDAO.setStoryId(chapter.getStoryId());
+        return chapterDAO;
     }
 }

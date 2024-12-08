@@ -3,10 +3,8 @@ package com.kai.Vasara.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.Type;
 
 import java.time.ZonedDateTime;
-import java.util.List;
 
 @Getter
 @Setter
@@ -22,8 +20,6 @@ public class Story {
     private String description;
     private String title;
     private String tags;
-//    @Column(name = "fandom", columnDefinition = "text[]")
-//    @Type(type = "org.hibernate.type.TextArrayType")
     @Column(name = "fandom")
     private String fandoms;
     private boolean finished;

@@ -23,6 +23,7 @@ export const fetchMyStories = async () => {
 
 export const createStory = async (storyData) => {
   try {
+    console.log(storyData);
     const response = await api.post("/stories/add", storyData);
     return response.data;
   } catch (error) {

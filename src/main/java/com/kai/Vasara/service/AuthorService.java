@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,16 +17,19 @@ import java.util.Optional;
 public class AuthorService {
 
     private final AuthorRepository authorRepository;
-    //private final StoryService storyService;
 
     @Autowired
     public AuthorService(AuthorRepository authorRepository) {
         this.authorRepository = authorRepository;
-       // this.storyService = storyService;
     }
 
-    public List<Author> getAll() {
-        return authorRepository.findAll();
+    public List<AuthorDAO> getAll() {
+        List<Author> authors = authorRepository.findAll();
+        List<AuthorDAO> daos = new ArrayList<>();
+        authors.forEach(story -> {
+            daos.add(from(story));
+        });
+        return daos;
     }
 
     public AuthorDAO getAuthor(Long id) {
@@ -47,15 +51,23 @@ public class AuthorService {
         return opt.orElse("");
     }
 
-    private AuthorDAO from(Author author) {
-        AuthorDAO a = new AuthorDAO();
-
-        a.setId(author.getId());
-        a.setUsername(author.getUsername());
-
-        // a.setChapters();
-      //  a.setStories(storyService.getStoriesByAuthor(author.getId()));
-
-        return a;
+    public long getAuthorIdByName(String username) {
+        Optional<Author> author = authorRepository.findAutorByUsername(username);
+        if (author.isPresent()) return author.get().getId();
+        return -1;
     }
+
+    public AuthorDAO from(Author author) {
+        AuthorDAO authorDAO = new AuthorDAO();
+        authorDAO.setId(author.getId());
+        authorDAO.setUsername(author.getUsername());
+        return authorDAO;
+    }
+    public Author from(AuthorDAO authorDAO) {
+        Author author = new Author();
+        author.setId(authorDAO.getId());
+        author.setUsername(authorDAO.getUsername());
+        return author;
+    }
+
 }

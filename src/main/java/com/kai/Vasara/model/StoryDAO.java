@@ -22,6 +22,7 @@ public class StoryDAO {
 
     private long id;
     private String authorName;
+    private long authorId;
     private String description;
     private String title;
     private List<String> tags;
@@ -38,7 +39,4 @@ public class StoryDAO {
     private AuthorService authorService;
     @Autowired
     private ChapterService chapterService;
-
-
-
 }

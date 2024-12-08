@@ -22,12 +22,12 @@ public class ChapterController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<Chapter>> getChapters() {
+    public ResponseEntity<List<ChapterDAO>> getChapters() {
         return new ResponseEntity<>(chapterService.getAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Chapter> getChapter(@PathVariable Long id) {
+    public ResponseEntity<ChapterDAO> getChapter(@PathVariable Long id) {
         return new ResponseEntity<>(chapterService.getChapter(id), HttpStatus.OK);
     }
 
@@ -37,7 +37,7 @@ public class ChapterController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Boolean> addChapter(@RequestBody Chapter chapter) {
-        return new ResponseEntity<>(chapterService.saveChapter(chapter), HttpStatus.OK);
+    public ResponseEntity<Boolean> addChapter(@RequestBody ChapterDAO chapterDAO) {
+        return new ResponseEntity<>(chapterService.saveChapter(chapterDAO), HttpStatus.OK);
     }
 }
