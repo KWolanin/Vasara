@@ -54,7 +54,11 @@ public class ChapterService {
 
     @Transactional
     public ChapterDAO getChapterByStoryIdAndNumber(Long storyId, Long chapterNo) {
-        return from(chapterRepository.findByStoryIdAndNumberNo(storyId, chapterNo));
+        Optional<Chapter> c = chapterRepository.findByStoryIdAndNumberNo(storyId, chapterNo);
+        if (c.isPresent()) {
+            return from(c.get());
+        }
+        return new ChapterDAO();
     }
 
     public Chapter from(ChapterDAO chapterDAO) {
@@ -75,5 +79,11 @@ public class ChapterService {
         chapterDAO.setContent(chapter.getContent());
         chapterDAO.setStoryId(chapter.getStoryId());
         return chapterDAO;
+    }
+
+    @Transactional
+    public Boolean checkIsNextOrPrevious(Long storyId, Long chapterNo) {
+        Optional<Chapter> c = chapterRepository.findByStoryIdAndNumberNo(storyId, chapterNo);
+        return c.isPresent();
     }
 }

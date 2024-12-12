@@ -3,16 +3,33 @@
   <div v-if="data">
     <div class="row justify-center q-ma-md">
       <div class="col-10 row justify-between items-center">
-        <q-btn class="q-ml-md" label="Previous" />
+        <router-link
+          v-show="isPreviousChapter"
+          :to="{
+            name: 'readChapter',
+            query: { storyId: sId, chapterNo: cNo - 1 },
+          }"
+        >
+          <q-btn class="q-ml-md" label="Previous" />
+        </router-link>
         <div class="row justify-center">
           <q-btn @click="decreaseFont" label="A-" class="q-mr-sm" />
           <q-btn @click="increaseFont" label="A+" />
         </div>
-        <q-btn class="q-mr-md" label="Next" />
+        <router-link
+          v-show="isNextChapter"
+          :to="{
+            name: 'readChapter',
+            query: { storyId: sId, chapterNo: cNo + 1 },
+          }"
+        >
+          <q-btn class="q-mr-md" label="Next" />
+        </router-link>
       </div>
     </div>
 
     <div class="row justify-center q-mb-md">
+      <h2>{{ data.chapterNo }}: {{ data.chapterTitle }}</h2>
       <q-card class="col-10 q-pa-md">
         <div :style="{ fontSize: fontSize + 'px' }" v-html="data.content" />
       </q-card>
@@ -25,26 +42,21 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
-import { fetchChapter } from "../services/chapterservice";
+import { onMounted, ref, watch } from "vue";
+import { fetchChapter, isNextOrPrevious } from "../services/chapterservice";
 import MainMenu from "./MainMenu.vue";
+import { useRoute } from "vue-router";
 
-const props = defineProps({
-  chapterNo: {
-    type: Number,
-    required: true,
-  },
-  storyId: {
-    type: Number,
-    required: true,
-  },
-});
+const route = useRoute();
 
 const data = ref(null);
-const title = ref("");
-const number = ref(0);
 
 const fontSize = ref(16);
+const isNextChapter = ref(false);
+const isPreviousChapter = ref(false);
+
+const sId = ref(0);
+const cNo = ref(0);
 
 const increaseFont = () => {
   fontSize.value += 2;
@@ -55,12 +67,33 @@ const decreaseFont = () => {
 };
 
 onMounted(() => {
-  fetchChapter(props.storyId, props.chapterNo)
+  loadChapter();
+});
+
+watch(
+  () => route.query,
+  () => {
+    loadChapter();
+  }
+);
+
+const loadChapter = () => {
+  sId.value = Number(route.query.storyId);
+  cNo.value = Number(route.query.chapterNo);
+
+  fetchChapter(route.query.storyId, route.query.chapterNo)
     .then((response) => {
       data.value = response;
     })
     .catch((error) => {
       console.error(error);
     });
-});
+
+  isNextOrPrevious(sId.value, cNo.value + 1).then((response) => {
+    isNextChapter.value = response;
+  });
+  isNextOrPrevious(sId.value, cNo.value - 1).then((response) => {
+    isPreviousChapter.value = response;
+  });
+};
 </script>

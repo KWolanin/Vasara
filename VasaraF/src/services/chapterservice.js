@@ -19,3 +19,15 @@ export const fetchChapter = async (storyId, chapterNo) => {
     throw error;
   }
 };
+
+export const isNextOrPrevious = async (storyId, chapterNo) => {
+  try {
+    const response = await api.get(
+      `/chapters/isNextOrPrevious/${storyId}/${chapterNo}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching stories:", error);
+    throw error;
+  }
+};

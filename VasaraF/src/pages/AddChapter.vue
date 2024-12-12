@@ -10,7 +10,6 @@
         class="q-py-md"
       />
       <q-editor
-        v-smart-quotes
         height="70vh"
         v-model="content"
         :dense="$q.screen.lt.md"
@@ -148,5 +147,4 @@ const editorFonts = {
   times_new_roman: "Times New Roman",
   verdana: "Verdana",
 };
-
 </script>

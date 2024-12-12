@@ -40,4 +40,9 @@ public class ChapterController {
     public ResponseEntity<Boolean> addChapter(@RequestBody ChapterDAO chapterDAO) {
         return new ResponseEntity<>(chapterService.saveChapter(chapterDAO), HttpStatus.OK);
     }
+
+    @GetMapping("/isNextOrPrevious/{storyId}/{chapterNo}")
+    public ResponseEntity<Boolean> CheckIsByStoryAndNumber(@PathVariable Long storyId, @PathVariable Long chapterNo) {
+        return new ResponseEntity<>(chapterService.checkIsNextOrPrevious(storyId, chapterNo), HttpStatus.OK);
+    }
 }
