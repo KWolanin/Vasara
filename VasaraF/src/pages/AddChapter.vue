@@ -2,7 +2,7 @@
   <main-menu />
   <div class="row justify-center">
     <q-card class="col-10 q-pa-md">
-      <q-btn @click="saveChapter" class="bg-primary">Publikuj</q-btn>
+      <q-btn @click="saveChapter" class="bg-primary">Publish</q-btn>
       <q-input
         filled
         v-model="chapterTitle"
@@ -22,7 +22,7 @@
 
 <script setup>
 import MainMenu from "./MainMenu.vue";
-import { ref, computed, watch } from "vue";
+import { ref, computed } from "vue";
 import { useQuasar } from "quasar";
 import { createChapter } from "../services/chapterservice";
 import { useRouter } from "vue-router";
@@ -50,7 +50,7 @@ const props = defineProps({
 });
 
 const chapterNumber = computed(() => {
-  return `Tytuł rozdziału ${props.chapters + 1}`;
+  return `Chapter no. ${props.chapters + 1}`;
 });
 
 const saveChapter = () => {

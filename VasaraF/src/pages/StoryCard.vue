@@ -1,11 +1,12 @@
 <template>
-  <q-card class="col-8 q-pa-md">
+  <q-card class="col-8 q-pa-lg q-ma-md card" flat>
     <q-chip v-for="(fandom, index) in story.fandoms" :key="index">{{
       fandom
     }}</q-chip>
     <q-chip v-for="(tag, index) in story.tags" :key="index">{{ tag }}</q-chip>
     <div class="text-h2">
       {{ story.title }}
+      <img v-if="!story.finished" src="public/work-in-progress.png" />
     </div>
     <div class="text-h3">{{ story.authorName }}</div>
     <div><strong>published: </strong> {{ formatDate(story.publishDt) }}</div>
@@ -15,12 +16,11 @@
     <p class="text-h6">
       {{ story.description }}
     </p>
-    <q-icon :name="story.finished ? 'check' : 'remove_done'" size="lg" />
     <div class="text-h3">
       {{ story.chaptersNumber }} /
       {{ !story.finished ? "?" : story.chaptersNumber }}
     </div>
-    <q-btn @click="readChapter" class="q-my-md">Czytaj</q-btn>
+    <q-btn @click="readChapter" class="q-my-md btn" flat>Read</q-btn>
     <slot></slot>
   </q-card>
 </template>
@@ -51,3 +51,24 @@ const readChapter = () => {
   });
 };
 </script>
+
+<style scoped>
+.btn {
+  font-family: "Farro", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  color: #333 !important;
+}
+
+a:visited {
+  color: #333;
+}
+
+.card {
+  border-radius: 15px;
+}
+
+img {
+  width: 50px;
+}
+</style>

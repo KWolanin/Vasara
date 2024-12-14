@@ -3,8 +3,8 @@
   <div class="row justify-center">
     <q-card class="col-8 q-pa-md">
       <q-card-section>
-        <div class="text-h2">Stwórz nową historię</div>
-        <div class="text-subtitle2">pierwsze zdanie to dopiero początek</div>
+        <div class="text-h2">Create a new story</div>
+        <div class="text-subtitle2">first step into an adventure</div>
       </q-card-section>
       <q-form
         @submit="createNewStory"
@@ -12,18 +12,23 @@
         @reset="clearForm"
         autofocus
       >
-        <q-input filled v-model="title" label="Tytuł" />
-        <q-input filled v-model="description" label="Opis" type="textarea" />
-        <tag-input v-model="tags" />
-        <tag-input v-model="fandoms" label="Fandom(y)" />
+        <q-input filled v-model="title" label="Title" />
+        <q-input
+          filled
+          v-model="description"
+          label="Description"
+          type="textarea"
+        />
+        <tag-input v-model="tags" label="Tag(s)" />
+        <tag-input v-model="fandoms" label="Fandom(s)" />
         <div>
-          <q-btn label="Stwórz" type="submit" color="primary" />
+          <q-btn label="Create" type="submit" color="primary" class="btn" />
           <q-btn
             label="Reset"
             type="reset"
             color="primary"
             flat
-            class="q-ml-sm"
+            class="q-ml-sm btn"
           />
         </div>
       </q-form>
@@ -82,3 +87,16 @@ function clearForm() {
   tags.value = [];
 }
 </script>
+
+<style scoped>
+.btn {
+  font-family: "Farro", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  color: #333 !important;
+}
+
+a:visited {
+  color: #333;
+}
+</style>

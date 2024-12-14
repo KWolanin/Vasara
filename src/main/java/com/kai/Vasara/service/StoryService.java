@@ -6,6 +6,7 @@ import com.kai.Vasara.repository.StoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
@@ -21,7 +22,8 @@ public class StoryService {
     private final ChapterService chapterService;
 
     @Autowired
-    public StoryService(StoryRepository storyRepository, AuthorService authorService, ChapterService chapterService) {
+    public StoryService(StoryRepository storyRepository, AuthorService authorService,
+                        ChapterService chapterService) {
         this.storyRepository = storyRepository;
         this.authorService = authorService;
         this.chapterService = chapterService;
@@ -105,5 +107,10 @@ public class StoryService {
             }
         }
         return resultList;
+    }
+
+    @Transactional
+    public Boolean deleteStory(Long id) {
+        return chapterService.deleteChaptersForStory(id) && storyRepository.deleteStoryById(id) > 0;
     }
 }

@@ -3,7 +3,6 @@ package com.kai.Vasara.service;
 import com.kai.Vasara.entity.Chapter;
 import com.kai.Vasara.model.ChapterDAO;
 import com.kai.Vasara.repository.ChapterRepository;
-import com.kai.Vasara.repository.StoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -18,8 +17,6 @@ import java.util.stream.Collectors;
 public class ChapterService {
 
     private final ChapterRepository chapterRepository;
-   // private final StoryService storyService;
-   // private final AuthorService authorService;
 
     @Autowired
     public ChapterService(ChapterRepository chapterRepository) {
@@ -85,5 +82,9 @@ public class ChapterService {
     public Boolean checkIsNextOrPrevious(Long storyId, Long chapterNo) {
         Optional<Chapter> c = chapterRepository.findByStoryIdAndNumberNo(storyId, chapterNo);
         return c.isPresent();
+    }
+
+    public Boolean deleteChaptersForStory(Long storyId) {
+        return chapterRepository.deleteAllByStoryId(storyId) > 0;
     }
 }

@@ -10,11 +10,11 @@
             query: { storyId: sId, chapterNo: cNo - 1 },
           }"
         >
-          <q-btn class="q-ml-md" label="Previous" />
+          <q-btn class="q-ml-md btn" label="Previous" flat />
         </router-link>
         <div class="row justify-center">
-          <q-btn @click="decreaseFont" label="A-" class="q-mr-sm" />
-          <q-btn @click="increaseFont" label="A+" />
+          <q-btn @click="decreaseFont" label="A-" class="q-mr-sm btn" flat />
+          <q-btn @click="increaseFont" label="A+" class="btn" flat />
         </div>
         <router-link
           v-show="isNextChapter"
@@ -23,7 +23,7 @@
             query: { storyId: sId, chapterNo: cNo + 1 },
           }"
         >
-          <q-btn class="q-mr-md" label="Next" />
+          <q-btn class="q-mr-md btn" label="Next" flat />
         </router-link>
       </div>
     </div>
@@ -36,7 +36,7 @@
     </div>
   </div>
   <q-inner-loading :showing="!data">
-    Wczytywanie...
+    Loading...
     <q-spinner-gears size="50px" color="primary" />
   </q-inner-loading>
 </template>
@@ -97,3 +97,16 @@ const loadChapter = () => {
   });
 };
 </script>
+
+<style scoped>
+.btn {
+  font-family: "Farro", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  color: #333 !important;
+}
+
+a:visited {
+  color: #333;
+}
+</style>

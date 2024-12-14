@@ -1,16 +1,16 @@
 <template>
   <div class="row justify-center q-pa-lg">
     <q-btn class="q-ma-sm btn" flat>
-      <RouterLink to="/">Strona główna</RouterLink>
+      <RouterLink to="/">Home</RouterLink>
     </q-btn>
     <q-btn class="q-ma-sm btn" flat>
-      <RouterLink to="readAll">Czytaj</RouterLink>
+      <RouterLink to="readAll">Read</RouterLink>
     </q-btn>
     <q-btn class="q-ma-sm btn" flat>
-      <RouterLink to="mines">Moje historie</RouterLink>
+      <RouterLink to="mines">My stories</RouterLink>
     </q-btn>
     <q-btn class="q-ma-sm btn" flat color="grey-10">
-      <RouterLink to="create">Dodaj nową</RouterLink>
+      <RouterLink to="create">Add</RouterLink>
     </q-btn>
   </div>
 </template>

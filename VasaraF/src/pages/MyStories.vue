@@ -1,7 +1,7 @@
 <template>
   <main-menu />
   <q-inner-loading :showing="loading">
-    Wczytywanie...
+    Loading...
     <q-spinner-gears size="50px" color="primary" />
   </q-inner-loading>
   <div v-if="!loading">
@@ -11,7 +11,7 @@
       class="row justify-center q-pa-lg"
     >
       <story-card :story>
-        <edit-menu :story />
+        <edit-menu :story @story-deleted="reloadStories()" />
       </story-card>
     </div>
   </div>
@@ -23,6 +23,7 @@ import { onMounted, ref } from "vue";
 import StoryCard from "./StoryCard.vue";
 import MainMenu from "./MainMenu.vue";
 import EditMenu from "./EditMenu.vue";
+import { Notify } from "quasar";
 
 const stories = ref([]);
 const loading = ref(true);
@@ -37,4 +38,23 @@ onMounted(() => {
       console.error(error);
     });
 });
+
+const fetchStories = async () => {
+  await fetchMyStories()
+    .then((response) => {
+      stories.value = response;
+      loading.value = false;
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+};
+
+const reloadStories = () => {
+  fetchStories();
+  Notify.create({
+    message: "Story was deleted!",
+    position: "bottom-right",
+  });
+};
 </script>

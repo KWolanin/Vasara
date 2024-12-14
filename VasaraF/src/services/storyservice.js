@@ -23,11 +23,20 @@ export const fetchMyStories = async () => {
 
 export const createStory = async (storyData) => {
   try {
-    console.log(storyData);
     const response = await api.post("/stories/add", storyData);
     return response.data;
   } catch (error) {
     console.error("Error creating story:", error);
+    throw error;
+  }
+};
+
+export const deleteStory = async (id) => {
+  try {
+    const response = await api.delete(`/stories/delete/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting story:", error);
     throw error;
   }
 };

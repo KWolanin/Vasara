@@ -39,4 +39,9 @@ public class StoryController {
     public ResponseEntity<List<StoryDAO>> getMyStories(@PathVariable Long id) {
         return new ResponseEntity<>(storyService.getMyStories(id), HttpStatus.OK);
     }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Boolean> deleteStory(@PathVariable Long id) {
+        return new ResponseEntity<>(storyService.deleteStory(id), HttpStatus.OK);
+    }
 }

@@ -1,7 +1,7 @@
 <template>
   <main-menu />
   <q-inner-loading :showing="loading">
-    Wczytywanie...
+    Loading...
     <q-spinner-gears size="50px" color="primary" />
   </q-inner-loading>
   <div v-if="!loading">
