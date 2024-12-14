@@ -109,4 +109,16 @@ const loadChapter = () => {
 a:visited {
   color: #333;
 }
+
+.card {
+  border-radius: 15px;
+}
+
+.row-1 {
+  /* display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 83.3333%; */
+  width: 83.3333%;
+}
 </style>

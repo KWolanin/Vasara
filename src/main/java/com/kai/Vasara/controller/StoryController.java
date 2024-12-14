@@ -35,6 +35,11 @@ public class StoryController {
         return new ResponseEntity<>(storyService.saveStory(storyDAO), HttpStatus.OK);
     }
 
+    @PatchMapping("/edit")
+    public ResponseEntity<Boolean> editStory(@RequestBody StoryDAO storyDAO) {
+        return new ResponseEntity<>(storyService.editStory(storyDAO), HttpStatus.OK);
+    }
+
     @GetMapping("/my/{id}")
     public ResponseEntity<List<StoryDAO>> getMyStories(@PathVariable Long id) {
         return new ResponseEntity<>(storyService.getMyStories(id), HttpStatus.OK);

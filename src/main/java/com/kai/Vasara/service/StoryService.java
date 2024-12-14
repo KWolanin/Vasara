@@ -109,8 +109,43 @@ public class StoryService {
         return resultList;
     }
 
+    public static String joinAndAddQuotes(List<String> inputList) {
+        if (inputList == null || inputList.isEmpty()) {
+            return "[]";
+        }
+        StringBuilder result = new StringBuilder("[");
+        for (int i = 0; i < inputList.size(); i++) {
+            result.append("\"").append(inputList.get(i)).append("\"");
+
+            if (i < inputList.size() - 1) {
+                result.append(",");
+            }
+        }
+        result.append("]");
+        return result.toString();
+    }
+
+
     @Transactional
     public Boolean deleteStory(Long id) {
-        return chapterService.deleteChaptersForStory(id) && storyRepository.deleteStoryById(id) > 0;
+        chapterService.deleteChaptersForStory(id);
+        int storiesDeleted = storyRepository.deleteStoryById(id);
+        return storiesDeleted > 0;
+    }
+
+    public Boolean editStory(StoryDAO storyDAO) {
+        Optional<Story> story = storyRepository.findById(storyDAO.getId());
+        if (story.isPresent()) {
+            Story s = story.get();
+            s.setTitle(storyDAO.getTitle());
+            s.setDescription(storyDAO.getDescription());
+            s.setFandoms(joinAndAddQuotes(storyDAO.getFandoms()));
+            s.setFinished(storyDAO.isFinished());
+            s.setTags(joinAndAddQuotes(storyDAO.getTags()));
+             storyRepository.save(s);
+             return true;
+        }
+        return false;
+
     }
 }

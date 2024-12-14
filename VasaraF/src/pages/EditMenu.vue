@@ -1,5 +1,5 @@
 <template>
-  <q-btn class="q-ma-sm btn" flat>Edit</q-btn>
+  <q-btn class="q-ma-sm btn" flat @click="edit">Edit</q-btn>
   <q-btn class="q-ma-sm btn" flat @click="addChapter">Add chapter</q-btn>
   <q-btn class="q-ma-sm btn" flat>Manage chapters</q-btn>
   <q-btn class="q-ma-sm btn del" flat @click="deleteById(props.story.id)"
@@ -35,13 +35,17 @@ const addChapter = () => {
 
 const deleteById = (id) => {
   deleteStory(id)
-    .then((response) => {
-      console.log(response);
+    .then(() => {
       emit("storyDeleted");
     })
     .catch((error) => {
       console.error(error);
     });
+};
+
+const edit = () => {
+  localStorage.setItem("currentStory", JSON.stringify(props.story));
+  router.push({ name: "create" });
 };
 </script>
 

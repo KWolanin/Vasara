@@ -31,6 +31,16 @@ export const createStory = async (storyData) => {
   }
 };
 
+export const updateStory = async (storyData) => {
+  try {
+    const response = await api.patch("/stories/edit", storyData);
+    return response.data;
+  } catch (error) {
+    console.error("Error editing story:", error);
+    throw error;
+  }
+};
+
 export const deleteStory = async (id) => {
   try {
     const response = await api.delete(`/stories/delete/${id}`);
