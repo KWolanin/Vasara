@@ -5,6 +5,7 @@ import com.kai.Vasara.entity.Author;
 import com.kai.Vasara.model.AuthorDAO;
 import com.kai.Vasara.repository.AuthorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -17,10 +18,12 @@ import java.util.Optional;
 public class AuthorService {
 
     private final AuthorRepository authorRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public AuthorService(AuthorRepository authorRepository) {
+    public AuthorService(AuthorRepository authorRepository, PasswordEncoder passwordEncoder) {
         this.authorRepository = authorRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public List<AuthorDAO> getAll() {
@@ -68,6 +71,20 @@ public class AuthorService {
         author.setId(authorDAO.getId());
         author.setUsername(authorDAO.getUsername());
         return author;
+    }
+
+    public Author register(String username, String login, String rawPassword) {
+        Author author = new Author();
+        author.setLogin(login);
+        author.setUsername(username);
+        author.setPassword(passwordEncoder.encode(rawPassword));
+        return authorRepository.save(author);
+    }
+
+    public Author authenticate(String login, String rawPassword) {
+        return authorRepository.findByLogin(login)
+                .filter(author -> passwordEncoder.matches(rawPassword, author.getPassword()))
+                .orElseThrow(() -> new IllegalArgumentException("Invalid login or password"));
     }
 
 }

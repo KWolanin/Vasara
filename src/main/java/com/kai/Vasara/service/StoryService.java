@@ -116,7 +116,6 @@ public class StoryService {
         StringBuilder result = new StringBuilder("[");
         for (int i = 0; i < inputList.size(); i++) {
             result.append("\"").append(inputList.get(i)).append("\"");
-
             if (i < inputList.size() - 1) {
                 result.append(",");
             }

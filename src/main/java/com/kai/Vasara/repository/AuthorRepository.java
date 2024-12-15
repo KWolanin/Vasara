@@ -15,4 +15,7 @@ public interface AuthorRepository extends JpaRepository<Author, Long> {
     Optional<String> findUsernameById(@Param("id") Long id);
 
     Optional<Author> findAutorByUsername(String username);
+
+    Optional<Author> findByLogin(String login);
+
 }

@@ -1,4 +1,5 @@
 import { api } from "../boot/axios";
+import { useUserStore } from "src/stores/user";
 
 export const fetchStories = async () => {
   try {
@@ -12,7 +13,8 @@ export const fetchStories = async () => {
 
 export const fetchMyStories = async () => {
   try {
-    const id = 1;
+    const userStore = useUserStore();
+    const id = userStore.id;
     const response = await api.get(`/stories/my/${id}`);
     return response.data;
   } catch (error) {

@@ -52,6 +52,9 @@ import { createStory, updateStory } from "../services/storyservice";
 import TagInput from "./TagInput.vue";
 import MainMenu from "./MainMenu.vue";
 import { useRouter } from "vue-router";
+import { useUserStore } from "../stores/user";
+
+const userStore = useUserStore();
 
 const title = ref("");
 const description = ref("");
@@ -72,9 +75,10 @@ const router = useRouter();
 // }
 
 const createNewStory = () => {
+  const id = userStore.id;
   if (!isEditing.value) {
     const story = {
-      authorId: 1,
+      authorId: id,
       title: title.value,
       description: description.value,
       tags: tags.value,
@@ -123,6 +127,7 @@ function clearForm() {
 }
 
 onMounted(() => {
+  console.log(localStorage.getItem("user"));
   const storyData = localStorage.getItem("currentStory");
 
   if (storyData) {

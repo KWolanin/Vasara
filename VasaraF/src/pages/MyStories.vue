@@ -14,6 +14,9 @@
         <edit-menu :story @story-deleted="reloadStories()" />
       </story-card>
     </div>
+    <div v-if="!stories.length">
+      No stories found. Maybe you should add a new story?
+    </div>
   </div>
 </template>
 
