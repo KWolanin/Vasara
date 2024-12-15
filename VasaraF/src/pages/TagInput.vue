@@ -14,7 +14,8 @@
         :key="index"
         removable
         @remove="removeTag(index)"
-        class="q-mr-xs"
+        class="q-mr-xs chip"
+        :class="label === 'Tag(s)' ? 'tag' : 'fandom'"
       >
         {{ tag }}
       </q-chip>
@@ -32,7 +33,7 @@ const props = defineProps({
   },
   label: {
     type: String,
-    default: "Tag(i)",
+    default: "Tag(s)",
   },
 });
 
@@ -66,5 +67,17 @@ watch(
 <style scoped>
 .q-chip {
   cursor: pointer;
+}
+
+.chip {
+  border-radius: 3px !important;
+}
+
+.fandom {
+  background-color: #dabfff;
+}
+
+.tag {
+  background-color: #fbbfca;
 }
 </style>

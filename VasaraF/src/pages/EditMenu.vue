@@ -59,6 +59,7 @@ const edit = () => {
 
 .del {
   background-color: #aa4465;
+  color: #eaeaea !important;
 }
 
 a:visited {

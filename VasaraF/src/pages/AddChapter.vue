@@ -62,7 +62,7 @@ const saveChapter = () => {
     chapterNo: props.chapters + 1,
   };
   createChapter(newChapter)
-    .then((response) => {
+    .then(() => {
       router.push("/mines");
     })
     .catch((error) => {

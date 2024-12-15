@@ -1,9 +1,15 @@
 <template>
   <q-card class="col-8 q-pa-lg q-ma-md card" flat>
-    <q-chip v-for="(fandom, index) in story.fandoms" :key="index">{{
-      fandom
+    <q-chip
+      v-for="(fandom, index) in story.fandoms"
+      :key="index"
+      class="chip fandom"
+      >{{ fandom }}</q-chip
+    >
+    <div></div>
+    <q-chip v-for="(tag, index) in story.tags" :key="index" class="chip tag">{{
+      tag
     }}</q-chip>
-    <q-chip v-for="(tag, index) in story.tags" :key="index">{{ tag }}</q-chip>
     <div class="text-h2 q-mb-md">
       {{ story.title }}
       <img v-if="!story.finished" src="public/work-in-progress.png" />
@@ -23,7 +29,13 @@
       {{ !story.finished ? "?" : story.chaptersNumber }}
     </div>
     <q-separator inset />
-    <q-btn @click="readChapter" class="q-my-md btn" flat>Read</q-btn>
+    <q-btn
+      :disabled="story.chaptersNumber == 0"
+      @click="readChapter"
+      class="q-my-md btn"
+      flat
+      >Read</q-btn
+    >
     <slot></slot>
   </q-card>
 </template>
@@ -69,6 +81,18 @@ a:visited {
 
 .card {
   border-radius: 15px;
+}
+
+.chip {
+  border-radius: 3px !important;
+}
+
+.fandom {
+  background-color: #dabfff;
+}
+
+.tag {
+  background-color: #fbbfca;
 }
 
 img {

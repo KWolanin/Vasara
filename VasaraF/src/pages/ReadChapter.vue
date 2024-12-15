@@ -28,9 +28,9 @@
       </div>
     </div>
 
-    <div class="row justify-center q-mb-md">
+    <div class="q-mb-md chapter">
       <h2>{{ data.chapterNo }}: {{ data.chapterTitle }}</h2>
-      <q-card class="col-10 q-pa-md">
+      <q-card class="q-pa-md content" flat>
         <div :style="{ fontSize: fontSize + 'px' }" v-html="data.content" />
       </q-card>
     </div>
@@ -114,11 +114,11 @@ a:visited {
   border-radius: 15px;
 }
 
-.row-1 {
-  /* display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: 83.3333%; */
-  width: 83.3333%;
+.chapter {
+  justify-items: center;
+}
+
+.content {
+  width: 80%;
 }
 </style>

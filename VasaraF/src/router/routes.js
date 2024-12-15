@@ -33,10 +33,6 @@ const routes = [
     path: "/read",
     name: "readChapter",
     component: () => import("pages/ReadChapter.vue"),
-    props: (route) => ({
-      storyId: Number(route.query.storyId),
-      chapterNo: Number(route.query.chapterNo),
-    }),
   },
   {
     path: "/:catchAll(.*)*",

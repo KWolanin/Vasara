@@ -5,7 +5,10 @@
       <q-card-section>
         <div v-if="!isEditing" class="text-h2">Create a new story</div>
         <div v-else class="text-h2">Edit the story</div>
-        <div class="text-subtitle2">first step into an adventure</div>
+        <div v-if="!isEditing" class="text-subtitle2">
+          First step into an adventure
+        </div>
+        <div v-else class="text-subtitle2">Just a small fixes</div>
       </q-card-section>
       <q-form
         @submit="createNewStory"
@@ -27,7 +30,8 @@
             :label="isEditing ? 'Update' : 'Create'"
             type="submit"
             color="primary"
-            class="btn"
+            class="btn send"
+            flat
           />
           <q-btn
             label="Reset"
@@ -149,5 +153,9 @@ a:visited {
 
 .card {
   border-radius: 15px;
+}
+
+.send {
+  background-color: gold !important;
 }
 </style>
