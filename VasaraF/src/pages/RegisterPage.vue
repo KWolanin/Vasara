@@ -25,7 +25,7 @@
         </div>
       </q-form>
       <div>
-        <router-link to="register">
+        <router-link to="login">
           <p class="guest-account q-mt-sm">Have an account? Login here</p>
         </router-link>
       </div>
