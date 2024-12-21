@@ -1,6 +1,5 @@
 package com.kai.Vasara.controller;
 
-import com.kai.Vasara.entity.Chapter;
 import com.kai.Vasara.model.ChapterDAO;
 import com.kai.Vasara.service.ChapterService;
 import org.springframework.beans.factory.annotation.Autowired;

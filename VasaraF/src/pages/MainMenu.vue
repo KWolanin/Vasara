@@ -47,7 +47,7 @@ const logout = () => {
   color: #333 !important;
 }
 
-a:visited {
+a, a:visited {
   color: #333;
 }
 

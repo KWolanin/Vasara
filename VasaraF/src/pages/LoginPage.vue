@@ -53,17 +53,17 @@ const password = ref("");
 const msg = ref("");
 
 const loginUser = () => {
-  console.log(log.value, password.value);
+  if (!login.value || !password.value) {
+    msg.value = "Please fill login and password";
+    return;
+  }
   login({ login: log.value, password: password.value }).then((response) => {
     if (response instanceof Error) {
-      msg.value = "Error! Incorrect login or password!";
+      msg.value = `Error! ${response.response.data}`;
     } else {
       msg.value = "";
-      // login successful, redirect to dashboard
       router.push("/readAll");
     }
-    // login successful, redirect to dashboard
-    // this.$router.push("/");
   });
 };
 </script>

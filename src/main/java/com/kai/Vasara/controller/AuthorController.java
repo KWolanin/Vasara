@@ -45,14 +45,24 @@ public class AuthorController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
-        Author autor = authorService.register(request.getUsername(), request.getLogin(), request.getPassword());
-        return ResponseEntity.ok("User registered successfully: " + autor.getId());
+        try {
+            authorService.register(request.getUsername(), request.getLogin(), request.getPassword());
+            return ResponseEntity.ok().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
+
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
-        Author autor = authorService.authenticate(request.getLogin(), request.getPassword());
-        return ResponseEntity.ok(new LoggedUser(autor.getId(), autor.getLogin(), autor.getUsername()));
+        try {
+            authorService.authenticate(request.getLogin(), request.getPassword());
+            return ResponseEntity.ok().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
     }
 
     @Data

@@ -14,3 +14,14 @@ export const login = async (loginData) => {
     return error;
   }
 };
+
+export const register = async (registerData) => {
+  try {
+    const response = await api.post("/authors/register", registerData);
+    console.log(response);
+    return response.data;
+  } catch (error) {
+    console.error("Error registering:", error);
+    return error;
+  }
+};

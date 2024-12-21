@@ -55,7 +55,7 @@ public class AuthorService {
     }
 
     public long getAuthorIdByName(String username) {
-        Optional<Author> author = authorRepository.findAutorByUsername(username);
+        Optional<Author> author = authorRepository.findAuthorByUsername(username);
         if (author.isPresent()) return author.get().getId();
         return -1;
     }
@@ -74,6 +74,12 @@ public class AuthorService {
     }
 
     public Author register(String username, String login, String rawPassword) {
+        if (authorRepository.findByLogin(login).isPresent()) {
+            throw new IllegalArgumentException("User with this login already exists");
+        }
+        if (authorRepository.findByUsername(username).isPresent()) {
+            throw new IllegalArgumentException("User with this username already exists");
+        }
         Author author = new Author();
         author.setLogin(login);
         author.setUsername(username);
@@ -82,9 +88,13 @@ public class AuthorService {
     }
 
     public Author authenticate(String login, String rawPassword) {
-        return authorRepository.findByLogin(login)
-                .filter(author -> passwordEncoder.matches(rawPassword, author.getPassword()))
-                .orElseThrow(() -> new IllegalArgumentException("Invalid login or password"));
+        Author author = authorRepository.findByLogin(login)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        if (!passwordEncoder.matches(rawPassword, author.getPassword())) {
+            throw new IllegalArgumentException("Invalid login or password");
+        }
+        return author;
     }
+
 
 }

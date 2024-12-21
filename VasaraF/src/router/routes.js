@@ -45,6 +45,11 @@ const routes = [
     component: () => import("pages/RegisterPage.vue"),
   },
   {
+    path: "/about",
+    name: "about",
+    component: () => import("pages/AboutPage.vue"),
+  },
+  {
     path: "/:catchAll(.*)*",
     component: () => import("pages/ErrorNotFound.vue"),
   },

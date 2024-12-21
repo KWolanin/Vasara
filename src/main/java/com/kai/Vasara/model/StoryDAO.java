@@ -1,7 +1,6 @@
 package com.kai.Vasara.model;
 
 import com.kai.Vasara.entity.Chapter;
-import com.kai.Vasara.entity.Story;
 import com.kai.Vasara.service.AuthorService;
 import com.kai.Vasara.service.ChapterService;
 import jakarta.persistence.OneToMany;

@@ -16,9 +16,4 @@ public class AuthorDAO {
 
     private long id;
     private String username;
-
-//    @OneToMany
-//    List<StoryDAO> stories;
-//    @OneToMany
-//    List<ChapterDAO> chapters;
 }
