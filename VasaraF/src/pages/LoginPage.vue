@@ -53,7 +53,7 @@ const password = ref("");
 const msg = ref("");
 
 const loginUser = () => {
-  if (!login.value || !password.value) {
+  if (!log.value || !password.value) {
     msg.value = "Please fill login and password";
     return;
   }

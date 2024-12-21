@@ -127,7 +127,6 @@ function clearForm() {
 }
 
 onMounted(() => {
-  console.log(localStorage.getItem("user"));
   const storyData = localStorage.getItem("currentStory");
 
   if (storyData) {
