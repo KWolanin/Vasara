@@ -29,9 +29,7 @@ public class AuthorService {
     public List<AuthorDAO> getAll() {
         List<Author> authors = authorRepository.findAll();
         List<AuthorDAO> daos = new ArrayList<>();
-        authors.forEach(story -> {
-            daos.add(from(story));
-        });
+        authors.forEach(story -> daos.add(from(story)));
         return daos;
     }
 

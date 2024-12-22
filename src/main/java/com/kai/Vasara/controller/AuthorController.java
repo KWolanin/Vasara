@@ -57,8 +57,8 @@ public class AuthorController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
         try {
-            authorService.authenticate(request.getLogin(), request.getPassword());
-            return ResponseEntity.ok().build();
+            Author author = authorService.authenticate(request.getLogin(), request.getPassword());
+            return ResponseEntity.ok(new LoggedUser(author.getId(), author.getUsername(), author.getLogin()));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
