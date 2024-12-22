@@ -7,12 +7,12 @@ const routes = [
   {
     path: "/create",
     name: "create",
-    component: () => import("pages/CreateStory.vue"),
+    component: () => import("src/pages/create/CreateStory.vue"),
   },
   {
     path: "/readAll",
     name: "readAll",
-    component: () => import("pages/ReadStories.vue"),
+    component: () => import("src/read/ReadStories.vue"),
   },
   {
     path: "/mines",
@@ -22,7 +22,7 @@ const routes = [
   {
     path: "/add",
     name: "add",
-    component: () => import("pages/AddChapter.vue"),
+    component: () => import("src/pages/create/AddChapter.vue"),
     props: (route) => ({
       storyId: Number(route.query.storyId),
       authorId: Number(route.query.authorId),
@@ -32,22 +32,30 @@ const routes = [
   {
     path: "/read",
     name: "readChapter",
-    component: () => import("pages/ReadChapter.vue"),
+    component: () => import("src/read/ReadChapter.vue"),
   },
   {
     path: "/login",
     name: "login",
-    component: () => import("pages/LoginPage.vue"),
+    component: () => import("src/pages/users/LoginPage.vue"),
   },
   {
     path: "/register",
     name: "register",
-    component: () => import("pages/RegisterPage.vue"),
+    component: () => import("src/pages/users/RegisterPage.vue"),
   },
   {
     path: "/about",
     name: "about",
-    component: () => import("pages/AboutPage.vue"),
+    component: () => import("src/pages/about/AboutPage.vue"),
+  },
+  {
+    path: "/manage",
+    name: "manage",
+    component: () => import("src/pages/create/ManageChapters.vue"),
+    props: (route) => ({
+      storyId: Number(route.query.storyId),
+    }),
   },
   {
     path: "/:catchAll(.*)*",

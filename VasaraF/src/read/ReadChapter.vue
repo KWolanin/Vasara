@@ -44,7 +44,7 @@
 <script setup>
 import { onMounted, ref, watch } from "vue";
 import { fetchChapter, isNextOrPrevious } from "../services/chapterservice";
-import MainMenu from "./MainMenu.vue";
+import MainMenu from "../components/MainMenu.vue";
 import { useRoute } from "vue-router";
 
 const route = useRoute();
@@ -110,12 +110,8 @@ a:visited {
   color: #333;
 }
 
-.card {
-  border-radius: 15px;
-}
-
 .chapter {
-  justify-items: center;
+  justify-items: center !important;
 }
 
 .content {

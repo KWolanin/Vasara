@@ -1,7 +1,9 @@
 <template>
   <q-btn class="q-ma-sm btn" flat @click="edit">Edit</q-btn>
   <q-btn class="q-ma-sm btn" flat @click="addChapter">Add chapter</q-btn>
-  <q-btn class="q-ma-sm btn" flat>Manage chapters</q-btn>
+  <q-btn class="q-ma-sm btn" flat @click="manageChapters"
+    >Manage chapters</q-btn
+  >
   <q-btn class="q-ma-sm btn del" flat @click="deleteById(props.story.id)"
     >Delete</q-btn
   >
@@ -43,6 +45,10 @@ const deleteById = (id) => {
     });
 };
 
+const manageChapters = () => {
+  router.push({ name: "manage", query: { storyId: props.story.id } });
+};
+
 const edit = () => {
   localStorage.setItem("currentStory", JSON.stringify(props.story));
   router.push({ name: "create" });
@@ -54,12 +60,7 @@ const edit = () => {
   font-family: "Farro", sans-serif;
   font-weight: 400;
   font-style: normal;
-  color: #333 !important;
-}
-
-.del {
-  background-color: #aa4465;
-  color: #eaeaea !important;
+  color: #333;
 }
 
 a:visited {

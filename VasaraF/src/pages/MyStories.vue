@@ -23,9 +23,9 @@
 <script setup>
 import { fetchMyStories } from "../services/storyservice";
 import { onMounted, ref } from "vue";
-import StoryCard from "./StoryCard.vue";
-import MainMenu from "./MainMenu.vue";
-import EditMenu from "./EditMenu.vue";
+import StoryCard from "../components/StoryCard.vue";
+import MainMenu from "../components/MainMenu.vue";
+import EditMenu from "../components/EditMenu.vue";
 import { Notify } from "quasar";
 
 const stories = ref([]);

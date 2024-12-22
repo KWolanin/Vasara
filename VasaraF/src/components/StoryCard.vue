@@ -3,13 +3,16 @@
     <q-chip
       v-for="(fandom, index) in story.fandoms"
       :key="index"
-      class="chip fandom"
+      class="chip bg-accent-purple"
       >{{ fandom }}</q-chip
     >
     <div></div>
-    <q-chip v-for="(tag, index) in story.tags" :key="index" class="chip tag">{{
-      tag
-    }}</q-chip>
+    <q-chip
+      v-for="(tag, index) in story.tags"
+      :key="index"
+      class="chip bg-accent-pink"
+      >{{ tag }}</q-chip
+    >
     <div class="text-h2 q-mb-md">
       {{ story.title }}
       <img v-if="!story.finished" src="public/work-in-progress.png" />
@@ -79,20 +82,9 @@ a:visited {
   color: #333;
 }
 
-.card {
-  border-radius: 15px;
-}
 
 .chip {
   border-radius: 3px !important;
-}
-
-.fandom {
-  background-color: #dabfff;
-}
-
-.tag {
-  background-color: #fbbfca;
 }
 
 img {

@@ -5,18 +5,17 @@
     </div>
     <q-card class="q-pa-md card content" flat>
       <q-form
-        @submit="registerUser"
+        @submit="loginUser"
         class="q-gutter-md"
         @reset="clearForm"
         autofocus
       >
         <div v-if="msg" class="msg">{{ msg }}</div>
-        <q-input filled v-model="login" label="Login" />
-        <q-input filled v-model="username" label="Username" />
+        <q-input filled v-model="log" label="Login" />
         <q-input filled v-model="password" label="Password" />
         <div>
           <q-btn
-            label="Register"
+            label="Login"
             type="submit"
             color="primary"
             class="btn send"
@@ -25,9 +24,17 @@
         </div>
       </q-form>
       <div>
-        <router-link to="login">
-          <p class="guest-account q-mt-sm">Have an account? Login here</p>
+        <router-link to="register">
+          <p class="guest-account q-mt-sm">No account yet? Register here</p>
         </router-link>
+      </div>
+      <div class="guest-account q-mt-lg">
+        <p>
+          Are you a recruiter? Please use guest account and feel free to use the
+          app:
+        </p>
+        <p>login: guest</p>
+        <p>password: guest</p>
       </div>
     </q-card>
   </div>
@@ -35,42 +42,33 @@
 
 <script setup>
 import { ref } from "vue";
-import { register } from "src/services/userservice";
+import { login } from "src/services/userservice";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
 
 const log = ref("");
 const password = ref("");
-const username = ref("");
 
 const msg = ref("");
 
-const registerUser = () => {
-  if (!username.value || !password.value || !login.value) {
-    msg.value = "All fields are required";
+const loginUser = () => {
+  if (!log.value || !password.value) {
+    msg.value = "Please fill login and password";
     return;
   }
-  register({
-    username: username.value,
-    login: log.value,
-    password: password.value,
-  }).then((response) => {
+  login({ login: log.value, password: password.value }).then((response) => {
     if (response instanceof Error) {
       msg.value = `Error! ${response.response.data}`;
     } else {
       msg.value = "";
-      router.push("/login");
+      router.push("/mines");
     }
   });
 };
 </script>
 
 <style scoped>
-.card {
-  border-radius: 15px;
-}
-
 .center {
   justify-items: center;
 }

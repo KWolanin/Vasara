@@ -18,8 +18,8 @@
 <script setup>
 import { fetchStories } from "../services/storyservice";
 import { onMounted, ref } from "vue";
-import StoryCard from "./StoryCard.vue";
-import MainMenu from "./MainMenu.vue";
+import StoryCard from "../components/StoryCard.vue";
+import MainMenu from "../components/MainMenu.vue";
 
 const stories = ref([]);
 const loading = ref(true);

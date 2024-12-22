@@ -15,7 +15,7 @@
         removable
         @remove="removeTag(index)"
         class="q-mr-xs chip"
-        :class="label === 'Tag(s)' ? 'tag' : 'fandom'"
+        :class="label === 'Tag(s)' ? 'bg-accent-pink' : 'bg-accent-purple'"
       >
         {{ tag }}
       </q-chip>
@@ -71,13 +71,5 @@ watch(
 
 .chip {
   border-radius: 3px !important;
-}
-
-.fandom {
-  background-color: #dabfff;
-}
-
-.tag {
-  background-color: #fbbfca;
 }
 </style>

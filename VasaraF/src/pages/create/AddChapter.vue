@@ -1,7 +1,7 @@
 <template>
   <main-menu />
   <div class="row justify-center">
-    <q-card class="col-10 q-pa-md">
+    <q-card class="col-10 q-pa-md q-mb-md">
       <q-btn @click="saveChapter" class="bg-primary">Publish</q-btn>
       <q-input
         filled
@@ -24,7 +24,7 @@
 import MainMenu from "./MainMenu.vue";
 import { ref, computed } from "vue";
 import { useQuasar } from "quasar";
-import { createChapter } from "../services/chapterservice";
+import { createChapter } from "../../services/chapterservice";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
@@ -79,16 +79,10 @@ const editorToolbar = [
       list: "only-icons",
       options: ["left", "center", "right", "justify"],
     },
-    {
-      label: $q.lang.editor.align,
-      icon: $q.iconSet.editor.align,
-      fixedLabel: true,
-      options: ["left", "center", "right", "justify"],
-    },
   ],
   ["bold", "italic", "strike", "underline", "subscript", "superscript"],
   ["token", "hr", "link", "custom_btn"],
-  ["print", "fullscreen"],
+  ["fullscreen"],
   [
     {
       label: $q.lang.editor.formatting,

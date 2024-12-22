@@ -48,11 +48,11 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import { createStory, updateStory } from "../services/storyservice";
-import TagInput from "./TagInput.vue";
-import MainMenu from "./MainMenu.vue";
+import { createStory, updateStory } from "../../services/storyservice";
+import TagInput from "../../components/TagInput.vue";
+import MainMenu from "../../components/MainMenu.vue";
 import { useRouter } from "vue-router";
-import { useUserStore } from "../stores/user";
+import { useUserStore } from "../../stores/user";
 
 const userStore = useUserStore();
 
@@ -153,10 +153,6 @@ onMounted(() => {
 
 a:visited {
   color: #333;
-}
-
-.card {
-  border-radius: 15px;
 }
 
 .send {
