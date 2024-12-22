@@ -21,7 +21,7 @@
 </template>
 
 <script setup>
-import MainMenu from "./MainMenu.vue";
+import MainMenu from "../../components/MainMenu.vue";
 import { ref, computed } from "vue";
 import { useQuasar } from "quasar";
 import { createChapter } from "../../services/chapterservice";
