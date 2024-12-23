@@ -5,3 +5,5 @@ Because writing stories is my personal hobby I'm using many different writing pl
 
 # Tech stack
 Vue.js, Quasar, Pinia, Javascript (frontend), Java 8 (backend), Railway (build and deploy service)
+
+[Vasara app](https://vasaraf-production.up.railway.app/#/)
