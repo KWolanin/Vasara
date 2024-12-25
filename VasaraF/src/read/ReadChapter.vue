@@ -29,7 +29,7 @@
     </div>
 
     <div class="q-mb-md chapter">
-      <h2>{{ data.chapterNo }}: {{ data.chapterTitle }}</h2>
+      <h4>{{ data.chapterNo }}: {{ data.chapterTitle }}</h4>
       <q-card class="q-pa-md content" flat>
         <div :style="{ fontSize: fontSize + 'px' }" v-html="data.content" />
       </q-card>

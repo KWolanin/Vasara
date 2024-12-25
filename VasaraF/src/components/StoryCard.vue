@@ -13,11 +13,11 @@
       class="chip bg-accent-pink"
       >{{ tag }}</q-chip
     >
-    <div class="text-h2 q-mb-md">
+    <div class="text-h3 q-mb-md">
       {{ story.title }}
       <img v-if="!story.finished" src="public/work-in-progress.png" />
     </div>
-    <div class="text-h4">{{ story.authorName }}</div>
+    <div class="text-h5">{{ story.authorName }}</div>
     <div class="q-mt-sm q-mb-sm">
       <strong>published: </strong> {{ formatDate(story.publishDt) }}
     </div>
