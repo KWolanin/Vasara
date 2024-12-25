@@ -24,7 +24,7 @@
     <span class="q-mt-sm q-mb-sm">
       <strong> last update: </strong>{{ formatDate(story.updateDt) }}</span
     >
-    <p class="text-h6 q-mt-md">
+    <p class="text-body1 q-mt-md">
       {{ story.description }}
     </p>
     <div class="text-h5 q-mb-md">
@@ -81,7 +81,6 @@ const readChapter = () => {
 a:visited {
   color: #333;
 }
-
 
 .chip {
   border-radius: 3px !important;

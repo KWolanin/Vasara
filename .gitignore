@@ -57,3 +57,11 @@ yarn-error.log*
 
 # local .env files
 .env.local*
+
+.idea/
+.mvn/wrapper/
+node/
+target/classes/
+.gitattributes
+.mvnw
+mvnw.cmd
