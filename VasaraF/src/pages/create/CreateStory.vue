@@ -34,7 +34,7 @@
             flat
           />
           <q-btn
-            label="Reset"
+            label="Clear"
             type="reset"
             color="primary"
             flat

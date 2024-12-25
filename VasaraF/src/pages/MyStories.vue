@@ -15,7 +15,8 @@
       </story-card>
     </div>
     <div v-if="!stories.length">
-      No stories found. Maybe you should add a new story?
+      No stories found. Maybe you should add a new story? // wip, link to add
+      stories here/
     </div>
   </div>
 </template>

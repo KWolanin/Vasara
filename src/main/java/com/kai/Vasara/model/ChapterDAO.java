@@ -11,9 +11,6 @@ import org.springframework.stereotype.Component;
 @Component
 @NoArgsConstructor
 public class ChapterDAO {
-
-
-
     private long id;
     private int chapterNo;
     private String chapterTitle;

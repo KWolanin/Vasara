@@ -4,12 +4,7 @@
       <h3 class="title q-mb-lg q-pb-lg">Vasara</h3>
     </div>
     <q-card class="q-pa-md card content" flat>
-      <q-form
-        @submit="loginUser"
-        class="q-gutter-md"
-        @reset="clearForm"
-        autofocus
-      >
+      <q-form @submit="loginUser" class="q-gutter-md" autofocus>
         <div v-if="msg" class="msg">{{ msg }}</div>
         <q-input filled v-model="log" label="Login" />
         <q-input filled v-model="password" label="Password" />

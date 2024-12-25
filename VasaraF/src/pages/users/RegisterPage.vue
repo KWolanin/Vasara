@@ -4,12 +4,7 @@
       <h3 class="title q-mb-lg q-pb-lg">Vasara</h3>
     </div>
     <q-card class="q-pa-md card content" flat>
-      <q-form
-        @submit="registerUser"
-        class="q-gutter-md"
-        @reset="clearForm"
-        autofocus
-      >
+      <q-form @submit="registerUser" class="q-gutter-md" autofocus>
         <div v-if="msg" class="msg">{{ msg }}</div>
         <q-input filled v-model="login" label="Login" />
         <q-input filled v-model="username" label="Username" />
@@ -40,7 +35,7 @@ import { useRouter } from "vue-router";
 
 const router = useRouter();
 
-const log = ref("");
+const login = ref("");
 const password = ref("");
 const username = ref("");
 
@@ -53,7 +48,7 @@ const registerUser = () => {
   }
   register({
     username: username.value,
-    login: log.value,
+    login: login.value,
     password: password.value,
   }).then((response) => {
     if (response instanceof Error) {
@@ -67,7 +62,6 @@ const registerUser = () => {
 </script>
 
 <style scoped>
-
 .center {
   justify-items: center;
 }

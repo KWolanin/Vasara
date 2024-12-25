@@ -1,7 +1,9 @@
 import { useUserStore } from "../stores/user";
 import { api } from "../boot/axios";
+import { Author } from "../types/Author";
+import { RegisterRequest } from "../types/RegisterRequest";
 
-export const login = async (loginData) => {
+export const login = async (loginData: Author): Promise<boolean> => {
   try {
     const response = await api.post("/authors/login", loginData);
     const userStore = useUserStore();
@@ -14,7 +16,9 @@ export const login = async (loginData) => {
   }
 };
 
-export const register = async (registerData) => {
+export const register = async (
+  registerData: RegisterRequest
+): Promise<Boolean> => {
   try {
     const response = await api.post("/authors/register", registerData);
     return response.data;

@@ -1,7 +1,8 @@
 import { api } from "../boot/axios";
 import { useUserStore } from "src/stores/user";
+import { Story } from "../types/Story";
 
-export const fetchStories = async () => {
+export const fetchStories = async (): Promise<Story[]> => {
   try {
     const response = await api.get("/stories/all");
     return response.data;
@@ -11,7 +12,7 @@ export const fetchStories = async () => {
   }
 };
 
-export const fetchMyStories = async () => {
+export const fetchMyStories = async (): Promise<Story[]> => {
   try {
     const userStore = useUserStore();
     const id = userStore.id;
@@ -23,7 +24,7 @@ export const fetchMyStories = async () => {
   }
 };
 
-export const createStory = async (storyData) => {
+export const createStory = async (storyData: Story): Promise<boolean> => {
   try {
     const response = await api.post("/stories/add", storyData);
     return response.data;
@@ -33,7 +34,7 @@ export const createStory = async (storyData) => {
   }
 };
 
-export const updateStory = async (storyData) => {
+export const updateStory = async (storyData: Story): Promise<boolean> => {
   try {
     const response = await api.patch("/stories/edit", storyData);
     return response.data;
@@ -43,7 +44,7 @@ export const updateStory = async (storyData) => {
   }
 };
 
-export const deleteStory = async (id) => {
+export const deleteStory = async (id: number): Promise<boolean> => {
   try {
     const response = await api.delete(`/stories/delete/${id}`);
     return response.data;
