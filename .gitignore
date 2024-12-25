@@ -65,3 +65,6 @@ target/classes/
 .gitattributes
 .mvnw
 mvnw.cmd
+/.mvn/
+/node/
+/target/
