@@ -7,9 +7,7 @@ module.exports = configure(function (ctx) {
 
     extras: [
       "roboto-font-latin-ext",
-
-      //"roboto-font", // optional, you are not bound to it
-      "material-icons", // optional, you are not bound to it
+      "material-icons",
     ],
 
     build: {
@@ -19,14 +17,6 @@ module.exports = configure(function (ctx) {
       },
 
       vueRouterMode: "hash", // available values: 'hash', 'history'
-      // vueRouterBase,
-      // vueDevtools,
-      // vueOptionsAPI: false,
-
-      // rebuildCache: true, // rebuilds Vite/linter/etc cache on startup
-
-      // publicPath: '/',
-      // analyze: true,
       env: {
         VUE_APP_API_URL:
           process.env.NODE_ENV !== "production"
@@ -36,14 +26,6 @@ module.exports = configure(function (ctx) {
              'ws://localhost:8080'
               : 'wss://vasaraf-production.up.railway.app:9000/'
       },
-      // rawDefine: {}
-      // ignorePublicFolder: true,
-      // minify: false,
-      // polyfillModulePreload: true,
-      // distDir
-
-      // extendViteConf (viteConf) {},
-      // viteVuePluginOptions: {},
 
       vitePlugins: [
         [
