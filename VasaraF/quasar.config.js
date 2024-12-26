@@ -60,8 +60,14 @@ module.exports = configure(function (ctx) {
       // https: true
       open: true, // opens browser window automatically,
       client: {
-        webSocketURL: 'wss://vasaraf-production.up.railway.app:9000/',
-      },
+        webSocketURL: {
+          hostname: '0.0.0.0',
+          pathname: '/ws',
+          password: 'dev-server',
+          port: 8080,
+          protocol: 'ws',
+          username: 'webpack',
+        },
     },
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#framework
