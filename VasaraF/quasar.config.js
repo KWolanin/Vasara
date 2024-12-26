@@ -61,10 +61,10 @@ module.exports = configure(function (ctx) {
       open: true, // opens browser window automatically,
       client: {
         webSocketURL: {
-          hostname: '0.0.0.0',
+          hostname: 'vasaraf-production.up.railway.app',
           pathname: '/ws',
           password: 'dev-server',
-          port: 8080,
+          port: 9000,
           protocol: 'ws',
           username: 'webpack',
         }      },
