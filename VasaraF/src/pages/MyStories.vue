@@ -2,7 +2,7 @@
   <main-menu />
   <q-inner-loading :showing="loading">
     Loading...
-    <q-spinner-gears size="50px" color="primary" />
+    <q-spinner-hearts size="50px" color="amber" />
   </q-inner-loading>
   <div v-if="!loading">
     <div
@@ -14,9 +14,16 @@
         <edit-menu :story @story-deleted="reloadStories()" />
       </story-card>
     </div>
-    <div v-if="!stories.length">
-      No stories found. Maybe you should add a new story? // wip, link to add
-      stories here/
+    <div class="row justify-center" v-if="!stories.length">
+      <q-card class="q-pa-md card content card" flat>
+        <q-card-title>No Stories Found</q-card-title>
+        <p>
+          Maybe you should add a new story?
+        </p>
+        <Router-link to="create">
+          <q-btn class="q-ml-md btn" label="+ Add" flat />
+        </Router-link>
+      </q-card>
     </div>
   </div>
 </template>
@@ -62,3 +69,17 @@ const reloadStories = async () => {
   await fetchStories();
 };
 </script>
+
+<style scoped>
+.content {
+  width: 80%;
+}
+
+.btn {
+  font-family: "Farro", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  color: #333 !important;
+}
+
+</style>

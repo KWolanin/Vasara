@@ -37,7 +37,7 @@
   </div>
   <q-inner-loading :showing="!data">
     Loading...
-    <q-spinner-gears size="50px" color="primary" />
+    <q-spinner-hearts size="50px" color="amber" />
   </q-inner-loading>
 </template>
 
@@ -110,9 +110,22 @@ a:visited {
   color: #333;
 }
 
-.chapter {
+/* .chapter {
   justify-items: center !important;
+} */
+
+
+.chapter {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  padding: 0;
+  margin: 0 auto;
 }
+
 
 .content {
   width: 80%;
