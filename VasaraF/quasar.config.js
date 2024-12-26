@@ -60,7 +60,7 @@ module.exports = configure(function (ctx) {
       // https: true
       open: true, // opens browser window automatically,
       client: {
-        webSocketURL: 'ws://0.0.0.0:8080/ws',
+        webSocketURL: 'wss://vasaraf-production.up.railway.app:9000/',
       },
     },
 
