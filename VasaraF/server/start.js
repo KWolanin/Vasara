@@ -16,6 +16,7 @@ const express = require("express"),
   serveStatic = require("serve-static"),
   port = process.env.PORT || 3000;
 
+console.log(port);
 const app = express();
 
 app.use(serveStatic("dist/spa", { index: ["index.html", "index.htm"] }));
