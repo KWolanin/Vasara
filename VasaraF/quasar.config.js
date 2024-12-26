@@ -32,6 +32,7 @@ module.exports = configure(function (ctx) {
           process.env.NODE_ENV !== "production"
             ? "http://localhost:8080/api"
             : "https://vasara-production.up.railway.app/api",
+            VUE_APP_WS_URL: process.env.NODE_ENV !== "production" ? 'ws://localhost:8080' : 'wss://vasaraf-production.up.railway.app:9000/'
       },
       // rawDefine: {}
       // ignorePublicFolder: true,
@@ -59,15 +60,6 @@ module.exports = configure(function (ctx) {
     devServer: {
       // https: true
       open: true, // opens browser window automatically,
-      client: {
-        webSocketURL: {
-          hostname: 'vasaraf-production.up.railway.app',
-          pathname: '/ws',
-          password: 'dev-server',
-          port: 9000,
-          protocol: 'ws',
-          username: 'webpack',
-        }      },
     },
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#framework
