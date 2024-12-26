@@ -69,3 +69,4 @@ mvnw.cmd
 /node/
 /target/
 /VasaraF/.vscode/
+/VasaraF/dist/
