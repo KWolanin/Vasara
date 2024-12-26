@@ -19,5 +19,5 @@ const express = require("express"),
 console.log(port);
 const app = express();
 
-app.use(serveStatic("dist/spa", { index: ["index.html", "index.htm"] }));
+app.use(serveStatic("../dist/spa", { index: ["index.html", "index.htm"] }));
 app.listen(port);
