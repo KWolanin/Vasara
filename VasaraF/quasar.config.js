@@ -60,7 +60,10 @@ module.exports = configure(function (ctx) {
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#devServer
     devServer: {
-      open: true, // opens browser window automatically,
+      open: true,
+      client: {
+        webSocketURL: 'ws://0.0.0.0:8080/ws',
+      },
     },
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#framework
