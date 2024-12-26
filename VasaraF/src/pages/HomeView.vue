@@ -6,7 +6,7 @@
           <h1 class="title">Vasara</h1>
           <h3 class="subtitle">your summer trip to stories</h3>
           <div>
-            <img src="/public/favicon.ico" width="150" height="150" />
+            <img src="../assets/favicon.ico" width="150" height="150" />
           </div>
           <q-btn class="q-ma-md" flat>
             <RouterLink to="create">

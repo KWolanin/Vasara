@@ -15,7 +15,7 @@
     >
     <div class="text-h3 q-mb-md">
       {{ story.title }}
-      <img v-if="!story.finished" src="public/work-in-progress.png" />
+      <img v-if="!story.finished" src="../assets/work-in-progress.png" />
     </div>
     <div class="text-h5">{{ story.authorName }}</div>
     <div class="q-mt-sm q-mb-sm">
