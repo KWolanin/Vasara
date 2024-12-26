@@ -59,7 +59,9 @@ module.exports = configure(function (ctx) {
     devServer: {
       // https: true
       open: true, // opens browser window automatically,
-      
+      client: {
+        webSocketURL: 'ws://0.0.0.0:8080/ws',
+      },
     },
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#framework
