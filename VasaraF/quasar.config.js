@@ -67,7 +67,7 @@ module.exports = configure(function (ctx) {
           port: 8080,
           protocol: 'ws',
           username: 'webpack',
-        },
+        }      },
     },
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#framework
