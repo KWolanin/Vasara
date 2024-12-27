@@ -24,6 +24,17 @@ export const fetchChapter = async (
   }
 };
 
+export const fetchChaptersForStory = async (
+  storyId: number): Promise<Chapter[]> => {
+  try {
+    const response = await api.get(`/chapters/all/${storyId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching chapters data:", error);
+    throw error;
+  }
+};
+
 export const isNextOrPrevious = async (
   storyId: number,
   chapterNo: number

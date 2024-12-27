@@ -1,13 +1,14 @@
 package com.kai.Vasara.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @Table(name = "chapter")
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 public class Chapter {
 
     @Id
