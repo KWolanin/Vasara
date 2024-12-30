@@ -62,3 +62,13 @@ export const updateChaptersOrder = async (chapters : Chapter[]) => {
     throw error;
   }
 }
+
+export const deleteChapterFromDb = async (id: number): Promise<boolean> => {
+  try {
+    const response = await api.delete(`/chapters/delete/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting chapter:", error);
+    throw error;
+  }
+}

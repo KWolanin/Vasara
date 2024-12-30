@@ -60,4 +60,9 @@ public class ChapterController {
     public ResponseEntity<List<ChapterDAO>> getChapters(@PathVariable Long storyId) {
         return new ResponseEntity<>(chapterService.getChapters(storyId), HttpStatus.OK);
     }
+
+    @DeleteMapping("/delete/{chapterId}")
+    public ResponseEntity<Boolean> deleteChapter(@PathVariable Long chapterId) {
+        return new ResponseEntity<>(chapterService.deleteChapter(chapterId), HttpStatus.OK);
+    }
 }

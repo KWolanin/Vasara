@@ -4,4 +4,5 @@ export interface Chapter {
   authorId: number;
   storyId: number;
   chapterNo: number;
+  id: number;
 }

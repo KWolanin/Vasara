@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -97,28 +96,41 @@ public class ChapterService {
                 .toList();
     }
 
+    @Transactional
     public Boolean editChaptersOrder(List<ChapterDAO> chapters) {
-        List<Long> chapterIds = chapters.stream()
-                .map(ChapterDAO::getId)
-                .collect(Collectors.toList());
+        try {
+            List<Long> chapterIds = chapters.stream()
+                    .map(ChapterDAO::getId)
+                    .collect(Collectors.toList());
 
-        List<Chapter> existingChapters = chapterRepository.findAllById(chapterIds);
+            List<Chapter> existingChapters = chapterRepository.findAllById(chapterIds);
 
-        existingChapters.forEach(existingChapter -> {
-            chapters.stream()
+            existingChapters.forEach(existingChapter -> chapters.stream()
                     .filter(chapterDAO -> chapterDAO.getId() == (existingChapter.getId()))
                     .findFirst()
                     .ifPresent(chapterDAO -> {
                         existingChapter.setChapterTitle(chapterDAO.getChapterTitle());
                         existingChapter.setChapterNo(chapterDAO.getChapterNo());
-        });
-        });
-        chapterRepository.saveAll(existingChapters);
-        return true;
+                    }));
+            chapterRepository.saveAll(existingChapters);
+            return true;
+        } catch (Exception e) {
+            System.err.println("Error updating chapters order: " + e.getMessage());
+            return false;
+        }
     }
 
     public Boolean editChapterContent(ChapterDAO chapterDAO) {
         // todo
         return true;
+    }
+
+
+    public Boolean deleteChapter(Long id) {
+        if (chapterRepository.existsById(id)) {
+            chapterRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 }
