@@ -1,19 +1,19 @@
 <template>
-<div>
-  <p>Edit title</p>
-  <span>{{chapter.chapterTitle}}</span>
-  <p>Edit position</p>
-  <span>{{chapter.chapterNo}}</span>
-  <p>Edit content</p>
-  <p>[wip]</p>
-</div>
-
+  <q-card class="q-pa-md" dense>
+    <p class="text-h6">
+      <q-input v-model="chapter.chapterTitle" outlined />
+      <!-- {{chapter.chapterTitle}} -->
+    </p>
+    <q-space/>
+    <!-- <q-btn class="q-mr-sm">Edit</q-btn>
+    <q-btn>Delete</q-btn> -->
+  </q-card>
 </template>
 
 
 <script setup lang="ts">
 
-const props = defineProps({
+defineProps({
   chapter:  {
     type: Object,
     required: true

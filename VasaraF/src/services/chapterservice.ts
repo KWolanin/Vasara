@@ -52,3 +52,13 @@ export const isNextOrPrevious = async (
     throw error;
   }
 };
+
+export const updateChaptersOrder = async (chapters : Chapter[]) => {
+  try {
+    const response = await api.patch('/chapters/editOrder', chapters)
+    return response.data;
+  } catch (error) {
+    console.error("Error updating chapters order:", error);
+    throw error;
+  }
+}

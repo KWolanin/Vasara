@@ -96,4 +96,29 @@ public class ChapterService {
                 .map(this::from)
                 .toList();
     }
+
+    public Boolean editChaptersOrder(List<ChapterDAO> chapters) {
+        List<Long> chapterIds = chapters.stream()
+                .map(ChapterDAO::getId)
+                .collect(Collectors.toList());
+
+        List<Chapter> existingChapters = chapterRepository.findAllById(chapterIds);
+
+        existingChapters.forEach(existingChapter -> {
+            chapters.stream()
+                    .filter(chapterDAO -> chapterDAO.getId() == (existingChapter.getId()))
+                    .findFirst()
+                    .ifPresent(chapterDAO -> {
+                        existingChapter.setChapterTitle(chapterDAO.getChapterTitle());
+                        existingChapter.setChapterNo(chapterDAO.getChapterNo());
+        });
+        });
+        chapterRepository.saveAll(existingChapters);
+        return true;
+    }
+
+    public Boolean editChapterContent(ChapterDAO chapterDAO) {
+        // todo
+        return true;
+    }
 }

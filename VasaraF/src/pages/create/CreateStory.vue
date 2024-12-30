@@ -66,14 +66,6 @@ const existingStory = ref({});
 
 const router = useRouter();
 
-// function updateTags(newTags) {
-//   tags.value = newTags;
-// }
-
-// function updateFandoms(newFandoms) {
-//   fandoms.value = newFandoms;
-// }
-
 const createNewStory = () => {
   const id = userStore.id;
   if (!isEditing.value) {

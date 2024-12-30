@@ -1,7 +1,7 @@
 <template>
   <q-btn class="q-ma-sm btn" flat @click="edit">Edit</q-btn>
   <q-btn class="q-ma-sm btn" flat @click="addChapter">Add chapter</q-btn>
-  <q-btn class="q-ma-sm btn" flat @click="manageChapters"
+  <q-btn class="q-ma-sm btn" v-if="story.chaptersNumber > 0" flat @click="manageChapters"
     >Manage chapters</q-btn
   >
   <q-btn class="q-ma-sm btn del" flat @click="deleteById(props.story.id)"

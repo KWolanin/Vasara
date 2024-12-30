@@ -22,6 +22,7 @@
     "quasar": "^2.16.0",
     "serve": "^14.2.4",
     "vue": "^3.4.18",
+    "vue-draggable-plus": "^0.6.0",
     "vue-router": "^4.0.12",
     "vue-tag-maker": "^1.1.0"
   },

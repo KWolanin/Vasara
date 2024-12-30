@@ -12,10 +12,12 @@
         >
           <q-btn class="q-ml-md btn" label="Previous" flat />
         </router-link>
+        <q-space/>
         <div class="row justify-center">
           <q-btn @click="decreaseFont" label="A-" class="q-mr-sm btn" flat />
           <q-btn @click="increaseFont" label="A+" class="btn" flat />
         </div>
+        <q-space/>
         <router-link
           v-show="isNextChapter"
           :to="{
@@ -29,7 +31,7 @@
     </div>
 
     <div class="q-mb-md chapter">
-      <h4>{{ data.chapterNo }}: {{ data.chapterTitle }}</h4>
+      <h4>{{ data.chapterTitle }}</h4>
       <q-card class="q-pa-md content" flat>
         <div :style="{ fontSize: fontSize + 'px' }" v-html="data.content" />
       </q-card>
