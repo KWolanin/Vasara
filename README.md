@@ -11,14 +11,14 @@ User currently can:
 - add chapters as full customizable html text
 - rename and delete chapters of their stories
 - change chapters order
+- set story as finished (no more chapters are expected to be published)
 - delete own story or edit its details
-- read other stories
+- read other stories and change its font size to make reading more comfortable
 - add fandom and tags to their story
 
 In the future user will be able to:
 - change theirs account settings (username/password)
 - filter and sort stories based on rating, tags and fandoms
-- set their story as finished
 - edit published chapter's content
 - follow other author and get en e-mail when they update/post a story
 - add the story to favourites and manage favourites list
@@ -26,9 +26,12 @@ In the future user will be able to:
 
 
 # Tech stack
-Vue.js, Quasar, Pinia, Javascript (frontend), Java 8 (backend), Railway (build and deploy service)
+Vue.js, Quasar, Pinia, Javascript/Typescript (frontend), Java 8 (backend), Railway (build and deploy service)
 
 You can use Vasara here:
 [Vasara app](https://vasaraf-production.up.railway.app/#/)
 
 use guest account (guest/guest) and feel free to play with Vasara publishing platform!
+
+Known problems:
+- slow server/database response - need to be investigated and fixed

@@ -88,7 +88,7 @@ const editorToolbar = [
       label: $q.lang.editor.formatting,
       icon: $q.iconSet.editor.formatting,
       list: "no-icons",
-      options: ["p", "h1", "h2", "h3", "h4", "h5", "h6", "code"],
+      options: ["p", "h1", "h2", "h3", "h4", "h5", "h6"],
     },
     {
       label: $q.lang.editor.fontSize,

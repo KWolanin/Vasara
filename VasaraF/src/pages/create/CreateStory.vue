@@ -25,6 +25,7 @@
         />
         <tag-input v-model="tags" label="Tag(s)" />
         <tag-input v-model="fandoms" label="Fandom(s)" />
+        <q-checkbox v-model="finished" label="Mark as completed work" />
         <div>
           <q-btn
             :label="isEditing ? 'Update' : 'Create'"
@@ -60,6 +61,7 @@ const title = ref("");
 const description = ref("");
 const fandoms = ref([]);
 const tags = ref([]);
+const finished = ref(false)
 
 const isEditing = ref(false);
 const existingStory = ref({});
@@ -75,7 +77,7 @@ const createNewStory = () => {
       description: description.value,
       tags: tags.value,
       fandoms: fandoms.value,
-      finished: false,
+      finished: finished.value,
       publishDt: new Date(),
       updateDt: new Date(),
     };
@@ -96,7 +98,7 @@ const createNewStory = () => {
       description: description.value,
       tags: tags.value,
       fandoms: fandoms.value,
-      finished: false,
+      finished: finished.value,
       publishDt: existingStory.value.publishDt,
       updateDt: existingStory.value.updateDt,
     };
@@ -127,7 +129,7 @@ onMounted(() => {
     description.value = story.description;
     tags.value = story.tags || [];
     fandoms.value = story.fandoms || [];
-
+    finished.value = story.finished || false;
     isEditing.value = true;
     existingStory.value = story;
     localStorage.removeItem("currentStory");
