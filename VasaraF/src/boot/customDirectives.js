@@ -1,5 +1,32 @@
 // src/boot/customDirectives.js
-import { quotes } from "src/quotesConfig";
+import { quotes } from "src/boot/quotesConfig";
+
+/**
+ * this directive is a try to implementation auto-switch of typography quotes
+ * for future versions of Vasara when user will be able to switch UI langguage and
+ * set a language of their works. In efecct the work should have a typography
+ * typical for its language - e.g. Polish or French works should use different quotes
+ *  then English ones:
+ *
+ * For example:
+ *
+ * typography quotes = {
+  pl: { open: "„", close: "”" },
+  en: { open: "“", close: "”" },
+  fr: { open: "«", close: "»" },
+
+  instead of a programmer quotes: ""
+
+  User should be also able to use hypnem, en dashes and em dashes, to follow
+  the rules of their language writting conventions:
+
+  Unicode: U+2010 (hypnem), U+2013 (en dash), U+2014 (m dash)
+
+
+  This part of code needs additional work to work correctly with
+  Vue components so it is not implemented yet.
+};
+ *  */
 
 export default ({ app }) => {
   app.directive("smart-quotes", {

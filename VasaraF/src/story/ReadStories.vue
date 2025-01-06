@@ -15,14 +15,15 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { fetchStories } from "../services/storyservice";
 import { onMounted, ref } from "vue";
-import StoryCard from "../components/StoryCard.vue";
-import MainMenu from "../components/MainMenu.vue";
+import StoryCard from "../story/StoryCard.vue";
+import MainMenu from "../utils/MainMenu.vue";
+import { Story } from "src/types/Story";
 
-const stories = ref([]);
-const loading = ref(true);
+const stories = ref<Story[]>([]);
+const loading = ref<boolean>(true);
 
 onMounted(() => {
   fetchStories()

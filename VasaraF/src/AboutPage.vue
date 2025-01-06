@@ -1,6 +1,6 @@
 <template>
   <main-menu />
-  <q-card class="q-ma-lg q-pa-sm">
+  <q-card class="q-ma-lg q-pa-sm" flat>
     <h4 class="header q-ml-sm">About Project</h4>
     <p class="q-ml-sm">
       "Vasara" in Lithuanian means "summer." Such are the stories – joyful and
@@ -33,5 +33,5 @@
 </template>
 
 <script setup>
-import MainMenu from "../../components/MainMenu.vue";
+import MainMenu from "./utils/MainMenu.vue";
 </script>

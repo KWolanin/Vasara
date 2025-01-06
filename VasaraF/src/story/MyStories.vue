@@ -11,7 +11,7 @@
       class="row justify-center q-pa-lg"
     >
       <story-card :story>
-        <edit-menu :story @story-deleted="reloadStories()" />
+        <edit-story-menu :story @story-deleted="reloadStories()" />
       </story-card>
     </div>
     <div class="row justify-center" v-if="!stories.length">
@@ -28,16 +28,17 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { fetchMyStories } from "../services/storyservice";
 import { onMounted, ref } from "vue";
-import StoryCard from "../components/StoryCard.vue";
-import MainMenu from "../components/MainMenu.vue";
-import EditMenu from "../components/EditMenu.vue";
+import StoryCard from "../story/StoryCard.vue";
+import MainMenu from "../utils/MainMenu.vue";
+import EditStoryMenu from "../story/EditStoryMenu.vue";
 import { Notify } from "quasar";
+import { Story } from "src/types/Story";
 
-const stories = ref([]);
-const loading = ref(true);
+const stories = ref<Story[]>([]);
+const loading = ref<boolean>(true);
 
 onMounted(() => {
   fetchMyStories()
@@ -73,13 +74,6 @@ const reloadStories = async () => {
 <style scoped>
 .content {
   width: 80%;
-}
-
-.btn {
-  font-family: "Farro", sans-serif;
-  font-weight: 400;
-  font-style: normal;
-  color: #333 !important;
 }
 
 </style>

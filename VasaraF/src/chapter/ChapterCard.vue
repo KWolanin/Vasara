@@ -27,30 +27,15 @@
 
 <script setup lang="ts">
 const emit = defineEmits();
-import { useUserStore } from "../../stores/user";
+import { Chapter } from "src/types/Chapter";
+import { useUserStore } from "../stores/user";
 const userStore = useUserStore();
 
-const props = defineProps({
-  chapter: {
-    type: Object,
-    required: true,
-  },
-});
+const props = defineProps<{
+  chapter: Chapter;
+}>();
 
-const deleteChapter = () => {
+const deleteChapter = () : void => {
   emit("delete-chapter", props.chapter.id);
 };
 </script>
-
-<style scoped>
-.btn {
-  font-family: "Farro", sans-serif;
-  font-weight: 400;
-  font-style: normal;
-  color: #333;
-}
-
-a:visited {
-  color: #333;
-}
-</style>

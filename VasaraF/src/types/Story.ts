@@ -7,7 +7,7 @@ export interface Story {
   tags: string[];
   fandoms: string[];
   finished: boolean;
-  publishDt: string;
-  updateDt: string;
+  publishDt: string | Date;
+  updateDt: string | Date;
   chaptersNumber: number;
 }

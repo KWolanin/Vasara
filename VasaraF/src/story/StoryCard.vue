@@ -25,10 +25,10 @@
     </div>
     <div class="text-h5">{{ story.authorName }}</div>
     <div class="q-mt-sm q-mb-sm">
-      <strong>published: </strong> {{ formatDate(story.publishDt) }}
+      <strong>published: </strong> {{ formatDate(story.publishDt.toString()) }}
     </div>
     <span class="q-mt-sm q-mb-sm">
-      <strong> last update: </strong>{{ formatDate(story.updateDt) }}</span
+      <strong> last update: </strong>{{ formatDate(story.updateDt.toString()) }}</span
     >
     <p class="text-body1 q-mt-md">
       {{ story.description }}
@@ -49,23 +49,21 @@
   </q-card>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { format } from "date-fns";
+import { Story } from "src/types/Story";
 import { useRouter } from "vue-router";
 const router = useRouter();
 
-const props = defineProps({
-  story: {
-    type: Object,
-    required: true,
-  },
-});
+const props = defineProps<{
+  story: Story;
+}>();
 
-const formatDate = (date) => {
+const formatDate = (date: string) : string => {
   return format(new Date(date), "dd.MM.yyyy");
 };
 
-const readChapter = () => {
+const readChapter = () : void => {
   router.push({
     path: "/read",
     query: {
@@ -77,16 +75,6 @@ const readChapter = () => {
 </script>
 
 <style scoped>
-.btn {
-  font-family: "Farro", sans-serif;
-  font-weight: 400;
-  font-style: normal;
-  color: #333 !important;
-}
-
-a:visited {
-  color: #333;
-}
 
 .chip {
   border-radius: 3px !important;

@@ -23,44 +23,33 @@
 </template>
 
 <script setup lang="ts">
-import MainMenu from "../../components/MainMenu.vue";
+import MainMenu from "../utils/MainMenu.vue";
 import { ref, computed, onMounted, Ref } from "vue";
 import { useQuasar } from "quasar";
-import { createChapter, fetchChapter } from "../../services/chapterservice";
+import { createChapter, fetchChapter } from "../services/chapterservice";
 import { useRouter, useRoute } from "vue-router";
 import { Chapter } from "src/types/Chapter";
 import { Notify } from "quasar";
 
-
 const router = useRouter();
 const route = useRoute();
-
-const chapterTitle = ref("");
-const content = ref("");
-
 const $q = useQuasar();
 
-const props = defineProps({
-  authorId: {
-    type: Number,
-    required: true,
-  },
-  storyId: {
-    type: Number,
-    required: true,
-  },
-  chapters: {
-    type: Number,
-    required: true,
-  },
-});
+const chapterTitle = ref<string>("");
+const content = ref<string>("");
 
-const chapterNumber = computed(() => {
+const props = defineProps<{
+  authorId: number;
+  storyId: number;
+  chapters: number;
+}>();
+
+const chapterNumber = computed<string>(() => {
   if (route.name === "edit") return "";
   return `Chapter no. ${props.chapters + 1}`;
 });
 
-const saveChapter = () => {
+const saveChapter = (): void => {
   let c: Chapter | Omit<Chapter, "id">;
   if (route.name === "add") {
     c = {
@@ -80,18 +69,22 @@ const saveChapter = () => {
   createChapter(c)
     .then(() => {
       router.push("/mines");
-      const msg = route.name === 'edit' ? 'updated' : 'published'
+      const msg = route.name === "edit" ? "updated" : "published";
       Notify.create({
-      message: `Chapter ${msg} successfully!`,
-      position: "bottom-right",
-    });
+        message: `Chapter ${msg} successfully!`,
+        position: "bottom-right",
+      });
     })
-    .catch((error) => {
+    .catch((error: unknown) => {
       console.error(error);
+      Notify.create({
+        message: `Error occurred!`,
+        position: "bottom-right",
+      });
     });
 };
 
-const existingChapter: Ref<Chapter | null> = ref(null)
+const existingChapter: Ref<Chapter | null> = ref(null);
 
 onMounted(() => {
   if (route.name === "edit") {

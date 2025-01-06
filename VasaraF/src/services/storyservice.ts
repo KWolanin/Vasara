@@ -24,7 +24,7 @@ export const fetchMyStories = async (): Promise<Story[]> => {
   }
 };
 
-export const createStory = async (storyData: Story): Promise<boolean> => {
+export const createStory = async (storyData: Story | Omit<Story, "id">): Promise<boolean> => {
   try {
     const response = await api.post("/stories/add", storyData);
     return response.data;
@@ -34,7 +34,7 @@ export const createStory = async (storyData: Story): Promise<boolean> => {
   }
 };
 
-export const updateStory = async (storyData: Story): Promise<boolean> => {
+export const updateStory = async (storyData: Story | Omit<Story, "id">): Promise<boolean> => {
   try {
     const response = await api.patch("/stories/edit", storyData);
     return response.data;

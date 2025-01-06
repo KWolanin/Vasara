@@ -43,28 +43,29 @@
   </q-inner-loading>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { onMounted, ref, watch } from "vue";
 import { fetchChapter, isNextOrPrevious } from "../services/chapterservice";
-import MainMenu from "../components/MainMenu.vue";
+import MainMenu from "../utils/MainMenu.vue";
 import { useRoute } from "vue-router";
+import { Chapter } from "../types/Chapter";
 
 const route = useRoute();
 
-const data = ref(null);
+const data = ref<Chapter>(null);
 
-const fontSize = ref(16);
-const isNextChapter = ref(false);
-const isPreviousChapter = ref(false);
+const fontSize = ref<number>(16);
+const isNextChapter = ref<boolean>(false);
+const isPreviousChapter = ref<boolean>(false);
 
-const sId = ref(0);
-const cNo = ref(0);
+const sId = ref<number>(0);
+const cNo = ref<number>(0);
 
-const increaseFont = () => {
+const increaseFont = () : void => {
   fontSize.value += 2;
 };
 
-const decreaseFont = () => {
+const decreaseFont = () : void => {
   if (fontSize.value > 8) fontSize.value -= 2;
 };
 
@@ -79,11 +80,11 @@ watch(
   }
 );
 
-const loadChapter = () => {
+const loadChapter = () : void => {
   sId.value = Number(route.query.storyId);
   cNo.value = Number(route.query.chapterNo);
 
-  fetchChapter(route.query.storyId, route.query.chapterNo)
+  fetchChapter(Number(route.query.storyId), Number(route.query.chapterNo))
     .then((response) => {
       data.value = response;
     })
@@ -101,21 +102,6 @@ const loadChapter = () => {
 </script>
 
 <style scoped>
-.btn {
-  font-family: "Farro", sans-serif;
-  font-weight: 400;
-  font-style: normal;
-  color: #333 !important;
-}
-
-a:visited {
-  color: #333;
-}
-
-/* .chapter {
-  justify-items: center !important;
-} */
-
 
 .chapter {
   display: flex;
@@ -127,8 +113,6 @@ a:visited {
   padding: 0;
   margin: 0 auto;
 }
-
-
 .content {
   width: 80%;
 }

@@ -2,27 +2,27 @@ const routes = [
   {
     path: "/",
     name: "home",
-    component: () => import("pages/HomeView.vue"),
+    component: () => import("src/HomeView.vue"),
   },
   {
     path: "/create",
     name: "create",
-    component: () => import("src/pages/create/CreateStory.vue"),
+    component: () => import("src/story/CreateStory.vue"),
   },
   {
     path: "/readAll",
     name: "readAll",
-    component: () => import("src/read/ReadStories.vue"),
+    component: () => import("src/story/ReadStories.vue"),
   },
   {
     path: "/mines",
     name: "mines",
-    component: () => import("pages/MyStories.vue"),
+    component: () => import("src/story/MyStories.vue"),
   },
   {
     path: "/add",
     name: "add",
-    component: () => import("src/pages/create/AddChapter.vue"),
+    component: () => import("src/chapter/AddEditChapter.vue"),
     props: (route) => ({
       storyId: Number(route.query.storyId),
       authorId: Number(route.query.authorId),
@@ -32,7 +32,7 @@ const routes = [
   {
     path: "/edit",
     name: "edit",
-    component: () => import("src/pages/create/AddChapter.vue"),
+    component: () => import("src/chapter/AddEditChapter.vue"),
     props: (route) => ({
       storyId: Number(route.query.storyId),
       authorId: Number(route.query.authorId),
@@ -42,34 +42,34 @@ const routes = [
   {
     path: "/read",
     name: "readChapter",
-    component: () => import("src/read/ReadChapter.vue"),
+    component: () => import("src/chapter/ReadChapter.vue"),
   },
   {
     path: "/login",
     name: "login",
-    component: () => import("src/pages/users/LoginPage.vue"),
+    component: () => import("src/users/LoginPage.vue"),
   },
   {
     path: "/register",
     name: "register",
-    component: () => import("src/pages/users/RegisterPage.vue"),
+    component: () => import("src/users/RegisterPage.vue"),
   },
   {
     path: "/about",
     name: "about",
-    component: () => import("src/pages/about/AboutPage.vue"),
+    component: () => import("src/AboutPage.vue"),
   },
   {
     path: "/manage",
     name: "manage",
-    component: () => import("src/pages/create/ManageChapters.vue"),
+    component: () => import("src/chapter/ManageChapters.vue"),
     props: (route) => ({
       storyId: Number(route.query.storyId),
     }),
   },
   {
     path: "/:catchAll(.*)*",
-    component: () => import("pages/ErrorNotFound.vue"),
+    component: () => import("src/ErrorNotFound.vue"),
   },
 ];
 

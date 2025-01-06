@@ -9,22 +9,20 @@
   >
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { useRouter } from "vue-router";
 import { deleteStory } from "../services/storyservice";
+import { Story } from "src/types/Story";
 
 const router = useRouter();
 
 const emit = defineEmits(["storyDeleted"]);
 
-const props = defineProps({
-  story: {
-    type: Object,
-    required: true,
-  },
-});
+const props = defineProps<{
+  story: Story;
+}>();
 
-const addChapter = () => {
+const addChapter = () : void => {
   router.push({
     path: "/add",
     query: {
@@ -35,7 +33,7 @@ const addChapter = () => {
   });
 };
 
-const deleteById = (id) => {
+const deleteById = (id : number) : void => {
   deleteStory(id)
     .then(() => {
       emit("storyDeleted");
@@ -45,25 +43,12 @@ const deleteById = (id) => {
     });
 };
 
-const manageChapters = () => {
+const manageChapters = () : void => {
   router.push({ name: "manage", query: { storyId: props.story.id } });
 };
 
-const edit = () => {
+const edit = () : void => {
   localStorage.setItem("currentStory", JSON.stringify(props.story));
   router.push({ name: "create" });
 };
 </script>
-
-<style scoped>
-.btn {
-  font-family: "Farro", sans-serif;
-  font-weight: 400;
-  font-style: normal;
-  color: #333;
-}
-
-a:visited {
-  color: #333;
-}
-</style>

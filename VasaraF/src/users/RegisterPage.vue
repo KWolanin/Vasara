@@ -8,7 +8,7 @@
         <div v-if="msg" class="msg">{{ msg }}</div>
         <q-input filled v-model="login" label="Login" />
         <q-input filled v-model="username" label="Username" />
-        <q-input filled v-model="password" label="Password" />
+        <q-input filled v-model="password" label="Password" type="password" />
         <div>
           <q-btn
             label="Register"

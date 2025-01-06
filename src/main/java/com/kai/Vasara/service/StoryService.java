@@ -1,8 +1,12 @@
 package com.kai.Vasara.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kai.Vasara.entity.Story;
 import com.kai.Vasara.model.StoryDAO;
 import com.kai.Vasara.repository.StoryRepository;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -15,11 +19,13 @@ import java.util.Optional;
 
 @Service
 @Component
+@Slf4j
 public class StoryService {
 
     private final StoryRepository storyRepository;
     private final AuthorService authorService;
     private final ChapterService chapterService;
+    private static final Logger logger = LoggerFactory.getLogger(StoryService.class);
 
     @Autowired
     public StoryService(StoryRepository storyRepository, AuthorService authorService,
@@ -80,12 +86,26 @@ public class StoryService {
         story.setAuthorId(storyDAO.getAuthorId());
         story.setDescription(storyDAO.getDescription());
         story.setTitle(storyDAO.getTitle());
-        story.setTags(String.join(",", storyDAO.getTags()));
-        story.setFandoms(String.join(",", storyDAO.getFandoms()));
+//        story.setTags(String.join(",", storyDAO.getTags()));
+//        story.setFandoms(String.join(",", storyDAO.getFandoms()));
+        updateStoryTagsAndFandoms(story, storyDAO);
         story.setFinished(storyDAO.isFinished());
         story.setPublishDt(storyDAO.getPublishDt());
         story.setUpdateDt(storyDAO.getUpdateDt());
         return story;
+    }
+
+    public void updateStoryTagsAndFandoms(Story story, StoryDAO storyDAO) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            String tagsJson = objectMapper.writeValueAsString(storyDAO.getTags());
+            story.setTags(tagsJson);
+            String fandomsJson = objectMapper.writeValueAsString(storyDAO.getFandoms());
+            story.setFandoms(fandomsJson);
+        } catch (Exception e) {
+            logger.warn(e.getMessage());
+            throw new RuntimeException("Error serializing to JSON", e);
+        }
     }
 
     public List<StoryDAO> getStoriesByAuthor(Long id) {

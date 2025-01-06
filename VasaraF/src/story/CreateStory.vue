@@ -31,7 +31,7 @@
             :label="isEditing ? 'Update' : 'Create'"
             type="submit"
             color="primary"
-            class="btn send"
+            class="btn bg-accent-gold"
             flat
           />
           <q-btn
@@ -47,32 +47,37 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted } from "vue";
-import { createStory, updateStory } from "../../services/storyservice";
-import TagInput from "../../components/TagInput.vue";
-import MainMenu from "../../components/MainMenu.vue";
+import { createStory, updateStory } from "../services/storyservice";
+import TagInput from "../utils/TagInput.vue";
+import MainMenu from "../utils/MainMenu.vue";
 import { useRouter } from "vue-router";
-import { useUserStore } from "../../stores/user";
+import { useUserStore } from "../stores/user";
+import { Story } from "src/types/Story";
 
 const userStore = useUserStore();
 
-const title = ref("");
-const description = ref("");
-const fandoms = ref([]);
-const tags = ref([]);
-const finished = ref(false)
+const title = ref<string>("");
+const description = ref<string>("");
+const fandoms = ref<string[]>([]);
+const tags = ref<string[]>([]);
+const finished = ref<boolean>(false)
 
-const isEditing = ref(false);
-const existingStory = ref({});
+const isEditing = ref<boolean>(false);
+const existingStory = ref<Story>(null);
+
 
 const router = useRouter();
 
-const createNewStory = () => {
+const createNewStory = () : void => {
   const id = userStore.id;
+  let story: Story | Omit<Story, "id">;
   if (!isEditing.value) {
-    const story = {
+    story = {
       authorId: id,
+      authorName: userStore.username,
+      chaptersNumber: 0,
       title: title.value,
       description: description.value,
       tags: tags.value,
@@ -81,7 +86,6 @@ const createNewStory = () => {
       publishDt: new Date(),
       updateDt: new Date(),
     };
-
     createStory(story)
       .then(() => {
         clearForm();
@@ -91,9 +95,11 @@ const createNewStory = () => {
         console.error(error);
       });
   } else {
-    const story = {
+    story = {
       id: existingStory.value.id,
       authorId: existingStory.value.authorId,
+      authorName: existingStory.value.authorName,
+      chaptersNumber: existingStory.value.chaptersNumber,
       title: title.value,
       description: description.value,
       tags: tags.value,
@@ -113,7 +119,7 @@ const createNewStory = () => {
   }
 };
 
-function clearForm() {
+function clearForm() : void {
   title.value = "";
   description.value = "";
   fandoms.value = [];
@@ -137,19 +143,3 @@ onMounted(() => {
 });
 </script>
 
-<style scoped>
-.btn {
-  font-family: "Farro", sans-serif;
-  font-weight: 400;
-  font-style: normal;
-  color: #333 !important;
-}
-
-a:visited {
-  color: #333;
-}
-
-.send {
-  background-color: gold !important;
-}
-</style>
