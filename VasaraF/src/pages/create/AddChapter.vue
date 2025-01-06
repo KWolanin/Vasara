@@ -2,7 +2,9 @@
   <main-menu />
   <div class="row justify-center">
     <q-card class="col-10 q-pa-md q-mb-md">
-      <q-btn @click="saveChapter" class="bg-primary">Publish</q-btn>
+      <q-btn @click="saveChapter" class="bg-accent-gold">
+        {{ route.name === "add" ? "Publish" : "Update" }}
+      </q-btn>
       <q-input
         filled
         v-model="chapterTitle"
@@ -20,16 +22,20 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import MainMenu from "../../components/MainMenu.vue";
-import { ref, computed } from "vue";
+import { ref, computed, onMounted, Ref } from "vue";
 import { useQuasar } from "quasar";
-import { createChapter } from "../../services/chapterservice";
-import { useRouter } from "vue-router";
+import { createChapter, fetchChapter } from "../../services/chapterservice";
+import { useRouter, useRoute } from "vue-router";
+import { Chapter } from "src/types/Chapter";
+import { Notify } from "quasar";
+
 
 const router = useRouter();
+const route = useRoute();
 
-const chapterTitle = ref();
+const chapterTitle = ref("");
 const content = ref("");
 
 const $q = useQuasar();
@@ -50,25 +56,56 @@ const props = defineProps({
 });
 
 const chapterNumber = computed(() => {
+  if (route.name === "edit") return "";
   return `Chapter no. ${props.chapters + 1}`;
 });
 
 const saveChapter = () => {
-  const newChapter = {
-    chapterTitle: chapterTitle.value,
-    content: content.value,
-    authorId: props.authorId,
-    storyId: props.storyId,
-    chapterNo: props.chapters + 1,
-  };
-  createChapter(newChapter)
+  let c: Chapter | Omit<Chapter, "id">;
+  if (route.name === "add") {
+    c = {
+      chapterTitle: chapterTitle.value,
+      content: content.value,
+      authorId: props.authorId,
+      storyId: props.storyId,
+      chapterNo: props.chapters + 1,
+    };
+  } else {
+    c = {
+      ...existingChapter.value,
+      chapterTitle: chapterTitle.value,
+      content: content.value,
+    };
+  }
+  createChapter(c)
     .then(() => {
       router.push("/mines");
+      const msg = route.name === 'edit' ? 'updated' : 'published'
+      Notify.create({
+      message: `Chapter ${msg} successfully!`,
+      position: "bottom-right",
+    });
     })
     .catch((error) => {
       console.error(error);
     });
 };
+
+const existingChapter: Ref<Chapter | null> = ref(null)
+
+onMounted(() => {
+  if (route.name === "edit") {
+    fetchChapter(Number(route.query.storyId), Number(route.query.chapters))
+      .then((chapter) => {
+        chapterTitle.value = chapter.chapterTitle;
+        content.value = chapter.content;
+        existingChapter.value = chapter;
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+});
 
 const editorToolbar = [
   [

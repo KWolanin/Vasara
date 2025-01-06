@@ -58,6 +58,7 @@ const chapterToDelete = ref(0)
 onMounted(() => {
   currentStory.value = Number(route.query.storyId)
   fetchChaptersForStory(currentStory.value).then((chapters) => {
+    chapters.sort((a, b) => a.chapterNo - b.chapterNo)
     currentChapters.value = chapters
   })
 })

@@ -1,7 +1,7 @@
 import { api } from "../boot/axios";
 import { Chapter } from "../types/Chapter";
 
-export const createChapter = async (chapterData: Chapter): Promise<boolean> => {
+export const createChapter = async (chapterData: Chapter | Omit<Chapter, 'id'>): Promise<boolean> => {
   try {
     const response = await api.post("/chapters/add", chapterData);
     return response.data;

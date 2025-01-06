@@ -30,6 +30,16 @@ const routes = [
     }),
   },
   {
+    path: "/edit",
+    name: "edit",
+    component: () => import("src/pages/create/AddChapter.vue"),
+    props: (route) => ({
+      storyId: Number(route.query.storyId),
+      authorId: Number(route.query.authorId),
+      chapters: Number(route.query.chapters),
+    }),
+  },
+  {
     path: "/read",
     name: "readChapter",
     component: () => import("src/read/ReadChapter.vue"),
