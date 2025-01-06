@@ -86,8 +86,6 @@ public class StoryService {
         story.setAuthorId(storyDAO.getAuthorId());
         story.setDescription(storyDAO.getDescription());
         story.setTitle(storyDAO.getTitle());
-//        story.setTags(String.join(",", storyDAO.getTags()));
-//        story.setFandoms(String.join(",", storyDAO.getFandoms()));
         updateStoryTagsAndFandoms(story, storyDAO);
         story.setFinished(storyDAO.isFinished());
         story.setPublishDt(storyDAO.getPublishDt());
