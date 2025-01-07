@@ -26,5 +26,4 @@
 defineOptions({
   name: 'ErrorNotFound'
 });
-// test - to be removed - git accounts changed
 </script>
