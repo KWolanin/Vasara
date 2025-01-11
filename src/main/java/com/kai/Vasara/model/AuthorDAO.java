@@ -5,6 +5,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 
 @Getter
 @Setter
@@ -14,4 +16,7 @@ public class AuthorDAO {
 
     private long id;
     private String username;
+
+    private List<StoryDAO> stories;
+
 }

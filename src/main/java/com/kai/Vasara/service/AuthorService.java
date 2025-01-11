@@ -95,4 +95,7 @@ public class AuthorService {
     }
 
 
+    public Optional<Author> find(long authorId) {
+        return authorRepository.findById(authorId);
+    }
 }

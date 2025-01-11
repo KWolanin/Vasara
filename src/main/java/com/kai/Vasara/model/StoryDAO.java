@@ -35,4 +35,5 @@ public class StoryDAO {
     private ChapterService chapterService;
 
     private List<ChapterDAO> chapters;
+    private AuthorDAO author;
 }

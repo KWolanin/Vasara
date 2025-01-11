@@ -1,17 +1,19 @@
 package com.kai.Vasara.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kai.Vasara.entity.Author;
 import com.kai.Vasara.entity.Story;
+import com.kai.Vasara.model.AuthorDAO;
+import com.kai.Vasara.model.Criteria;
 import com.kai.Vasara.model.StoryDAO;
 import com.kai.Vasara.repository.StoryRepository;
+import jakarta.persistence.criteria.Predicate;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,14 +50,100 @@ public class StoryService {
         return daos;
     }
 
-    public Page<StoryDAO> getPage(int page, int size) {
-        Pageable pageable = PageRequest.of(page -1, size);
+    public Page<StoryDAO> getPage(int page, int size, Criteria criteria, String sortBy) {
+        return criteria.areFieldsEmpty() ?  getPageWithoutCriteria(page, size, sortBy)
+            : getPageWithCriteria(page, size, criteria, sortBy);
+    }
+
+    private PageImpl<StoryDAO> getPageWithoutCriteria(int page, int size, String sortBy) {
+        Sort sort = getSortType(sortBy);
+        Pageable pageable = PageRequest.of(page -1, size, sort);
         Page<Story> storiesPage = storyRepository.findAllWithChapters(pageable);
         List<StoryDAO> daos = storiesPage.getContent().stream()
                 .map(this::from)
                 .collect(Collectors.toList());
         return new PageImpl<>(daos, pageable, storiesPage.getTotalElements());
     }
+
+    private PageImpl<StoryDAO> getPageWithCriteria(int page, int size, Criteria criteria, String sortBy) {
+        Sort sort = getSortType(sortBy);
+        Pageable pageable = PageRequest.of(page - 1, size, sort);
+        Specification<Story> spec = buildSpecification(criteria);
+        Page<Story> storiesPage = storyRepository.findAll(spec, pageable);
+        List<StoryDAO> daos = storiesPage.getContent().stream()
+                .map(this::from)
+                .collect(Collectors.toList());
+        return new PageImpl<>(daos, pageable, storiesPage.getTotalElements());
+    }
+
+    private static Sort getSortType(String sortBy) {
+        Sort sort = null;
+        if (sortBy != null) {
+            switch (sortBy) {
+                case "updateDt":
+                    sort = Sort.by(Sort.Order.desc("updateDt"));
+                    break;
+                case "updateDt asc":
+                    sort = Sort.by(Sort.Order.asc("updateDt"));
+                    break;
+                case "author":
+                    sort = Sort.by(Sort.Order.asc("author.username"));
+                    break;
+                case "author desc":
+                    sort = Sort.by(Sort.Order.desc("author.username"));
+                    break;
+                case "title":
+                    sort = Sort.by(Sort.Order.asc("title"));
+                    break;
+                case "title desc":
+                    sort = Sort.by(Sort.Order.desc("title"));
+                    break;
+                default:
+                    break;
+            }
+        }
+        return sort;
+    }
+
+    private Specification<Story> buildSpecification(Criteria criteria) {
+        return (root, query, builder) -> {
+            List<Predicate> predicates = new ArrayList<>();
+
+            if (criteria.getTitle() != null && !criteria.getTitle().trim().isEmpty()) {
+                predicates.add(builder.like(
+                        builder.lower(root.get("title")), "%" + criteria.getTitle().toLowerCase() + "%"
+                ));
+            }
+            if (criteria.getAuthor() != null && !criteria.getAuthor().trim().isEmpty()) {
+                predicates.add(builder.like(
+                        builder.lower(root.get("author").get("username")), "%" + criteria.getAuthor().toLowerCase() + "%"
+                ));
+            }
+            if (criteria.getDescription() != null && !criteria.getDescription().trim().isEmpty()) {
+                predicates.add(builder.like(
+                        builder.lower(root.get("description")), "%" + criteria.getDescription().toLowerCase() + "%"
+                ));
+            }
+            if (criteria.getFandoms() != null && !criteria.getFandoms().isEmpty()) {
+                for (String fandom : criteria.getFandoms()) {
+                    predicates.add(builder.like(
+                            builder.lower(root.get("fandoms")), "%" + fandom.toLowerCase() + "%"
+                    ));
+                }
+            }
+            if (criteria.getTags() != null && !criteria.getTags().isEmpty()) {
+                for (String tag : criteria.getTags()) {
+                    predicates.add(builder.like(
+                            builder.lower(root.get("tags")), "%" + tag.toLowerCase() + "%"
+                    ));
+                }
+            }
+            predicates.add(builder.isNotEmpty(root.get("chapters")));
+            return builder.and(predicates.toArray(new Predicate[0]));
+        };
+    }
+
+
 
     public Page<StoryDAO> getMyStories(Long id, int page, int size) {
         Pageable pageable = PageRequest.of(page -1, size);
@@ -83,7 +171,8 @@ public class StoryService {
     public StoryDAO from(Story story) {
         StoryDAO s = new StoryDAO();
         s.setId(story.getId());
-        s.setAuthorName(authorService.getAuthorName(story.getAuthorId()));
+        s.setAuthorName(story.getAuthor().getUsername());
+        s.setAuthorId(story.getAuthor().getId());
         s.setDescription(story.getDescription());
         s.setTitle(story.getTitle());
         s.setTags(splitAndRemoveQuotes(story.getTags()));
@@ -92,18 +181,30 @@ public class StoryService {
         s.setPublishDt(story.getPublishDt());
         s.setUpdateDt(story.getUpdateDt());
         s.setChaptersNumber(chapterService.getChapterNumber(story.getId()));
+
+        if (story.getAuthor() != null) {
+            AuthorDAO authorDAO = new AuthorDAO();
+            authorDAO.setUsername(story.getAuthor().getUsername());
+            authorDAO.setId(story.getAuthor().getId());
+        }
+
         return s;
     }
 
     public Story from(StoryDAO storyDAO) {
         Story story = new Story();
-        story.setAuthorId(storyDAO.getAuthorId());
         story.setDescription(storyDAO.getDescription());
         story.setTitle(storyDAO.getTitle());
         updateStoryTagsAndFandoms(story, storyDAO);
         story.setFinished(storyDAO.isFinished());
         story.setPublishDt(storyDAO.getPublishDt());
         story.setUpdateDt(storyDAO.getUpdateDt());
+
+        if (storyDAO.getAuthorId() > 0) {
+            Optional<Author> author = authorService.find(storyDAO.getAuthorId());
+            author.ifPresent(story::setAuthor);
+        }
+
         return story;
     }
 

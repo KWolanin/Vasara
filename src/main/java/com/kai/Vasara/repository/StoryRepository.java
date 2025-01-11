@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.domain.Specification;
+
 
 import java.util.List;
 
@@ -18,11 +20,13 @@ public interface StoryRepository extends JpaRepository<Story, Long> {
     @Query("DELETE FROM Story s where s.id = :id")
     int deleteStoryById(Long id);
 
-    @Query("select count(*) from Story s where s.authorId = :id")
+    @Query("select count(*) from Story s where s.author.id = :id")
     long countMine(Long id);
 
     @Query("SELECT s FROM Story s WHERE s.chapters IS NOT EMPTY")
     Page<Story> findAllWithChapters(Pageable pageable);
+
+    Page<Story> findAll(Specification<Story> spec, Pageable pageable);
 
     @Query("select count(*) from Story s where s.chapters IS NOT EMPTY")
     long count();

@@ -2,7 +2,7 @@
   <main-menu />
   <q-inner-loading :showing="loading">
     Loading...
-    <q-spinner-hearts size="50px" color="amber" />
+    <q-spinner-hearts size="50px" color="gold" />
   </q-inner-loading>
   <div v-if="!loading">
     <div
@@ -32,7 +32,7 @@
       color="black"
       rounded
       glossy
-      active-color="amber"
+      active-color="gold"
       direction-links
       boundary-links
       icon-first="skip_previous"

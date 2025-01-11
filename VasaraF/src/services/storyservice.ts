@@ -2,11 +2,13 @@ import { api } from "../boot/axios";
 import { useUserStore } from "src/stores/user";
 import { Story } from "../types/Story";
 import { StoryPage } from "../types/StoryPage";
+import { Criteria } from "src/types/Criteria";
 
 
-export const fetchStories = async (page: number, size: number): Promise<StoryPage> => {
+export const fetchStories = async (page: number,
+  size: number, criteria: Criteria, sortBy: string): Promise<StoryPage> => {
   try {
-    const response = await api.get(`/stories/all?page=${page}&size=${size}`);
+    const response = await api.post(`/stories/all?page=${page}&size=${size}&sortBy=${sortBy}`, criteria);
     return response.data;
   } catch (error) {
     console.error("Error fetching stories:", error);

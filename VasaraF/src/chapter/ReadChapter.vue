@@ -39,7 +39,7 @@
   </div>
   <q-inner-loading :showing="!data">
     Loading...
-    <q-spinner-hearts size="50px" color="amber" />
+    <q-spinner-hearts size="50px" color="gold" />
   </q-inner-loading>
 </template>
 

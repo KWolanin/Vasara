@@ -19,8 +19,6 @@ public class Story {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "authorid")
-    private long authorId;
     private String description;
     private String title;
     private String tags;
@@ -34,4 +32,8 @@ public class Story {
 
     @OneToMany(mappedBy = "story", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Chapter> chapters = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "authorid")
+    private Author author;
 }

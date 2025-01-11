@@ -1,5 +1,6 @@
 package com.kai.Vasara.controller;
 
+import com.kai.Vasara.model.Criteria;
 import com.kai.Vasara.model.StoryDAO;
 import com.kai.Vasara.service.StoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +21,13 @@ public class StoryController {
         this.storyService = storyService;
     }
 
-    @GetMapping("/all")
+    @PostMapping("/all")
     public ResponseEntity<Page<StoryDAO>> getStories(
             @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "5") int size) {
-        return new ResponseEntity<>(storyService.getPage(page, size), HttpStatus.OK);
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "updateDt") String sortBy,
+            @RequestBody Criteria criteria) {
+        return new ResponseEntity<>(storyService.getPage(page, size, criteria, sortBy), HttpStatus.OK);
     }
 
     @GetMapping("/my/{id}")
