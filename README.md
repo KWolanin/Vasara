@@ -16,14 +16,15 @@ User currently can:
 - read other stories and change its font size to make reading more comfortable
 - add fandom and tags to their story
 - edit published chapter's content
+- filter and sort stories based on title, author's username, description, tags and fandoms
 
 
 In the future user will be able to:
 - change theirs account settings (username/password)
-- filter and sort stories based on rating, tags and fandoms
 - follow other author and get en e-mail when they update/post a story
-- add the story to favourites and manage favourites list
-- change to dark theme 
+- add the story to favourites and manage favourites list, create "read later" list
+- change to dark theme
+- set rating to its work (r.g. for kids, teen, adults)
 
 
 # Tech stack
