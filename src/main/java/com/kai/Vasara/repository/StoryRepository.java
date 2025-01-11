@@ -20,4 +20,10 @@ public interface StoryRepository extends JpaRepository<Story, Long> {
 
     @Query("select count(*) from Story s where s.authorId = :id")
     long countMine(Long id);
+
+    @Query("SELECT s FROM Story s WHERE s.chapters IS NOT EMPTY")
+    Page<Story> findAllWithChapters(Pageable pageable);
+
+    @Query("select count(*) from Story s where s.chapters IS NOT EMPTY")
+    long count();
 }

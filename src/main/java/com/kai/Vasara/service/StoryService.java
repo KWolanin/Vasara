@@ -19,6 +19,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -49,7 +50,7 @@ public class StoryService {
 
     public Page<StoryDAO> getPage(int page, int size) {
         Pageable pageable = PageRequest.of(page -1, size);
-        Page<Story> storiesPage = storyRepository.findAll(pageable);
+        Page<Story> storiesPage = storyRepository.findAllWithChapters(pageable);
         List<StoryDAO> daos = storiesPage.getContent().stream()
                 .map(this::from)
                 .collect(Collectors.toList());
