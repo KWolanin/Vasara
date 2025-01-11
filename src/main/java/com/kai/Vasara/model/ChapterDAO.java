@@ -1,7 +1,6 @@
 package com.kai.Vasara.model;
 
 import jakarta.persistence.Lob;
-import jakarta.persistence.ManyToOne;
 import lombok.*;
 import org.springframework.stereotype.Component;
 
