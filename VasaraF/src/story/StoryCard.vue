@@ -9,7 +9,7 @@
     >
     <q-space/>
     <q-chip v-if="!story.finished" class="bg-accent-gold chip">🔓 in progress</q-chip>
-    <q-chip v-else class="bg-accent-gold chip">🔒 completed</q-chip>
+    <q-chip v-else class="bg-accent-gold chip">🔐 completed</q-chip>
     </div>
     <div>
       <q-chip

@@ -110,10 +110,14 @@ public class StoryService {
     public void updateStoryTagsAndFandoms(Story story, StoryDAO storyDAO) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            String tagsJson = objectMapper.writeValueAsString(storyDAO.getTags());
-            story.setTags(tagsJson);
-            String fandomsJson = objectMapper.writeValueAsString(storyDAO.getFandoms());
-            story.setFandoms(fandomsJson);
+            if (Objects.nonNull(storyDAO.getTags())) {
+                String tagsJson = objectMapper.writeValueAsString(storyDAO.getTags());
+                story.setTags(tagsJson);
+            } else story.setTags("[\"\"]");
+            if (Objects.nonNull(storyDAO.getFandoms())) {
+                String fandomsJson = objectMapper.writeValueAsString(storyDAO.getFandoms());
+                story.setFandoms(fandomsJson);
+            } else story.setFandoms("[\"\"]");
         } catch (Exception e) {
             logger.warn(e.getMessage());
             throw new RuntimeException("Error serializing to JSON", e);
