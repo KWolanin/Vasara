@@ -1,6 +1,7 @@
 package com.kai.Vasara.service;
 
 import com.kai.Vasara.entity.Chapter;
+import com.kai.Vasara.entity.Story;
 import com.kai.Vasara.model.ChapterDAO;
 import com.kai.Vasara.repository.ChapterRepository;
 import org.junit.jupiter.api.Assertions;
@@ -96,10 +97,13 @@ class ChapterServiceTest {
     }
 
     private List<Chapter> prepareChapters() {
+        Story story = new Story();
+        story.setId(1L);
+
         Chapter c1 = Chapter.builder()
                 .chapterNo(1)
                 .chapterTitle("Chapter 1")
-                .storyId(1)
+                .story(story)
                 .id(1L)
                 .content("content1")
                 .build();
@@ -107,7 +111,7 @@ class ChapterServiceTest {
         Chapter c2 = Chapter.builder()
                 .chapterNo(2)
                 .chapterTitle("Chapter 2")
-                .storyId(1)
+                .story(story)
                 .id(2L)
                 .content("content2")
                 .build();
@@ -115,7 +119,7 @@ class ChapterServiceTest {
         Chapter c3 = Chapter.builder()
                 .chapterNo(3)
                 .chapterTitle("Chapter 3")
-                .storyId(1)
+                .story(story)
                 .id(3L)
                 .content("content3")
                 .build();
@@ -123,7 +127,7 @@ class ChapterServiceTest {
         Chapter c4 = Chapter.builder()
                 .chapterNo(4)
                 .chapterTitle("Chapter 4")
-                .storyId(1)
+                .story(story)
                 .id(4L)
                 .content("content4")
                 .build();

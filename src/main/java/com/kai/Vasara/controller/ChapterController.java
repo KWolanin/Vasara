@@ -1,7 +1,6 @@
 package com.kai.Vasara.controller;
 
 import com.kai.Vasara.model.ChapterDAO;
-import com.kai.Vasara.model.StoryDAO;
 import com.kai.Vasara.service.ChapterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -44,11 +43,6 @@ public class ChapterController {
     @PatchMapping("/editOrder")
     public ResponseEntity<Boolean> editChaptersOrder(@RequestBody List<ChapterDAO> chapters) {
         return new ResponseEntity<>(chapterService.editChaptersOrder(chapters), HttpStatus.OK);
-    }
-
-    @PatchMapping("/editContent")
-    public ResponseEntity<Boolean> editChapterContent(@RequestBody ChapterDAO chapterDAO) {
-        return new ResponseEntity<>(chapterService.editChapterContent(chapterDAO), HttpStatus.OK);
     }
 
     @GetMapping("/isNextOrPrevious/{storyId}/{chapterNo}")

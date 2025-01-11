@@ -31,11 +31,10 @@ public class StoryDAO {
     private ZonedDateTime updateDt;
     private int chaptersNumber;
 
-    @OneToMany
-    private List<Chapter> chapters;
-
     @Autowired
     private AuthorService authorService;
     @Autowired
     private ChapterService chapterService;
+
+    private List<ChapterDAO> chapters;
 }

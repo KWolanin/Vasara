@@ -25,12 +25,29 @@
         </Router-link>
       </q-card>
     </div>
+    <div class="row justify-center q-py-lg">
+      <q-pagination
+      :model-value=currentPage
+      :max="maxPages"
+      color="black"
+      rounded
+      glossy
+      active-color="amber"
+      direction-links
+      boundary-links
+      icon-first="skip_previous"
+      icon-last="skip_next"
+      icon-prev="fast_rewind"
+      icon-next="fast_forward"
+      @update:model-value="setPage"
+      />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { fetchMyStories } from "../services/storyservice";
-import { onMounted, ref } from "vue";
+import { fetchMyStories, countMines } from "../services/storyservice";
+import { onMounted, ref, computed } from "vue";
 import StoryCard from "../story/StoryCard.vue";
 import MainMenu from "../utils/MainMenu.vue";
 import EditStoryMenu from "../story/EditStoryMenu.vue";
@@ -40,10 +57,20 @@ import { Story } from "src/types/Story";
 const stories = ref<Story[]>([]);
 const loading = ref<boolean>(true);
 
+const storiesAmount = ref<number>(0)
+const storiesPerPage : number = 5
+const currentPage = ref<number>(1)
+
 onMounted(() => {
-  fetchMyStories()
+
+  countMines()
+  .then((response) =>{
+    storiesAmount.value = response
+  })
+
+  fetchMyStories(currentPage.value, storiesPerPage)
     .then((response) => {
-      stories.value = response;
+      stories.value = response.content;
       loading.value = false;
     })
     .catch((error) => {
@@ -52,9 +79,9 @@ onMounted(() => {
 });
 
 const fetchStories = async () => {
-  await fetchMyStories()
+  await fetchMyStories(currentPage.value, storiesPerPage)
     .then((response) => {
-      stories.value = response;
+      stories.value = response.content;
       loading.value = false;
     })
     .catch((error) => {
@@ -69,6 +96,25 @@ const reloadStories = async () => {
   });
   await fetchStories();
 };
+
+
+const maxPages = computed<number>(() => {
+  return Math.ceil(storiesAmount.value / storiesPerPage)
+})
+
+const setPage = (newPage: number) => {
+  fetchMyStories(newPage, storiesPerPage)
+    .then((response) => {
+      stories.value = response.content;
+      currentPage.value = newPage;
+      loading.value = false;
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+}
+
+
 </script>
 
 <style scoped>

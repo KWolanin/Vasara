@@ -51,6 +51,7 @@ const chapterNumber = computed<string>(() => {
 
 const saveChapter = (): void => {
   let c: Chapter | Omit<Chapter, "id">;
+  const date = new Date().toISOString();
   if (route.name === "add") {
     c = {
       chapterTitle: chapterTitle.value,
@@ -58,12 +59,15 @@ const saveChapter = (): void => {
       authorId: props.authorId,
       storyId: props.storyId,
       chapterNo: props.chapters + 1,
+      published: date,
+      updated: date
     };
   } else {
     c = {
       ...existingChapter.value,
       chapterTitle: chapterTitle.value,
       content: content.value,
+      updated: date
     };
   }
   createChapter(c)

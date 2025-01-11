@@ -3,6 +3,7 @@ package com.kai.Vasara.controller;
 import com.kai.Vasara.model.StoryDAO;
 import com.kai.Vasara.service.StoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,8 +22,17 @@ public class StoryController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<StoryDAO>> getStories() {
-        return new ResponseEntity<>(storyService.getAll(), HttpStatus.OK);
+    public ResponseEntity<Page<StoryDAO>> getStories(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "5") int size) {
+        return new ResponseEntity<>(storyService.getPage(page, size), HttpStatus.OK);
+    }
+
+    @GetMapping("/my/{id}")
+    public ResponseEntity<Page<StoryDAO>> getMyStories(@PathVariable Long id,
+                                                       @RequestParam(defaultValue = "1") int page,
+                                                       @RequestParam(defaultValue = "5") int size) {
+        return new ResponseEntity<>(storyService.getMyStories(id, page, size), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -40,13 +50,18 @@ public class StoryController {
         return new ResponseEntity<>(storyService.editStory(storyDAO), HttpStatus.OK);
     }
 
-    @GetMapping("/my/{id}")
-    public ResponseEntity<List<StoryDAO>> getMyStories(@PathVariable Long id) {
-        return new ResponseEntity<>(storyService.getMyStories(id), HttpStatus.OK);
-    }
-
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Boolean> deleteStory(@PathVariable Long id) {
         return new ResponseEntity<>(storyService.deleteStory(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/count")
+    public ResponseEntity<Long> count() {
+        return new ResponseEntity<>(storyService.count(), HttpStatus.OK);
+    }
+
+    @GetMapping("/mines/count/{id}")
+    public ResponseEntity<Long> countMine(@PathVariable Long id) {
+        return new ResponseEntity<>(storyService.countMine(id), HttpStatus.OK);
     }
 }

@@ -5,4 +5,6 @@ export interface Chapter {
   storyId: number;
   chapterNo: number;
   id: number;
+  published: string | number;
+  updated: string | number;
 }

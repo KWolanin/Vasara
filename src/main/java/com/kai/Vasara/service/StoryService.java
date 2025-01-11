@@ -8,6 +8,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +20,7 @@ import org.springframework.util.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Component
@@ -38,11 +43,27 @@ public class StoryService {
     public List<StoryDAO> getAll() {
         List<Story> stories = storyRepository.findAll();
         List<StoryDAO> daos = new ArrayList<>();
-        stories.forEach(story -> {
-            daos.add(from(story));
-        });
+        stories.forEach(story -> daos.add(from(story)));
         return daos;
     }
+
+    public Page<StoryDAO> getPage(int page, int size) {
+        Pageable pageable = PageRequest.of(page -1, size);
+        Page<Story> storiesPage = storyRepository.findAll(pageable);
+        List<StoryDAO> daos = storiesPage.getContent().stream()
+                .map(this::from)
+                .collect(Collectors.toList());
+        return new PageImpl<>(daos, pageable, storiesPage.getTotalElements());
+    }
+
+    public Page<StoryDAO> getMyStories(Long id, int page, int size) {
+        Pageable pageable = PageRequest.of(page -1, size);
+        Page<Story> stories = storyRepository.findAllByAuthorId(id, pageable);
+        List<StoryDAO> daos = new ArrayList<>();
+        stories.forEach(story -> daos.add(from(story)));
+        return  new PageImpl<>(daos, pageable, stories.getTotalElements());
+    }
+
 
     public StoryDAO getStory(Long id) {
         Optional<Story> opt = storyRepository.findById(id);
@@ -56,14 +77,6 @@ public class StoryService {
         } catch (Exception e) {
             return false;
         }
-    }
-
-
-    public List<StoryDAO> getMyStories(Long id) {
-        List<Story> stories = storyRepository.findAllByAuthorId(id);
-        List<StoryDAO> daos = new ArrayList<>();
-        stories.forEach(story -> daos.add(from(story)));
-        return daos;
     }
 
     public StoryDAO from(Story story) {
@@ -106,18 +119,9 @@ public class StoryService {
         }
     }
 
-    public List<StoryDAO> getStoriesByAuthor(Long id) {
-        List<StoryDAO> daos = new ArrayList<>();
-        List<Story> stories = storyRepository.findAllByAuthorId(id);
-        stories.forEach(s -> {
-            daos.add(from(s));
-        });
-        return daos;
-    }
-
     public static List<String> splitAndRemoveQuotes(String input) {
         List<String> resultList = new ArrayList<>();
-        if (StringUtils.hasLength(input)) {
+        if (StringUtils.hasLength(input) && !noTag(input)) {
             input = input.substring(1, input.length() - 1);
             String[] parts = input.split(",");
             for (String part : parts) {
@@ -125,6 +129,10 @@ public class StoryService {
             }
         }
         return resultList;
+    }
+
+    private static boolean noTag(String tag) {
+        return "[]".equals(tag) || tag.isEmpty();
     }
 
     public static String joinAndAddQuotes(List<String> inputList) {
@@ -163,6 +171,13 @@ public class StoryService {
              return true;
         }
         return false;
+    }
 
+    public long count() {
+        return storyRepository.count();
+    }
+
+    public long countMine(Long id) {
+        return storyRepository.countMine(id);
     }
 }

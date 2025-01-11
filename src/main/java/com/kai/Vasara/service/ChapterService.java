@@ -1,8 +1,11 @@
 package com.kai.Vasara.service;
 
 import com.kai.Vasara.entity.Chapter;
+import com.kai.Vasara.entity.Story;
 import com.kai.Vasara.model.ChapterDAO;
+import com.kai.Vasara.model.StoryDAO;
 import com.kai.Vasara.repository.ChapterRepository;
+import com.kai.Vasara.repository.StoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -17,10 +20,12 @@ import java.util.stream.Collectors;
 public class ChapterService {
 
     private final ChapterRepository chapterRepository;
+    private final StoryRepository storyRepository;
 
     @Autowired
-    public ChapterService(ChapterRepository chapterRepository) {
+    public ChapterService(ChapterRepository chapterRepository, StoryRepository storyRepository) {
         this.chapterRepository = chapterRepository;
+        this.storyRepository = storyRepository;
     }
 
     public List<ChapterDAO> getAll() {
@@ -38,7 +43,12 @@ public class ChapterService {
 
     public Boolean saveChapter(ChapterDAO chapterDAO) {
         try {
-            chapterRepository.save(from(chapterDAO));
+            Chapter chapter = from(chapterDAO);
+            if (chapter.getStory() != null) {
+                Story story = chapter.getStory();
+                story.setUpdateDt(chapter.getUpdated());
+            }
+            chapterRepository.save(chapter);
             return true;
         } catch (Exception e) {
             return false;
@@ -64,7 +74,12 @@ public class ChapterService {
         chapter.setChapterNo(chapterDAO.getChapterNo());
         chapter.setChapterTitle(chapterDAO.getChapterTitle());
         chapter.setContent(chapterDAO.getContent());
-        chapter.setStoryId(chapterDAO.getStoryId());
+        chapter.setPublished(chapterDAO.getPublished());
+        chapter.setUpdated(chapterDAO.getUpdated());
+        if (chapterDAO.getStoryId() > 0) {
+            Optional<Story> st = storyRepository.findById(chapterDAO.getStoryId());
+            st.ifPresent(chapter::setStory);
+        }
         return chapter;
     }
 
@@ -74,7 +89,15 @@ public class ChapterService {
         chapterDAO.setChapterNo(chapter.getChapterNo());
         chapterDAO.setChapterTitle(chapter.getChapterTitle());
         chapterDAO.setContent(chapter.getContent());
-        chapterDAO.setStoryId(chapter.getStoryId());
+        chapterDAO.setPublished(chapter.getPublished());
+        chapterDAO.setUpdated(chapter.getUpdated());
+        if (chapter.getStory() != null) {
+            StoryDAO storyDAO = new StoryDAO();
+            storyDAO.setId(chapter.getStory().getId());
+            storyDAO.setTitle(chapter.getStory().getTitle());
+            chapterDAO.setStoryDAO(storyDAO);
+            chapterDAO.setStoryId(storyDAO.getId());
+        }
         return chapterDAO;
     }
 
@@ -119,12 +142,6 @@ public class ChapterService {
             return false;
         }
     }
-
-    public Boolean editChapterContent(ChapterDAO chapterDAO) {
-        // todo
-        return true;
-    }
-
 
     public Boolean deleteChapter(Long id) {
         if (chapterRepository.existsById(id)) {
