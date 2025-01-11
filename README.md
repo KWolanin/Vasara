@@ -15,11 +15,12 @@ User currently can:
 - delete own story or edit its details
 - read other stories and change its font size to make reading more comfortable
 - add fandom and tags to their story
+- edit published chapter's content
+
 
 In the future user will be able to:
 - change theirs account settings (username/password)
 - filter and sort stories based on rating, tags and fandoms
-- edit published chapter's content
 - follow other author and get en e-mail when they update/post a story
 - add the story to favourites and manage favourites list
 - change to dark theme 
