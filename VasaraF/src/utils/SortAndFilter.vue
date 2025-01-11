@@ -1,9 +1,9 @@
 <template>
 <q-card class="col-7 q-pa-lg card" flat>
   <div class="search">
-  <q-input outlined v-model="criteria.title" label="title"  />
-  <q-input outlined v-model="criteria.author" label="author" />
-  <q-input outlined v-model="criteria.description" label="desciption [not active yet]" />
+  <q-input outlined v-model="criteria.title" label="Title"  />
+  <q-input outlined v-model="criteria.author" label="Author" />
+  <q-input outlined v-model="criteria.description" label="Desciption" />
   <tag-input v-model="criteria.fandoms" label="Fandom(s)" />
   <tag-input v-model="criteria.tags" label="Tag(s)" />
   </div>
