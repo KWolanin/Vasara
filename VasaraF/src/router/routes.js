@@ -68,6 +68,11 @@ const routes = [
     }),
   },
   {
+    path: "/account",
+    name: "Account",
+    component: () => import("src/users/ManageAccount.vue"),
+  },
+  {
     path: "/:catchAll(.*)*",
     component: () => import("src/ErrorNotFound.vue"),
   },

@@ -18,28 +18,22 @@
     <q-btn v-if="!isLoggedIn" class="q-ma-sm btn" flat color="grey-10">
       <RouterLink to="login">Login</RouterLink>
     </q-btn>
-    <q-btn v-else class="q-ma-sm btn" flat color="grey-10" @click="logout()">
-      Logout
-    </q-btn>
-    <p v-if="isLoggedIn" class="welcome">Welcome, {{ username }}</p>
+    <p v-if="isLoggedIn" class="welcome">
+    <user-menu :username />
+    </p>
+
   </div>
 </template>
 
 <script setup>
-import { useUserStore } from "src/stores/user";
 import { computed } from "vue";
-import { useRouter } from "vue-router";
-
-const router = useRouter();
+import UserMenu from "./UserMenu.vue";
+import { useUserStore } from "src/stores/user";
 
 const userStore = useUserStore();
 const isLoggedIn = computed(() => !!userStore.id);
 const username = computed(() => userStore.username);
 
-const logout = () => {
-  userStore.logout();
-  router.push("/");
-};
 </script>
 
 <style scoped>

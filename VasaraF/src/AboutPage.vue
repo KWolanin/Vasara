@@ -22,9 +22,6 @@
         <a href="https://github.com/KaiShouri">GitHub</a>
       </li>
       <li>
-        <a>GitLab</a>
-      </li>
-      <li>
         <a href="https://linktr.ee/Wolanin">LinkTree</a>
       </li>
     </ul>

@@ -16,7 +16,9 @@
     </div>
     <div class="row justify-center" v-if="!stories.length">
       <q-card class="q-pa-md card content card" flat>
-        <q-card-title>No Stories Found</q-card-title>
+        <p>
+          No Stories Found
+        </p>
         <p>
           Maybe you should add a new story?
         </p>

@@ -12,39 +12,38 @@
   </div>
 </q-card>
 
-<q-btn-dropdown color="gold"
- label="Sort by" size="xs" text-color="black" class="q-ml-md card">
+<q-btn-dropdown color="gold" label="Sort by" size="xs" text-color="black" class="q-ml-md card">
       <q-list>
-        <q-item clickable v-close-popup @click="onItemClick">
+        <q-item clickable v-close-popup @click="sort">
           <q-item-section>
             <q-item-label>Update date (newest)</q-item-label>
           </q-item-section>
         </q-item>
 
-        <q-item clickable v-close-popup @click="onItemClick">
+        <q-item clickable v-close-popup @click="sort">
           <q-item-section>
             <q-item-label>Update date (oldest)</q-item-label>
           </q-item-section>
         </q-item>
 
-        <q-item clickable v-close-popup @click="onItemClick">
+        <q-item clickable v-close-popup @click="sort">
           <q-item-section>
             <q-item-label>Author (A-Z)</q-item-label>
           </q-item-section>
         </q-item>
 
-        <q-item clickable v-close-popup @click="onItemClick">
+        <q-item clickable v-close-popup @click="sort">
           <q-item-section>
             <q-item-label>Author (Z-A)</q-item-label>
           </q-item-section>
         </q-item>
 
-        <q-item clickable v-close-popup @click="onItemClick">
+        <q-item clickable v-close-popup @click="sort">
           <q-item-section>
             <q-item-label>Story title (A-Z)</q-item-label>
           </q-item-section>
         </q-item>
-        <q-item clickable v-close-popup @click="onItemClick">
+        <q-item clickable v-close-popup @click="sort">
           <q-item-section>
             <q-item-label>Story title (Z-A)</q-item-label>
           </q-item-section>
@@ -58,7 +57,7 @@ import { reactive, watch, defineEmits } from "vue"
 import { Criteria } from "../types/Criteria"
 import TagInput from "./TagInput.vue";
 
-const emit = defineEmits();
+const emit = defineEmits(['criteria-changed', 'sort-changed']);
 
 const criteria = reactive<Criteria>({
   title: "",
@@ -79,7 +78,7 @@ watch(criteria, () => {
   }, 100)
 })
 
-const onItemClick = (event: MouseEvent) => {
+const sort = (event: MouseEvent) => {
   const target = event.target as HTMLElement;
   emit('sort-changed', target.innerText);
 };
