@@ -1,5 +1,7 @@
 <template>
   <main-menu />
+  <div class="row justify-center q-ml-md">
+    <div class="col-8">
   <q-card class="q-ma-lg q-pa-sm" flat>
     <h4 class="header q-ml-sm">About Project</h4>
     <p class="q-ml-sm">
@@ -26,6 +28,9 @@
       </li>
     </ul>
   </q-card>
+  </div>
+  </div>
+
   <template />
 </template>
 

@@ -9,9 +9,6 @@
     <q-btn class="q-ma-sm btn" v-if="isLoggedIn" flat>
       <RouterLink to="mines">My stories</RouterLink>
     </q-btn>
-    <q-btn class="q-ma-sm btn" v-if="isLoggedIn" flat color="grey-10">
-      <RouterLink to="create">Add</RouterLink>
-    </q-btn>
     <q-btn flat color="grey-10">
       <RouterLink class="q-ma-sm btn" to="about">About</RouterLink>
     </q-btn>

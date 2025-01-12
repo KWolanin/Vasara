@@ -19,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, computed } from 'vue';
+import { computed } from 'vue';
 import { useUserStore } from "src/stores/user";
 import { useRouter } from "vue-router";
 

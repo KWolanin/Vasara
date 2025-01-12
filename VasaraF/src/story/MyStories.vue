@@ -1,5 +1,13 @@
 <template>
   <main-menu />
+  <div class="row justify-center q-ml-md">
+    <div class="col-8">
+    <q-btn color="pink" class="btn" unelevated>
+      <RouterLink to="create">Add a new work</RouterLink>
+    </q-btn>
+    </div>
+  </div>
+
   <q-inner-loading :showing="loading">
     Loading...
     <q-spinner-hearts size="50px" color="gold" />

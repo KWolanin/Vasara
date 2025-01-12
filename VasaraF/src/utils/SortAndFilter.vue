@@ -53,7 +53,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, watch, defineEmits } from "vue"
+import { reactive, watch } from "vue"
 import { Criteria } from "../types/Criteria"
 import TagInput from "./TagInput.vue";
 
