@@ -8,6 +8,7 @@
         <div v-if="msg" class="msg">{{ msg }}</div>
         <q-input filled v-model="login" label="Login" />
         <q-input filled v-model="username" label="Username" />
+        <q-input filled v-model="email" label="Email" type="email" />
         <q-input filled v-model="password" label="Password" type="password" />
         <div>
           <q-btn
@@ -38,11 +39,12 @@ const router = useRouter();
 const login = ref("");
 const password = ref("");
 const username = ref("");
+const email = ref("");
 
 const msg = ref("");
 
 const registerUser = () => {
-  if (!username.value || !password.value || !login.value) {
+  if (!username.value || !password.value || !login.value || !email.value) {
     msg.value = "All fields are required";
     return;
   }
@@ -50,6 +52,7 @@ const registerUser = () => {
     username: username.value,
     login: login.value,
     password: password.value,
+    email: email.value
   }).then((response) => {
     if (response instanceof Error) {
       msg.value = `Error! ${response.response.data}`;

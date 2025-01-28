@@ -46,7 +46,7 @@ public class AuthorController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
         try {
-            authorService.register(request.getUsername(), request.getLogin(), request.getPassword());
+            authorService.register(request.getUsername(), request.getLogin(), request.getPassword(), request.getEmail());
             return ResponseEntity.ok().build();
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -58,11 +58,30 @@ public class AuthorController {
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
         try {
             Author author = authorService.authenticate(request.getLogin(), request.getPassword());
-            return ResponseEntity.ok(new LoggedUser(author.getId(), author.getUsername(), author.getLogin()));
+            return ResponseEntity.ok(new LoggedUser(author.getId(), author.getUsername(), author.getLogin(), author.getEmail()));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
 
+    @PostMapping("/changeEmail")
+    public ResponseEntity<Boolean> changeEmail(@RequestBody EmailRequest request) {
+        try {
+            boolean result = authorService.changeEmail(request.getEmail(), request.getId());
+            return ResponseEntity.ok(result);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(false);
+        }
+    }
+
+    @PostMapping("/changeUsername")
+    public ResponseEntity<Boolean> changeUsername(@RequestBody UsernameRequest request) {
+        try {
+            boolean result = authorService.changeUsername(request.getUsername(), request.getId());
+            return ResponseEntity.ok(result);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(false);
+        }
     }
 
     @Data
@@ -70,6 +89,7 @@ public class AuthorController {
         private String username;
         private String login;
         private String password;
+        private String email;
     }
 
     @Data
@@ -84,6 +104,18 @@ public class AuthorController {
         private Long id;
         private String login;
         private String username;
+        private String email;
     }
 
+    @Data
+    public static class EmailRequest {
+        private String email;
+        private long id;
+    }
+
+    @Data
+    public static class UsernameRequest {
+        private String username;
+        private long id;
+    }
 }

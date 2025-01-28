@@ -18,5 +18,6 @@ public class AuthorDAO {
     private String username;
 
     private List<StoryDAO> stories;
+    private String email;
 
 }

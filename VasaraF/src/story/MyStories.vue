@@ -1,6 +1,6 @@
 <template>
   <main-menu />
-  <div class="row justify-center q-ml-md">
+  <div class="row justify-center q-ml-md q-mb-sm">
     <div class="col-8">
     <q-btn color="pink" class="btn" unelevated>
       <RouterLink to="create">Add a new work</RouterLink>
@@ -37,6 +37,7 @@
     </div>
     <div class="row justify-center q-py-lg">
       <q-pagination
+      v-if="stories.length"
       :model-value=currentPage
       :max="maxPages"
       color="black"

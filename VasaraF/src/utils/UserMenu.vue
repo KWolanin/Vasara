@@ -2,12 +2,11 @@
 <q-btn-dropdown
  :label="welcome" size="md" flat text-color="black" class="q-ml-md welcome">
       <q-list>
-        <!-- temporary disabled - waiting for manage account implementation -->
-<!--         <q-item clickable v-close-popup @click="manage">
+        <q-item clickable v-close-popup @click="manage">
           <q-item-section>
             <q-item-label>Manage account</q-item-label>
           </q-item-section>
-        </q-item> -->
+        </q-item>
 
         <q-item clickable v-close-popup @click="logout">
           <q-item-section>

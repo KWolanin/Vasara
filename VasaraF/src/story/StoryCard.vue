@@ -1,5 +1,5 @@
 <template>
-  <q-card class="col-8 q-pa-lg q-ma-sm card" flat>
+  <q-card class="col-8 q-pa-lg q-ma-xs card" flat>
     <div class="row no-wrap items-center q-mt-sm">
     <q-chip
       v-for="(fandom, index) in story.fandoms"
