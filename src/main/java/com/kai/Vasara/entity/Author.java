@@ -1,8 +1,7 @@
 package com.kai.Vasara.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
@@ -10,6 +9,9 @@ import java.util.List;
 @Setter
 @Table(name = "author")
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Author {
 
     @Id

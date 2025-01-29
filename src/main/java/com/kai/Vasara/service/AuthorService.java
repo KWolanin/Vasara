@@ -54,12 +54,6 @@ public class AuthorService {
         return opt.orElse("");
     }
 
-    public long getAuthorIdByName(String username) {
-        Optional<Author> author = authorRepository.findAuthorByUsername(username);
-        if (author.isPresent()) return author.get().getId();
-        return -1;
-    }
-
     public AuthorDAO from(Author author) {
         AuthorDAO authorDAO = new AuthorDAO();
         authorDAO.setId(author.getId());

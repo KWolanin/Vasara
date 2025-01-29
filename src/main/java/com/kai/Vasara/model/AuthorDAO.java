@@ -1,8 +1,6 @@
 package com.kai.Vasara.model;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -12,6 +10,8 @@ import java.util.List;
 @Setter
 @Component
 @NoArgsConstructor
+@Builder
+@AllArgsConstructor
 public class AuthorDAO {
 
     private long id;

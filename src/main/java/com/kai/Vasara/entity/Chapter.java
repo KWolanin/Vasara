@@ -23,8 +23,6 @@ public class Chapter {
     private String chapterTitle;
     @Lob
     private String content;
-//    @Column(name = "storyid")
-//    private long storyId;
     @Column(name = "published")
     private ZonedDateTime published;
     @Column(name = "updated")
