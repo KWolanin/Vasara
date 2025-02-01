@@ -286,4 +286,9 @@ public class StoryService {
     public long countMine(Long id) {
         return storyRepository.countMine(id);
     }
+
+    public Optional<Story> findById(long id) {
+        return storyRepository.findById(id);
+    }
+
 }

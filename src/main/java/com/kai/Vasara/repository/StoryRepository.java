@@ -10,8 +10,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.domain.Specification;
 
 
-import java.util.List;
-
 @Repository
 public interface StoryRepository extends JpaRepository<Story, Long> {
     Page<Story> findAllByAuthorId(Long id, Pageable pageable);

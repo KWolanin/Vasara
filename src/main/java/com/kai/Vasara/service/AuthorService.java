@@ -128,6 +128,9 @@ public class AuthorService {
         if (!validateEmail(email)) {
             throw new IllegalArgumentException("Invalid email");
         }
+        if (authorRepository.findByEmail(email).isPresent()) {
+            throw new IllegalArgumentException("User with this email already exists");
+        }
        Optional<Author> author = authorRepository.findById(id);
         if (author.isPresent()) {
             author.get().setEmail(email);
@@ -140,6 +143,9 @@ public class AuthorService {
         if (!validateUsername(username)) {
             throw new IllegalArgumentException("Invalid username");
         }
+        if (authorRepository.findByUsername(username).isPresent()) {
+            throw new IllegalArgumentException("User with this username already exists");
+        }
         Optional<Author> author = authorRepository.findById(id);
         if (author.isPresent()) {
             author.get().setUsername(username);
@@ -147,4 +153,22 @@ public class AuthorService {
         }
         return false;
     }
+
+    public boolean changePassword(String password, long id) {
+        if (!StringUtils.hasText(password)) {
+            throw new IllegalArgumentException("Invalid password");
+        }
+        Optional<Author> author = authorRepository.findById(id);
+        if (author.isPresent()) {
+            author.get().setPassword(passwordEncoder.encode(password));
+            return authorRepository.save(author.get()).getId() > 0;
+        }
+        return false;
+    }
+
+    public Optional<Author> findById(long id) {
+        return authorRepository.findById(id);
+    }
+
+
 }

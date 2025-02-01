@@ -73,6 +73,11 @@ const routes = [
     component: () => import("src/users/ManageAccount.vue"),
   },
   {
+    path: "/favs",
+    name: "Favorites and following",
+    component: () => import("src/story/FavoritesAndFollowing.vue"),
+  },
+  {
     path: "/:catchAll(.*)*",
     component: () => import("src/ErrorNotFound.vue"),
   },

@@ -84,6 +84,16 @@ public class AuthorController {
         }
     }
 
+    @PostMapping("/changePassword")
+    public ResponseEntity<Boolean> changePassword(@RequestBody PasswordRequest request) {
+        try {
+            boolean result = authorService.changePassword(request.getPassword(), request.getId());
+            return ResponseEntity.ok(result);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(false);
+        }
+    }
+
     @Data
     public static class RegisterRequest {
         private String username;
@@ -116,6 +126,12 @@ public class AuthorController {
     @Data
     public static class UsernameRequest {
         private String username;
+        private long id;
+    }
+
+    @Data
+    public static class PasswordRequest {
+        private String password;
         private long id;
     }
 }

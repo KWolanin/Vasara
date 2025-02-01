@@ -48,3 +48,13 @@ export const changeUsername = async (username: string, id: number) : Promise<Boo
     return error;
   }
 }
+
+export const changePassword = async (password: string, id: number) : Promise<Boolean> => {
+  try {
+    const response = await api.post(`/authors/changePassword`, { password: password, id: id });
+    return response.data;
+  } catch (error) {
+    console.error("Error changing password:", error);
+    return error;
+  }
+}

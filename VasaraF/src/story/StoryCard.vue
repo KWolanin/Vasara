@@ -1,5 +1,5 @@
 <template>
-  <q-card class="col-8 q-pa-lg q-ma-xs card" flat>
+  <q-card class="col-8 q-pa-lg q-ma-xs card" flat :bordered="bordered">
     <div class="row no-wrap items-center q-mt-sm">
     <q-chip
       v-for="(fandom, index) in story.fandoms"
@@ -35,8 +35,13 @@
     <div class="text-h6 q-mb-sm">
       Chapters {{ story.chaptersNumber }} /
       {{ !story.finished ? "?" : story.chaptersNumber }}
+      <q-tooltip v-if="story.chaptersNumber === 0">
+        This story has no chapters and it is not visible for other users
+      </q-tooltip>
     </div>
     <q-separator inset />
+
+    <div class="row no-wrap items-center">
     <q-btn
       :disabled="story.chaptersNumber == 0"
       @click="readChapter"
@@ -44,7 +49,12 @@
       flat
       >Read</q-btn
     >
-    <slot></slot>
+    <q-space/>
+    <slot name="tools"></slot>
+    <slot name="following"></slot>
+    <slot name="removeFollowing"></slot>
+    </div>
+
   </q-card>
 </template>
 
@@ -56,6 +66,7 @@ const router = useRouter();
 
 const props = defineProps<{
   story: Story;
+  bordered?: boolean;
 }>();
 
 const formatDate = (date: string) : string => {

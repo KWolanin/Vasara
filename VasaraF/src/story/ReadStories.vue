@@ -13,7 +13,11 @@
       :key="story.id"
       class="row justify-center q-pa-lg"
     >
-      <story-card :story/>
+      <story-card :story>
+        <template v-slot:following>
+          <fav-and-follow :story-id="story.id"/>
+        </template>
+      </story-card>
     </div>
     <div v-if="!loading && !stories.length" class="not-found">No stories found. Change a criteria and try again</div>
     <div class="row justify-center q-py-lg" v-if="!loading && stories.length">
@@ -44,6 +48,7 @@ import MainMenu from "../utils/MainMenu.vue";
 import SortAndFilter from "src/utils/SortAndFilter.vue";
 import { Story } from "src/types/Story";
 import { Criteria } from "../types/Criteria";
+import FavAndFollow from "../utils/FavAndFollow.vue";
 
 const stories = ref<Story[]>([]);
 const loading = ref<boolean>(true);

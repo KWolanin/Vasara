@@ -22,6 +22,9 @@ public class SecurityConfig {
                         .requestMatchers("/api/chapters/**").permitAll()
                         .requestMatchers("/api/stories/**").permitAll()
                         .requestMatchers("/api/authors/**").permitAll()
+                        .requestMatchers("/api/favorites/**").permitAll()
+                        .requestMatchers("/api/follows/**").permitAll()
+                        .requestMatchers("/api/reads/**").permitAll()
                         .anyRequest().authenticated());
 
         return http.build();

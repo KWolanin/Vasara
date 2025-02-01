@@ -19,7 +19,9 @@
       class="row justify-center q-pa-lg"
     >
       <story-card :story>
-        <edit-story-menu :story @story-deleted="reloadStories()" />
+        <template v-slot:tools>
+          <edit-story-menu :story @story-deleted="reloadStories()" />
+        </template>
       </story-card>
     </div>
     <div class="row justify-center" v-if="!stories.length">

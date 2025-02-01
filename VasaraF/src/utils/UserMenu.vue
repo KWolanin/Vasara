@@ -2,6 +2,13 @@
 <q-btn-dropdown
  :label="welcome" size="md" flat text-color="black" class="q-ml-md welcome">
       <q-list>
+
+        <q-item clickable v-close-popup @click="toFollows">
+          <q-item-section>
+            <q-item-label>Follows, favourites & read later</q-item-label>
+          </q-item-section>
+        </q-item>
+
         <q-item clickable v-close-popup @click="manage">
           <q-item-section>
             <q-item-label>Manage account</q-item-label>
@@ -40,6 +47,14 @@ const welcome = computed<string>(() => {
 
 const manage = (): void => {
   router.push("/account");
+};
+
+const toFollows = (): void => {
+  router.push("/favs");
+};
+
+const totoRead = (): void => {
+  router.push("/toread");
 };
 
 </script>

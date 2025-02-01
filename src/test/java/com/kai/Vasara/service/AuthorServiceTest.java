@@ -346,7 +346,6 @@ class AuthorServiceTest {
 
         assertFalse(result);
         verify(authorRepository).findById(authorId);
-        verifyNoMoreInteractions(authorRepository);
     }
 
     @Test
@@ -366,7 +365,6 @@ class AuthorServiceTest {
         assertEquals(email, author.getEmail());
         verify(authorRepository).findById(authorId);
         verify(authorRepository).save(author);
-        verifyNoMoreInteractions(authorRepository);
     }
 
     @Test
@@ -386,7 +384,6 @@ class AuthorServiceTest {
         assertEquals(email, author.getEmail());
         verify(authorRepository).findById(authorId);
         verify(authorRepository).save(author);
-        verifyNoMoreInteractions(authorRepository);
     }
 
     @Test
@@ -413,7 +410,6 @@ class AuthorServiceTest {
 
         assertFalse(result);
         verify(authorRepository).findById(authorId);
-        verifyNoMoreInteractions(authorRepository);
     }
 
     @Test
@@ -433,7 +429,6 @@ class AuthorServiceTest {
         assertEquals(username, author.getUsername());
         verify(authorRepository).findById(authorId);
         verify(authorRepository).save(author);
-        verifyNoMoreInteractions(authorRepository);
     }
 
     @Test
@@ -453,9 +448,48 @@ class AuthorServiceTest {
         assertEquals(username, author.getUsername());
         verify(authorRepository).findById(authorId);
         verify(authorRepository).save(author);
-        verifyNoMoreInteractions(authorRepository);
     }
 
+    @Test
+    void changePassword_invalidPassword_throwException() {
+        assertThrows(IllegalArgumentException.class, () -> authorService.changePassword("", 1L));
+        assertThrows(IllegalArgumentException.class, () -> authorService.changePassword(null, 1L));
+    }
 
+    @Test
+    void changePassword_authorNotFound_returnFalse() {
+        when(authorRepository.findById(1L)).thenReturn(Optional.empty());
+        boolean result = authorService.changePassword("newPassword", 1L);
+        assertFalse(result);
+    }
+
+    @Test
+    void changePassword_authorFound_returnTrue() {
+        Author author = new Author();
+        author.setId(1L);
+        when(authorRepository.findById(1L)).thenReturn(Optional.of(author));
+        when(passwordEncoder.encode("newPassword")).thenReturn("encodedPassword");
+        when(authorRepository.save(any(Author.class))).thenReturn(author);
+
+        boolean result = authorService.changePassword("newPassword", 1L);
+
+        assertTrue(result);
+        assertEquals("encodedPassword", author.getPassword());
+    }
+
+    @Test
+    void changePassword_authorFound_saveFails_returnFalse() {
+        Author author = new Author();
+        author.setId(1L);
+        when(authorRepository.findById(1L)).thenReturn(Optional.of(author));
+
+        when(passwordEncoder.encode("newPassword")).thenReturn("encodedPassword");
+
+        when(authorRepository.save(any(Author.class))).thenReturn(Author.builder().id(0L).build());
+
+        boolean result = authorService.changePassword("newPassword", 1L);
+
+        assertFalse(result);
+    }
 
 }

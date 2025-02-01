@@ -4,6 +4,7 @@
   <q-card class="col-8 q-pa-lg card" flat>
   <span class="q-ml-md q-mb-lg">Manage your account</span>
   <div v-if="msg" class="msg">{{ msg }}</div>
+  <div v-if="msgSuccess" class="msg-success">{{ msgSuccess }}</div>
   <div class="row q-ml-md col-4">
     <q-input v-model="email" :disable="!editingEmail"></q-input>
     <q-btn class="q-ml-md" flat @click="changeUserEmail">
@@ -21,6 +22,12 @@
         Change the displayed username (the login will remain the same as the one provided during registration).      </q-tooltip>
     </q-btn>
   </div>
+  <div class="row q-ml-md col-4">
+      <q-input v-model="password" :disable="!editingPassword" type="password" placeholder="*******"></q-input>
+    <q-btn class="q-ml-md" flat @click="changeUserPassword">
+      {{ editingPassword ? 'Save 🔧' : 'Set new password 🔧' }}
+    </q-btn>
+  </div>
 </q-card>
 </div>
 
@@ -30,7 +37,7 @@
 import MainMenu from "../utils/MainMenu.vue";
 import { useUserStore } from "src/stores/user";
 import { ref, onMounted } from "vue";
-import { changeEmail, changeUsername } from "src/services/userservice";
+import { changeEmail, changeUsername, changePassword } from "src/services/userservice";
 
 const userStore = useUserStore();
 
@@ -46,6 +53,7 @@ onMounted(() => {
 
 const editingEmail = ref<boolean>(false)
 const msg = ref<string>("")
+const msgSuccess = ref<string>("")
 
 const changeUserEmail = async () : Promise<void> => {
   msg.value = ""
@@ -56,6 +64,7 @@ const changeUserEmail = async () : Promise<void> => {
         userStore.updateEmail(email.value)
         oldEmail.value = email.value
         msg.value = ""
+        msgSuccess.value = "Email updated successfully"
       })
       .catch((error) => {
         console.error(error)
@@ -78,6 +87,7 @@ const changeUserName = async () : Promise<void> => {
         userStore.updateUsername(username.value)
         oldusername.value = username.value
         msg.value = ""
+        msgSuccess.value = "Username updated successfully"
       })
       .catch(() => {
         msg.value = "Failed to update username"
@@ -85,6 +95,23 @@ const changeUserName = async () : Promise<void> => {
   }
 }
 editingUsername.value = !editingUsername.value
+}
+
+const password = ref<string>("")
+const editingPassword = ref<boolean>(false)
+
+const changeUserPassword = async () : Promise<void> => {
+  msg.value = ""
+  if (editingPassword.value) {
+      changePassword(password.value, userStore.id).then((data) => {
+        msg.value = ""
+        msgSuccess.value = "Password updated successfully"
+      })
+      .catch(() => {
+        msg.value = "Failed to update password"
+    })
+}
+editingPassword.value = !editingPassword.value
 }
 
 </script>
@@ -98,4 +125,13 @@ editingUsername.value = !editingUsername.value
   font-size: small;
   font-weight: 700;
 }
+
+.msg-success {
+  color: greenyellow;
+  margin-top: 10px;
+  text-align: center;
+  font-size: small;
+  font-weight: 700;
+}
+
 </style>

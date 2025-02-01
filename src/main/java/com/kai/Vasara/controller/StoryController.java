@@ -3,6 +3,7 @@ package com.kai.Vasara.controller;
 import com.kai.Vasara.model.Criteria;
 import com.kai.Vasara.model.StoryDAO;
 import com.kai.Vasara.service.StoryService;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
