@@ -1,13 +1,11 @@
 [[builds]]
-  # Definiujemy frontend
   path = "vasara/vasaraF"
   build = "npm run build"
-  start = "serve -s dist/spa -l $PORT"  # Railway ustawi zmienną PORT na odpowiedni port
+  start = "serve -s dist/spa -l $PORT"
   env = { "CI" = "true" }
 
 [[builds]]
-  # Definiujemy backend
   path = "vasara/src"
-  build = "mvn clean install"  # Komenda do budowania backendu w Mavenie
-  start = "java -jar target/vasara.jar"  # Uruchamianie backendu
+  build = "mvn clean install"
+  start = "java -jar target/vasara.jar"
   env = { "CI" = "true" }

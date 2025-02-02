@@ -21,11 +21,13 @@ public class ChapterService {
 
     private final ChapterRepository chapterRepository;
     private final StoryRepository storyRepository;
+    private final EmailService emailService;
 
     @Autowired
-    public ChapterService(ChapterRepository chapterRepository, StoryRepository storyRepository) {
+    public ChapterService(ChapterRepository chapterRepository, StoryRepository storyRepository, EmailService emailService) {
         this.chapterRepository = chapterRepository;
         this.storyRepository = storyRepository;
+        this.emailService = emailService;
     }
 
     public List<ChapterDAO> getAll() {
@@ -49,6 +51,7 @@ public class ChapterService {
                 story.setUpdateDt(chapter.getUpdated());
             }
             chapterRepository.save(chapter);
+            emailService.sendMessageToQueue(chapter);
             return true;
         } catch (Exception e) {
             return false;

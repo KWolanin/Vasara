@@ -83,11 +83,12 @@ public class FollowingService implements ActionService<FollowingStories> {
     @Override
     public Page<StoryDAO> get(int page, int size, long id) {
         Pageable pageable = PageRequest.of(page -1, size);
-        List<Story> followStories = null;
+        List<Story> followStories;
         Optional<Author> author = authorService.find(id);
         followStories = followingRepository.findByAuthor(author.get(), pageable).stream().map(FollowingStories::getStory).toList();
         List<StoryDAO> daos = new ArrayList<>();
         followStories.forEach(story -> daos.add(storyService.from(story)));
         return  new PageImpl<>(daos, pageable, followStories.size());
     }
+
 }
