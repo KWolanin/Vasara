@@ -17,12 +17,13 @@ User currently can:
 - add fandom and tags to their story
 - edit published chapter's content
 - filter and sort stories based on title, author's username, description, tags and fandoms
+- change theirs account settings (username/password/email)
+- follow other author and get en e-mail when they update/post a story
+- add story to favorite/read later list
 
 
 In the future user will be able to:
-- change theirs account settings (username/password)
-- follow other author and get en e-mail when they update/post a story
-- add the story to favourites and manage favourites list, create "read later" list
+-  manage favourites list, follows & "read later" list
 - change to dark theme
 - set rating to its work (r.g. for kids, teen, adults)
 
@@ -35,5 +36,3 @@ You can use Vasara here:
 
 use guest account (guest/guest) and feel free to play with Vasara publishing platform!
 
-Known problems:
-- slow server/database response - need to be investigated and fixed
