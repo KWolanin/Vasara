@@ -15,7 +15,7 @@
     >
       <story-card :story>
         <template v-slot:following>
-          <fav-and-follow :story-id="story.id"/>
+          <fav-and-follow v-if="isLoggedIn" :story-id="story.id"/>
         </template>
       </story-card>
     </div>
@@ -49,6 +49,10 @@ import SortAndFilter from "src/utils/SortAndFilter.vue";
 import { Story } from "src/types/Story";
 import { Criteria } from "../types/Criteria";
 import FavAndFollow from "../utils/FavAndFollow.vue";
+import { useUserStore } from "src/stores/user";
+
+const userStore = useUserStore();
+const isLoggedIn = computed(() => !!userStore.id);
 
 const stories = ref<Story[]>([]);
 const loading = ref<boolean>(true);

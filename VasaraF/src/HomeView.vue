@@ -9,7 +9,7 @@
             <img src="./assets/favicon.ico" width="150" height="150" />
           </div>
           <q-btn class="q-ma-md" flat>
-            <RouterLink to="create">
+            <RouterLink to="create" v-if="isLoggedIn">
               <h2 class="btn">Create</h2>
             </RouterLink>
           </q-btn>
@@ -26,6 +26,11 @@
 
 <script setup>
 import { RouterLink } from "vue-router";
+import { useUserStore } from "src/stores/user";
+import { computed } from "vue";
+
+const userStore = useUserStore();
+const isLoggedIn = computed(() => !!userStore.id);
 </script>
 
 <style scoped>
