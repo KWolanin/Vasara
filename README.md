@@ -17,23 +17,23 @@ User currently can:
 - add fandom and tags to their story
 - edit published chapter's content
 - filter and sort stories based on title, author's username, description, tags and fandoms
+- change theirs account settings (username/password/email)
+- follow a story and get email when the story is updated
+- add story to favorite/read later list
 
 
 In the future user will be able to:
-- change theirs account settings (username/password)
-- follow other author and get en e-mail when they update/post a story
-- add the story to favourites and manage favourites list, create "read later" list
+-  manage favourites list, follows & "read later" list
 - change to dark theme
 - set rating to its work (r.g. for kids, teen, adults)
+- add author to following authors and get email when they publish something new
 
 
 # Tech stack
-Vue.js, Quasar, Pinia, Javascript/Typescript (frontend), Java 8 (backend), Railway (build and deploy service)
+Vue.js, Quasar, Pinia, Javascript/Typescript (frontend), Java 8 (backend), Railway (build and deploy service), RabbitMQ
 
 You can use Vasara here:
 [Vasara app](https://vasaraf-production.up.railway.app/#/)
 
 use guest account (guest/guest) and feel free to play with Vasara publishing platform!
 
-Known problems:
-- slow server/database response - need to be investigated and fixed
