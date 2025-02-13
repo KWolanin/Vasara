@@ -3,7 +3,6 @@ package com.kai.Vasara.service;
 import com.kai.Vasara.entity.Author;
 import com.kai.Vasara.model.AuthorDAO;
 import com.kai.Vasara.repository.AuthorRepository;
-import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -35,8 +34,8 @@ class AuthorServiceTest {
     @Test
     void getAll_return_all_authors() {
         List<Author> authors = List.of(
-                Author.builder().id(1L).username("John Doe").build(),
-                Author.builder().id(2L).username("Jane Smith").build()
+                Author.builder().id(1L).username("John Doe").stories(Collections.emptyList()).build(),
+                Author.builder().id(2L).username("Jane Smith").stories(Collections.emptyList()).build()
         );
         when(authorRepository.findAll()).thenReturn(authors);
         List<AuthorDAO> result = authorService.getAll();
@@ -56,7 +55,7 @@ class AuthorServiceTest {
 
     @Test
     void getAuthor_exists() {
-        Author author = Author.builder().id(1L).login("login").username("John Doe").build();
+        Author author = Author.builder().id(1L).login("login").username("John Doe").stories(Collections.emptyList()).build();
         when(authorRepository.findById(1L)).thenReturn(Optional.of(author));
         AuthorDAO result = authorService.getAuthor(1L);
         assertNotNull(result);
@@ -100,6 +99,15 @@ class AuthorServiceTest {
     }
 
     @Test
+    void getAuthorDesc_authorFound_returnsDesc() {
+        Long authorId = 1L;
+        String desc = "Hello, I am X.";
+        when(authorRepository.findDescriptionById(authorId)).thenReturn(Optional.of(desc));
+        String result = authorService.getAuthorDesc(authorId);
+        assertEquals(desc, result);
+    }
+
+    @Test
     void getAuthorName_authorNotFound_returnsEmptyString() {
         Long authorId = 2L;
         when(authorRepository.findUsernameById(authorId)).thenReturn(Optional.empty());
@@ -111,7 +119,7 @@ class AuthorServiceTest {
 
     @Test
     void from_authorToAuthorDAO_returnsCorrectAuthorDAO() {
-        Author author = Author.builder().id(1L).login("login").username("username").build();
+        Author author = Author.builder().id(1L).login("login").stories(Collections.emptyList()).username("username").build();
         AuthorDAO result = authorService.from(author);
         assertNotNull(result);
         assertEquals(author.getId(), result.getId());
@@ -121,7 +129,7 @@ class AuthorServiceTest {
 
     @Test
     void from_authorDAOToAuthor_returnsCorrectAuthor() {
-        AuthorDAO authorDAO = AuthorDAO.builder().id(1L).username("username").email("e@e.com").build();
+        AuthorDAO authorDAO = AuthorDAO.builder().id(1L).username("username").email("e@e.com").stories(Collections.emptyList()).build();
         Author result = authorService.from(authorDAO);
         assertNotNull(result);
         assertEquals(authorDAO.getId(), result.getId());
@@ -335,6 +343,20 @@ class AuthorServiceTest {
         verifyNoMoreInteractions(authorRepository);
     }
 
+
+    @Test
+    void changeEmail_emptyEmail_throwsIllegalArgumentException() {
+        String email = "";
+        long authorId = 1L;
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            authorService.changeEmail(email, authorId);
+        });
+
+        assertEquals("Invalid email", exception.getMessage());
+        verifyNoMoreInteractions(authorRepository);
+    }
+
     @Test
     void changeEmail_authorNotFound_returnsFalse() {
         String email = "newemail@example.com";
@@ -387,6 +409,28 @@ class AuthorServiceTest {
     }
 
     @Test
+    void changeEmail_validEmail_emailExists_saveFails_returnsFalse() {
+        String email = "newemail@example.com";
+        long authorId = 1L;
+        Author author = new Author();
+        author.setId(authorId);
+        author.setEmail("oldemail@example.com");
+
+        Author anotherAuthor = new Author();
+        anotherAuthor.setUsername("second");
+        anotherAuthor.setEmail("newemail@example.com");
+
+        when(authorRepository.findByEmail(email)).thenReturn(Optional.of(anotherAuthor));
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            authorService.changeEmail(email, authorId);
+        });
+
+        assertEquals("User with this email already exists", exception.getMessage());
+        verifyNoMoreInteractions(authorRepository);
+    }
+
+    @Test
     void changeUsername_invalidUsername_throwsIllegalArgumentException() {
         String username = "invalid#username";
         long authorId = 1L;
@@ -396,6 +440,39 @@ class AuthorServiceTest {
         });
 
         assertEquals("Invalid username", exception.getMessage());
+        verifyNoMoreInteractions(authorRepository);
+    }
+
+
+    @Test
+    void changeUsername_emptyusername_throwsIllegalArgumentException() {
+        String username = "";
+        long authorId = 1L;
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            authorService.changeUsername(username, authorId);
+        });
+
+        assertEquals("Invalid username", exception.getMessage());
+        verifyNoMoreInteractions(authorRepository);
+    }
+
+    @Test
+    void changeUsername_usernameTaken_throwsIllegalArgumentException() {
+        String username = "taken";
+        long authorId = 1L;
+
+        Author anotherAuthor = new Author();
+        anotherAuthor.setUsername("taken");
+        anotherAuthor.setEmail("newemail@example.com");
+
+        when(authorRepository.findByUsername(username)).thenReturn(Optional.of(anotherAuthor));
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            authorService.changeUsername(username, authorId);
+        });
+
+        assertEquals("User with this username already exists", exception.getMessage());
         verifyNoMoreInteractions(authorRepository);
     }
 
@@ -490,6 +567,53 @@ class AuthorServiceTest {
         boolean result = authorService.changePassword("newPassword", 1L);
 
         assertFalse(result);
+    }
+
+    @Test
+    void changeDesc_emptydesc() {
+        String desc = "";
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            authorService.changeDesc(desc, 1L);
+        });
+        assertEquals("Invalid description", exception.getMessage());
+        verifyNoMoreInteractions(authorRepository);
+    }
+
+    @Test
+    void changeDesc_noAuthor() {
+        String desc = "This is Johnny.";
+        when(authorRepository.findById(1L)).thenReturn(Optional.empty());
+        boolean result = authorService.changeDesc(desc, 1L);
+        assertFalse(result);
+    }
+
+    @Test
+    void changeDesc_success() {
+        String desc = "This is Johnny.";
+        Author author = new Author();
+        author.setDescription("XXX");
+        author.setId(1L);
+        when(authorRepository.findById(1L)).thenReturn(Optional.of(author));
+        when(authorRepository.save(any(Author.class))).thenReturn(author);
+        boolean result = authorService.changeDesc(desc, 1L);
+        assertTrue(result);
+        assertEquals("This is Johnny.", author.getDescription());
+    }
+
+    @Test
+    void findById_success() {
+        Author author = new Author();
+        when(authorRepository.findById(1L)).thenReturn(Optional.of(author));
+        Optional<Author> a = authorService.findById(1L);
+        assertTrue(a.isPresent());
+        assertSame(a.get(), author);
+    }
+
+    @Test
+    void findById_none() {
+        when(authorRepository.findById(1L)).thenReturn(Optional.empty());
+        Optional<Author> a = authorService.findById(1L);
+        assertFalse(a.isPresent());
     }
 
 }

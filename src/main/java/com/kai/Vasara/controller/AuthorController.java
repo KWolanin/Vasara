@@ -38,6 +38,11 @@ public class AuthorController {
         return new ResponseEntity<>(authorService.getAuthorName(id), HttpStatus.OK);
     }
 
+    @GetMapping("/{id}/desc")
+    public ResponseEntity<String> getAuthorDesc(@PathVariable Long id) {
+        return new ResponseEntity<>(authorService.getAuthorDesc(id), HttpStatus.OK);
+    }
+
     @PostMapping("/add")
     public ResponseEntity<Boolean> addAuthor(@RequestBody Author author) {
         return new ResponseEntity<>(authorService.saveAuthor(author), HttpStatus.OK);
@@ -94,6 +99,16 @@ public class AuthorController {
         }
     }
 
+    @PostMapping("/changeDescription")
+    public ResponseEntity<Boolean> changeDescription(@RequestBody DescRequest request) {
+        try {
+            boolean result = authorService.changeDesc(request.getDescription(), request.getId());
+            return ResponseEntity.ok(result);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(false);
+        }
+    }
+
     @Data
     public static class RegisterRequest {
         private String username;
@@ -132,6 +147,12 @@ public class AuthorController {
     @Data
     public static class PasswordRequest {
         private String password;
+        private long id;
+    }
+
+    @Data
+    public static class DescRequest {
+        private String description;
         private long id;
     }
 }

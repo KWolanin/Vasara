@@ -27,7 +27,6 @@ export const isFollow = async (user: number, story: number) : Promise<Boolean> =
 export const findMyFollows = async (page: number, size: number, id: number): Promise<StoryPage> => {
   try {
     const response = await api.get(`/follows/my/${id}?page=${page}&size=${size}`);
-    console.log(response)
     return response.data;
   } catch (error) {
     console.error("Error fetching stories:", error);

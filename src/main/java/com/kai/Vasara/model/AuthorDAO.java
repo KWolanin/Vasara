@@ -1,5 +1,6 @@
 package com.kai.Vasara.model;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.springframework.stereotype.Component;
 
@@ -19,5 +20,5 @@ public class AuthorDAO {
 
     private List<StoryDAO> stories;
     private String email;
-
+    private String description;
 }

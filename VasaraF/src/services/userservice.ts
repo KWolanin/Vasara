@@ -58,3 +58,13 @@ export const changePassword = async (password: string, id: number) : Promise<Boo
     return error;
   }
 }
+
+export const changeDesc = async (id: number, description: string) : Promise<Boolean> => {
+  try {
+    const response = await api.post(`/authors/changeDescription`, { description: description, id: id });
+    return response.data;
+  } catch (error) {
+    console.error("Error changing description:", error);
+    return error;
+  }
+}

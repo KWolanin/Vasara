@@ -1,11 +1,17 @@
 <template>
-  <q-btn class="q-ma-sm btn" flat @click="edit">Edit</q-btn>
-  <q-btn class="q-ma-sm btn" flat @click="addChapter">Add chapter</q-btn>
-  <q-btn class="q-ma-sm btn" v-if="story.chaptersNumber > 0" flat @click="manageChapters"
-    >Manage chapters</q-btn
-  >
-  <q-btn class="q-ma-sm btn del" flat @click="deleteById(props.story.id)"
-    >Delete</q-btn
+  <q-btn class="q-ma-sm btn" flat icon="edit" @click="edit">
+    <q-tooltip> Edit story's details </q-tooltip>
+  </q-btn>
+  <q-btn class="q-ma-sm btn" flat icon="post_add" @click="addChapter">
+    <q-tooltip> Add new chapter </q-tooltip>
+  </q-btn>
+  <q-btn class="q-ma-sm btn" v-if="story.chaptersNumber > 0" flat icon="edit_note"
+    @click="manageChapters">
+    <q-tooltip> Manage chapters </q-tooltip>
+    </q-btn>
+  <q-btn class="q-ma-sm btn" flat icon="delete_forever" color="burgund" @click="deleteById(props.story.id)"
+    >    <q-tooltip> Delete forever</q-tooltip>
+    </q-btn
   >
 </template>
 

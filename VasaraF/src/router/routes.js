@@ -78,6 +78,14 @@ const routes = [
     component: () => import("src/story/FavoritesAndFollowing.vue"),
   },
   {
+    path: "/user",
+    name: "User profile",
+    component: () => import("src/users/UserPage.vue"),
+    props: (route) => ({
+      authorId: Number(route.query.authorId),
+    }),
+  },
+  {
     path: "/:catchAll(.*)*",
     component: () => import("src/ErrorNotFound.vue"),
   },

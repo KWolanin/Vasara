@@ -27,7 +27,6 @@ export const isReads = async (user: number, story: number) : Promise<Boolean> =>
 export const findMyReads = async (page: number, size: number, id: number): Promise<StoryPage> => {
   try {
     const response = await api.get(`/reads/my/${id}?page=${page}&size=${size}`);
-    console.log(response)
     return response.data;
   } catch (error) {
     console.error("Error fetching stories:", error);

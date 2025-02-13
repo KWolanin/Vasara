@@ -20,11 +20,6 @@ public class ChapterController {
         this.chapterService = chapterService;
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<List<ChapterDAO>> getChapters() {
-        return new ResponseEntity<>(chapterService.getAll(), HttpStatus.OK);
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<ChapterDAO> getChapter(@PathVariable Long id) {
         return new ResponseEntity<>(chapterService.getChapter(id), HttpStatus.OK);

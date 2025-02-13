@@ -30,13 +30,6 @@ public class ChapterService {
         this.emailService = emailService;
     }
 
-    public List<ChapterDAO> getAll() {
-        return chapterRepository.findAll()
-                .stream()
-                .map(this::from)
-                .collect(Collectors.toList());
-    }
-
     public ChapterDAO getChapter(Long id) {
          Optional<Chapter> opt = chapterRepository.findById(id);
          if (opt.isPresent()) return from(opt.get());

@@ -5,6 +5,7 @@ import com.kai.Vasara.entity.Author;
 import com.kai.Vasara.model.AuthorDAO;
 import com.kai.Vasara.repository.AuthorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -21,11 +22,13 @@ public class AuthorService {
 
     private final AuthorRepository authorRepository;
     private final PasswordEncoder passwordEncoder;
+    private final StoryService storyService;
 
     @Autowired
-    public AuthorService(AuthorRepository authorRepository, PasswordEncoder passwordEncoder) {
+    public AuthorService(AuthorRepository authorRepository, PasswordEncoder passwordEncoder, @Lazy StoryService storyService) {
         this.authorRepository = authorRepository;
         this.passwordEncoder = passwordEncoder;
+        this.storyService = storyService;
     }
 
     public List<AuthorDAO> getAll() {
@@ -54,11 +57,19 @@ public class AuthorService {
         return opt.orElse("");
     }
 
+    public String getAuthorDesc(Long id) {
+        Optional<String> opt = authorRepository.findDescriptionById(id);
+        return opt.orElse("");
+    }
+
     public AuthorDAO from(Author author) {
         AuthorDAO authorDAO = new AuthorDAO();
         authorDAO.setId(author.getId());
         authorDAO.setUsername(author.getUsername());
         authorDAO.setEmail(author.getEmail());
+        authorDAO.setDescription(author.getDescription());
+        authorDAO.setStories(new ArrayList<>());
+        author.getStories().forEach(story -> authorDAO.getStories().add(storyService.from(story)));
         return authorDAO;
     }
     public Author from(AuthorDAO authorDAO) {
@@ -66,6 +77,9 @@ public class AuthorService {
         author.setId(authorDAO.getId());
         author.setUsername(authorDAO.getUsername());
         author.setEmail(authorDAO.getEmail());
+        author.setDescription(authorDAO.getDescription());
+        author.setStories(new ArrayList<>());
+        authorDAO.getStories().forEach(storyDAO -> author.getStories().add(storyService.from(storyDAO)));
         return author;
     }
 
@@ -79,7 +93,7 @@ public class AuthorService {
         if (authorRepository.findByEmail(email).isPresent()) {
             throw new IllegalArgumentException("User with this email already exists");
         }
-        if (!validateEmail(email)) {
+        if (!emailValid(email)) {
             throw new IllegalArgumentException("Email is incorrect");
         }
         Author author = new Author();
@@ -90,7 +104,7 @@ public class AuthorService {
         return authorRepository.save(author);
     }
 
-    private boolean validateEmail(String email) {
+    private boolean emailValid(String email) {
         String EMAIL_REGEX = "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?";
         Pattern EMAIL_PATTERN = Pattern.compile(EMAIL_REGEX, Pattern.CASE_INSENSITIVE);
 
@@ -101,13 +115,13 @@ public class AuthorService {
     }
 
 
-    private boolean validateUsername(String username) {
+    private boolean usernameValid(String username) {
         String USERNAME_REGEX = "^(?=.{3,20}$)(?![_\\.\\-])[A-Za-z0-9._-]+(?<![_\\.\\-])$";
         Pattern USERNAME_PATTERN = Pattern.compile(USERNAME_REGEX);
-        if (!StringUtils.hasText(username)) {
-            return false;
+        if (StringUtils.hasText(username)) {
+            return USERNAME_PATTERN.matcher(username).matches();
         }
-        return USERNAME_PATTERN.matcher(username).matches();
+        return false;
     }
 
     public Author authenticate(String login, String rawPassword) {
@@ -125,7 +139,7 @@ public class AuthorService {
     }
 
     public boolean changeEmail(String email, long id) {
-        if (!validateEmail(email)) {
+        if (!emailValid(email)) {
             throw new IllegalArgumentException("Invalid email");
         }
         if (authorRepository.findByEmail(email).isPresent()) {
@@ -140,7 +154,7 @@ public class AuthorService {
     }
 
     public boolean changeUsername(String username, long id) {
-        if (!validateUsername(username)) {
+        if (!usernameValid(username)) {
             throw new IllegalArgumentException("Invalid username");
         }
         if (authorRepository.findByUsername(username).isPresent()) {
@@ -171,4 +185,15 @@ public class AuthorService {
     }
 
 
+    public boolean changeDesc(String description, long id) {
+        if (!StringUtils.hasText(description)) {
+            throw new IllegalArgumentException("Invalid description");
+        }
+        Optional<Author> author = authorRepository.findById(id);
+        if (author.isPresent()) {
+            author.get().setDescription(description);
+            return authorRepository.save(author.get()).getId() > 0;
+        }
+        return false;
+    }
 }

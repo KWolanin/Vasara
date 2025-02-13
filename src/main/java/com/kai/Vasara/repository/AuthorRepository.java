@@ -21,4 +21,7 @@ public interface AuthorRepository extends JpaRepository<Author, Long> {
     Optional<Object> findByUsername(String username);
 
     Optional<Author> findByEmail(String email);
+
+    @Query("SELECT a.description FROM Author a WHERE a.id = :id")
+    Optional<String> findDescriptionById(@Param("id") Long id);
 }
