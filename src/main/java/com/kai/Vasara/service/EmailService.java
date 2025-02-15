@@ -1,7 +1,5 @@
 package com.kai.Vasara.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kai.Vasara.RabbitMQ.RabbitMQProducer;
 import com.kai.Vasara.entity.Chapter;
 import com.kai.Vasara.entity.FollowingStories;
 import com.kai.Vasara.repository.FollowingRepository;
@@ -11,6 +9,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -28,15 +28,16 @@ import java.util.List;
 @Slf4j
 public class EmailService {
 
-    private final RabbitMQProducer mqProducer;
     private final JavaMailSender emailSender;
     private final FollowingRepository followingRepository;
+    private final RabbitTemplate rabbitTemplate;
+
 
     @Autowired
-    public EmailService(RabbitMQProducer mqProducer, JavaMailSender emailSender, FollowingRepository followingRepository) {
-        this.mqProducer = mqProducer;
+    public EmailService(JavaMailSender emailSender, FollowingRepository followingRepository, RabbitTemplate rabbitTemplate) {
         this.emailSender = emailSender;
         this.followingRepository = followingRepository;
+        this.rabbitTemplate = rabbitTemplate;
     }
 
     public void sendMessageToQueue(Chapter chapter) {
@@ -50,8 +51,43 @@ public class EmailService {
         data.setChapterTitle(chapter.getChapterTitle());
         data.setStoryTitle(chapter.getStory().getTitle());
         data.setChapterNo(String.valueOf(chapter.getChapterNo()));
-        mqProducer.sendMessage(data);
+        sendMessage(data);
     }
+
+    public void sendMessage(EmailService.DataStructure email) {
+        rabbitTemplate.convertAndSend("email-notifications", email);
+    }
+
+    @RabbitListener(queues = "email-notifications")
+    public void receiveMessage(EmailService.DataStructure message) {
+        sendMailsToFollowers(message);
+    }
+
+    private void sendMailsToFollowers(DataStructure message) {
+        List<FollowingStories> stories = followingRepository.findByStoryId(Long.parseLong(message.getStoryId()));
+        stories.forEach(story -> {
+            String email = story.getAuthor().getEmail();
+            String subject = formatTitle(message.getStoryTitle(), message.getUsername());
+            String body = formatBody(message.getUsername(), message.getChapterTitle(), message.getStoryTitle(),
+                    message.getPublished(), message.getStoryId(), message.getChapterNo());
+            sendEmail(email, subject, body);
+        });
+    }
+
+    private void sendEmail(String to, String subject, String text) {
+        try {
+            MimeMessage message = emailSender.createMimeMessage();
+            message.setSubject(subject);
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            helper.setFrom("vasara@app.com");
+            helper.setTo(to);
+            helper.setText(text, true);
+            emailSender.send(message);
+        } catch (MessagingException e) {
+            log.error("Unable to send email, ", e);
+        }
+    }
+
 
     private String formatTitle(String storyTitle, String username) {
         return String.format("New chapter for %s published by %s [Vasara]", storyTitle, username);
@@ -64,40 +100,6 @@ public class EmailService {
 
     private Object formatLink(String storyId, String chapterNo) {
         return String.format("<a href=\"https://vasaraf-production.up.railway.app/#/read?storyId=%s&chapterNo=%s\">HERE</a>", storyId, chapterNo);
-    }
-
-    public void sendMailsToFollowers(String message) {
-        DataStructure data;
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            data = objectMapper.readValue(message, DataStructure.class);
-        } catch (Exception e) {
-            log.warn("Unable to read jso and send an email");
-            return;
-        }
-        List<FollowingStories> stories = followingRepository.findByStoryId(Long.parseLong(data.getStoryId()));
-        DataStructure finalData = data;
-        stories.forEach(story -> {
-            String email = story.getAuthor().getEmail();
-            String subject = formatTitle(finalData.getStoryTitle(), finalData.getUsername());
-            String body = formatBody(finalData.getUsername(), finalData.getChapterTitle(), finalData.getStoryTitle(),
-                    finalData.getPublished(), finalData.getStoryId(), finalData.getChapterNo());
-            sendEmail(email, subject, body);
-        });
-    }
-
-    public void sendEmail(String to, String subject, String text) {
-        try {
-            MimeMessage message = emailSender.createMimeMessage();
-            message.setSubject(subject);
-            MimeMessageHelper helper = new MimeMessageHelper(message, true);
-            helper.setFrom("vasara@app.com");
-            helper.setTo(to);
-            helper.setText(text, true);
-            emailSender.send(message);
-        } catch (MessagingException e) {
-            log.error("Unable to send email, ", e);
-        }
     }
 
     @Getter

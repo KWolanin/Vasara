@@ -3,7 +3,7 @@ import { Author } from "../types/Author";
 
 export const fetchAuthors = async (): Promise<Author[]> => {
   try {
-    const response = await api.get("/authors/all");
+    const response = await api.get("/authors");
     return response.data;
   } catch (error) {
     console.error("Error fetching authors:", error);

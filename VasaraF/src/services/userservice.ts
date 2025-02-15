@@ -31,7 +31,7 @@ export const register = async (
 
 export const changeEmail = async (email: string, id: number) : Promise<Boolean> => {
   try {
-    const response = await api.post(`/authors/changeEmail`, { email: email, id: id });
+    const response = await api.post(`/authors/email`, { email: email, id: id });
     return response.data;
   } catch (error) {
     console.error("Error changing email:", error);
@@ -41,7 +41,7 @@ export const changeEmail = async (email: string, id: number) : Promise<Boolean> 
 
 export const changeUsername = async (username: string, id: number) : Promise<Boolean> => {
   try {
-    const response = await api.post(`/authors/changeUsername`, { username: username, id: id });
+    const response = await api.post(`/authors/username`, { username: username, id: id });
     return response.data;
   } catch (error) {
     console.error("Error changing username:", error);
@@ -51,7 +51,7 @@ export const changeUsername = async (username: string, id: number) : Promise<Boo
 
 export const changePassword = async (password: string, id: number) : Promise<Boolean> => {
   try {
-    const response = await api.post(`/authors/changePassword`, { password: password, id: id });
+    const response = await api.post(`/authors/password`, { password: password, id: id });
     return response.data;
   } catch (error) {
     console.error("Error changing password:", error);
@@ -61,7 +61,7 @@ export const changePassword = async (password: string, id: number) : Promise<Boo
 
 export const changeDesc = async (id: number, description: string) : Promise<Boolean> => {
   try {
-    const response = await api.post(`/authors/changeDescription`, { description: description, id: id });
+    const response = await api.post(`/authors/desc`, { description: description, id: id });
     return response.data;
   } catch (error) {
     console.error("Error changing description:", error);

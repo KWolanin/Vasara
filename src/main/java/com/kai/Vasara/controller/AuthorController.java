@@ -23,7 +23,7 @@ public class AuthorController {
         this.authorService = authorService;
     }
 
-    @GetMapping("/all")
+    @GetMapping()
     public ResponseEntity<List<AuthorDAO>> getAuthors() {
         return new ResponseEntity<>(authorService.getAll(), HttpStatus.OK);
     }
@@ -69,7 +69,7 @@ public class AuthorController {
         }
     }
 
-    @PostMapping("/changeEmail")
+    @PostMapping("/email")
     public ResponseEntity<Boolean> changeEmail(@RequestBody EmailRequest request) {
         try {
             boolean result = authorService.changeEmail(request.getEmail(), request.getId());
@@ -79,7 +79,7 @@ public class AuthorController {
         }
     }
 
-    @PostMapping("/changeUsername")
+    @PostMapping("/username")
     public ResponseEntity<Boolean> changeUsername(@RequestBody UsernameRequest request) {
         try {
             boolean result = authorService.changeUsername(request.getUsername(), request.getId());
@@ -89,7 +89,7 @@ public class AuthorController {
         }
     }
 
-    @PostMapping("/changePassword")
+    @PostMapping("/password")
     public ResponseEntity<Boolean> changePassword(@RequestBody PasswordRequest request) {
         try {
             boolean result = authorService.changePassword(request.getPassword(), request.getId());
@@ -99,7 +99,7 @@ public class AuthorController {
         }
     }
 
-    @PostMapping("/changeDescription")
+    @PostMapping("/desc")
     public ResponseEntity<Boolean> changeDescription(@RequestBody DescRequest request) {
         try {
             boolean result = authorService.changeDesc(request.getDescription(), request.getId());
