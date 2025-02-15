@@ -154,7 +154,7 @@ const changeDescription = async (): Promise<void> => {
     changeDesc(userStore.id, description.value)
       .then((data) => {
         msg.value = "";
-        msgSuccess.value = "Descirption updated successfully";
+        msgSuccess.value = "Description updated successfully";
       })
       .catch(() => {
         msg.value = "Failed to update description";
@@ -175,7 +175,7 @@ const changeDescription = async (): Promise<void> => {
 }
 
 .msg-success {
-  color: greenyellow;
+  color: rgb(69, 114, 0);
   margin-top: 10px;
   text-align: center;
   font-size: small;

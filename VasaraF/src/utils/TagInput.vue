@@ -5,7 +5,6 @@
       :label="label"
       @keydown.enter.prevent="addTag"
       outlined
-      dense
       class="q-mb-md"
     />
     <div>
@@ -14,7 +13,7 @@
         :key="index"
         removable
         @remove="removeTag(index)"
-        class="q-mr-xs chip"
+        class="q-mr-xs"
         :class="label === 'Tag(s)' ? 'bg-accent-pink' : 'bg-accent-purple'"
       >
         {{ tag }}
