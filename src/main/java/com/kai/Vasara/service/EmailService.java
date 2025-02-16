@@ -41,6 +41,11 @@ public class EmailService {
     }
 
     public void sendMessageToQueue(Chapter chapter) {
+        DataStructure data = prepareMessage(chapter);
+        sendMessage(data);
+    }
+
+    private static DataStructure prepareMessage(Chapter chapter) {
         String author = chapter.getStory().getAuthor().getUsername();
         DataStructure data = new DataStructure();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -51,7 +56,7 @@ public class EmailService {
         data.setChapterTitle(chapter.getChapterTitle());
         data.setStoryTitle(chapter.getStory().getTitle());
         data.setChapterNo(String.valueOf(chapter.getChapterNo()));
-        sendMessage(data);
+        return data;
     }
 
     public void sendMessage(EmailService.DataStructure email) {
