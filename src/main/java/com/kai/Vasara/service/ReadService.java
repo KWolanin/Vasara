@@ -62,11 +62,15 @@ public class ReadService implements ActionService<ReadStories> {
             read.setAddedAt(ZonedDateTime.now());
             readRepository.save(read);
             return true;
+        } catch (EntityNotFoundException e) {
+            log.error("Entity not found: {}", e.getMessage());
+            throw e;
         } catch (Exception e) {
-            log.error("Error while adding/removing read later: {}", e.getMessage());
+            log.error("Unexpected error while adding/removing read later: {}", e.getMessage());
             throw new RuntimeException("Error occurred while processing the read later action");
         }
     }
+
 
 
     @Override
@@ -82,11 +86,24 @@ public class ReadService implements ActionService<ReadStories> {
     @Override
     public Page<StoryDAO> get(int page, int size, long id) {
         Pageable pageable = PageRequest.of(page -1, size);
-        List<Story> readStories = null;
-        Optional<Author> author = authorService.find(id);
-        readStories = readRepository.findByAuthor(author.get(), pageable).stream().map(ReadStories::getStory).toList();
+        List<Story> readStories;
         List<StoryDAO> daos = new ArrayList<>();
-        readStories.forEach(story -> daos.add(storyService.from(story)));
-        return  new PageImpl<>(daos, pageable, readStories.size());
+        Optional<Author> author = authorService.find(id);
+        if (author.isPresent()) {
+            readStories = readRepository.findByAuthor(author.get(), pageable).stream().map(ReadStories::getStory).toList();
+            readStories.forEach(story -> daos.add(storyService.from(story)));
+            return  new PageImpl<>(daos, pageable, readStories.size());
+        }
+        return  new PageImpl<>(daos, pageable, 0);
+    }
+
+    @Override
+    public void delete(long id) {
+        readRepository.deleteByStoryId(id);
+    }
+
+    @Override
+    public int count(long id) {
+       return readRepository.countByAuthorId(id);
     }
 }

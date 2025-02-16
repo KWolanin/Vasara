@@ -20,7 +20,6 @@
     </div>
 
     <div v-if="!loading && !myFavs.length" class="not-found">No favorites yet! </div>
-
     <div class="row justify-center q-py-lg" v-if="!loading && myFavs.length">
       <q-pagination
       v-if="storiesPerPage <= myFavs.length"
@@ -47,6 +46,7 @@ import { Story } from "src/types/Story";
 import { computed, onMounted, ref } from "vue";
 import { useUserStore } from "src/stores/user";
 import StoryCard from "../StoryCard.vue";
+import { countFavs } from "src/services/favoriteservice";
 
 const store = useUserStore();
 
@@ -60,6 +60,12 @@ const myFavs = ref<Story[]>([]);
 
 onMounted(() => {
   loading.value = true
+
+  countFavs()
+  .then((response) =>{
+    storiesAmount.value = response
+  })
+
   findMyFavs(currentPage.value, storiesPerPage, store.id).then((response) => {
     myFavs.value = response.content;
     loading.value = false;

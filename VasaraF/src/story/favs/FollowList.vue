@@ -42,7 +42,7 @@
 </template>
 
 <script setup lang="ts">
-import { findMyFollows } from "src/services/followservice";
+import { countFollows, findMyFollows } from "src/services/followservice";
 import { Story } from "src/types/Story";
 import { computed, onMounted, ref } from "vue";
 import { useUserStore } from "src/stores/user";
@@ -60,6 +60,12 @@ const myFollows = ref<Story[]>([]);
 
 onMounted(() => {
 loading.value = true
+
+countFollows()
+  .then((response) =>{
+    storiesAmount.value = response
+  })
+
 findMyFollows(currentPage.value, storiesPerPage, store.id).then((response) => {
   myFollows.value = response.content;
   loading.value = false;

@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
@@ -33,14 +34,21 @@ public class StoryService {
     private final StoryRepository storyRepository;
     private final AuthorService authorService;
     private final ChapterService chapterService;
+    private final FavoriteService favoriteService;
+    private final FollowingService followingService;
+    private final ReadService readService;
     private static final Logger logger = LoggerFactory.getLogger(StoryService.class);
 
     @Autowired
     public StoryService(StoryRepository storyRepository, AuthorService authorService,
-                        ChapterService chapterService) {
+                        ChapterService chapterService, @Lazy FavoriteService favoriteService,
+                        @Lazy FollowingService followingService, @Lazy ReadService readService) {
         this.storyRepository = storyRepository;
         this.authorService = authorService;
         this.chapterService = chapterService;
+        this.favoriteService = favoriteService;
+        this.followingService = followingService;
+        this.readService = readService;
     }
 
     public List<StoryDAO> getAll() {
@@ -259,7 +267,11 @@ public class StoryService {
 
     @Transactional
     public Boolean deleteStory(Long id) {
+        // todo
         chapterService.deleteChaptersForStory(id);
+        favoriteService.delete(id);
+        followingService.delete(id);
+        readService.delete(id);
         int storiesDeleted = storyRepository.deleteStoryById(id);
         return storiesDeleted > 0;
     }

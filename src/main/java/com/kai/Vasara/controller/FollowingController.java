@@ -35,6 +35,11 @@ public class FollowingController {
         return new ResponseEntity<>(followingService.get(page, size, id), HttpStatus.OK);
     }
 
+    @GetMapping("/count/{id}")
+    public ResponseEntity<Integer> countMine(@PathVariable Long id) {
+        return new ResponseEntity<>(followingService.count(id), HttpStatus.OK);
+    }
+
     @Data
     public static class FollowRequest {
         private long user;

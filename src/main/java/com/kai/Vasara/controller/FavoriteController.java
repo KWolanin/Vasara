@@ -35,6 +35,11 @@ public class FavoriteController {
         return new ResponseEntity<>(favouriteService.get(page, size, id), HttpStatus.OK);
     }
 
+    @GetMapping("/count/{id}")
+    public ResponseEntity<Integer> countMine(@PathVariable Long id) {
+        return new ResponseEntity<>(favouriteService.count(id), HttpStatus.OK);
+    }
+
     @Data
     public static class FavRequest {
         private long user;

@@ -17,4 +17,7 @@ public interface ReadRepository extends JpaRepository<ReadStories, Long> {
 
     Page<ReadStories> findByAuthor(Author author, Pageable pageable);
 
+    void deleteByStoryId(long id);
+
+    int countByAuthorId(long id);
 }

@@ -1,5 +1,7 @@
 import { StoryPage } from "src/types/StoryPage";
 import { api } from "../boot/axios";
+import { useUserStore } from "../stores/user";
+
 
 
 export const addToFavorite = async (user: number, story: number) : Promise<Boolean> => {
@@ -33,3 +35,15 @@ export const findMyFavs = async (page: number, size: number, id: number): Promis
     throw error;
   }
 };
+
+export const countFavs = async () : Promise<number> => {
+  try {
+    const userStore = useUserStore();
+    const id = userStore.id;
+    const response = await api.get(`/favorites/count/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error counting my favs stories:", error);
+    throw error;
+  }
+}

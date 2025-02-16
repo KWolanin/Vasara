@@ -14,8 +14,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -63,10 +63,13 @@ public class FollowingService implements ActionService<FollowingStories> {
             fol.setAddedAt(ZonedDateTime.now());
             followingRepository.save(fol);
             return true;
-        } catch (Exception e) {
-            log.error("Error while adding/removing following: {}", e.getMessage());
-            throw new RuntimeException("Error occurred while processing the follow action");
-        }
+    } catch (EntityNotFoundException e) {
+        log.error("Entity not found: {}", e.getMessage());
+        throw e;
+    } catch (Exception e) {
+        log.error("Unexpected error while adding/removing following: {}", e.getMessage());
+        throw new RuntimeException("Error occurred while processing the following action");
+    }
     }
 
 
@@ -84,11 +87,24 @@ public class FollowingService implements ActionService<FollowingStories> {
     public Page<StoryDAO> get(int page, int size, long id) {
         Pageable pageable = PageRequest.of(page -1, size);
         List<Story> followStories;
-        Optional<Author> author = authorService.find(id);
-        followStories = followingRepository.findByAuthor(author.get(), pageable).stream().map(FollowingStories::getStory).toList();
         List<StoryDAO> daos = new ArrayList<>();
-        followStories.forEach(story -> daos.add(storyService.from(story)));
-        return  new PageImpl<>(daos, pageable, followStories.size());
+        Optional<Author> author = authorService.find(id);
+        if (author.isPresent()) {
+            followStories = followingRepository.findByAuthor(author.get(), pageable).stream().map(FollowingStories::getStory).toList();
+            followStories.forEach(story -> daos.add(storyService.from(story)));
+            return  new PageImpl<>(daos, pageable, followStories.size());
+        }
+        return new PageImpl<>(daos, pageable, 0);
+
     }
 
+    @Override
+    public void delete(long id) {
+        followingRepository.deleteByStoryId(id);
+    }
+
+    @Override
+    public int count(long id) {
+        return followingRepository.countByAuthorId(id);
+    }
 }

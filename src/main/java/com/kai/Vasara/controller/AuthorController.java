@@ -5,6 +5,8 @@ import com.kai.Vasara.model.AuthorDAO;
 import com.kai.Vasara.service.AuthorService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -58,6 +60,17 @@ public class AuthorController {
         }
     }
 
+    @PatchMapping
+    public ResponseEntity<Boolean> updateAuthor(@RequestBody UpdateAuthorRequest request) {
+        try {
+            boolean updated = authorService.updateAuthor(request);
+            return ResponseEntity.ok(updated);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(false);
+        }
+    }
+
+
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
@@ -66,46 +79,6 @@ public class AuthorController {
             return ResponseEntity.ok(new LoggedUser(author.getId(), author.getUsername(), author.getLogin(), author.getEmail()));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
-
-    @PostMapping("/email")
-    public ResponseEntity<Boolean> changeEmail(@RequestBody EmailRequest request) {
-        try {
-            boolean result = authorService.changeEmail(request.getEmail(), request.getId());
-            return ResponseEntity.ok(result);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(false);
-        }
-    }
-
-    @PostMapping("/username")
-    public ResponseEntity<Boolean> changeUsername(@RequestBody UsernameRequest request) {
-        try {
-            boolean result = authorService.changeUsername(request.getUsername(), request.getId());
-            return ResponseEntity.ok(result);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(false);
-        }
-    }
-
-    @PostMapping("/password")
-    public ResponseEntity<Boolean> changePassword(@RequestBody PasswordRequest request) {
-        try {
-            boolean result = authorService.changePassword(request.getPassword(), request.getId());
-            return ResponseEntity.ok(result);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(false);
-        }
-    }
-
-    @PostMapping("/desc")
-    public ResponseEntity<Boolean> changeDescription(@RequestBody DescRequest request) {
-        try {
-            boolean result = authorService.changeDesc(request.getDescription(), request.getId());
-            return ResponseEntity.ok(result);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(false);
         }
     }
 
@@ -132,27 +105,14 @@ public class AuthorController {
         private String email;
     }
 
-    @Data
-    public static class EmailRequest {
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class UpdateAuthorRequest {
+        private Long id;
         private String email;
-        private long id;
-    }
-
-    @Data
-    public static class UsernameRequest {
         private String username;
-        private long id;
-    }
-
-    @Data
-    public static class PasswordRequest {
         private String password;
-        private long id;
-    }
-
-    @Data
-    public static class DescRequest {
         private String description;
-        private long id;
     }
 }

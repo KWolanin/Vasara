@@ -19,4 +19,8 @@ public interface FollowingRepository extends JpaRepository<FollowingStories, Lon
     Page<FollowingStories> findByAuthor(Author author, Pageable pageable);
 
     List<FollowingStories> findByStoryId(long storyId);
+
+    void deleteByStoryId(long id);
+
+    int countByAuthorId(long id);
 }

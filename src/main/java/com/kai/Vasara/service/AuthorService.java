@@ -1,6 +1,7 @@
 package com.kai.Vasara.service;
 
 
+import com.kai.Vasara.controller.AuthorController;
 import com.kai.Vasara.entity.Author;
 import com.kai.Vasara.model.AuthorDAO;
 import com.kai.Vasara.repository.AuthorRepository;
@@ -138,62 +139,47 @@ public class AuthorService {
         return authorRepository.findById(authorId);
     }
 
-    public boolean changeEmail(String email, long id) {
-        if (!emailValid(email)) {
-            throw new IllegalArgumentException("Invalid email");
-        }
-        if (authorRepository.findByEmail(email).isPresent()) {
-            throw new IllegalArgumentException("User with this email already exists");
-        }
-       Optional<Author> author = authorRepository.findById(id);
-        if (author.isPresent()) {
-            author.get().setEmail(email);
-            return authorRepository.save(author.get()).getId() > 0;
-        }
-        return false;
-    }
-
-    public boolean changeUsername(String username, long id) {
-        if (!usernameValid(username)) {
-            throw new IllegalArgumentException("Invalid username");
-        }
-        if (authorRepository.findByUsername(username).isPresent()) {
-            throw new IllegalArgumentException("User with this username already exists");
-        }
-        Optional<Author> author = authorRepository.findById(id);
-        if (author.isPresent()) {
-            author.get().setUsername(username);
-            return authorRepository.save(author.get()).getId() > 0;
-        }
-        return false;
-    }
-
-    public boolean changePassword(String password, long id) {
-        if (!StringUtils.hasText(password)) {
-            throw new IllegalArgumentException("Invalid password");
-        }
-        Optional<Author> author = authorRepository.findById(id);
-        if (author.isPresent()) {
-            author.get().setPassword(passwordEncoder.encode(password));
-            return authorRepository.save(author.get()).getId() > 0;
-        }
-        return false;
-    }
-
     public Optional<Author> findById(long id) {
         return authorRepository.findById(id);
     }
 
+    public boolean updateAuthor(AuthorController.UpdateAuthorRequest request) {
+        Author author = authorRepository.findById(request.getId())
+                .orElseThrow(() -> new IllegalArgumentException("Author not found"));
 
-    public boolean changeDesc(String description, long id) {
-        if (!StringUtils.hasText(description)) {
-            throw new IllegalArgumentException("Invalid description");
+        if (request.getEmail() != null) {
+            if (!emailValid(request.getEmail())) {
+                throw new IllegalArgumentException("Invalid email");
+            }
+            if (authorRepository.findByEmail(request.getEmail() ).isPresent()) {
+                throw new IllegalArgumentException("User with this email already exists");
+            }
+            author.setEmail(request.getEmail());
         }
-        Optional<Author> author = authorRepository.findById(id);
-        if (author.isPresent()) {
-            author.get().setDescription(description);
-            return authorRepository.save(author.get()).getId() > 0;
+        if (request.getUsername() != null) {
+            if (!usernameValid(request.getUsername())) {
+                throw new IllegalArgumentException("Invalid username");
+            }
+            if (authorRepository.findByUsername(request.getUsername()).isPresent()) {
+                throw new IllegalArgumentException("User with this username already exists");
+            }
+            author.setUsername(request.getUsername());
         }
-        return false;
+        if (request.getPassword() != null) {
+            if (!StringUtils.hasText(request.getPassword())) {
+                throw new IllegalArgumentException("Invalid password");
+            }
+            author.setPassword(passwordEncoder.encode(request.getPassword()));
+        }
+        if (request.getDescription() != null) {
+            if (!StringUtils.hasText(request.getDescription())) {
+                throw new IllegalArgumentException("Invalid description");
+            }
+            author.setDescription(request.getDescription());
+        }
+
+        authorRepository.save(author);
+        return true;
     }
+
 }

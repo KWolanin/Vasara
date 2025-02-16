@@ -79,3 +79,4 @@ export const countMines = async () : Promise<number> => {
     throw error;
   }
 }
+

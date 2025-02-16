@@ -35,6 +35,11 @@ public class ReadController {
         return new ResponseEntity<>(readService.get(page, size, id), HttpStatus.OK);
     }
 
+    @GetMapping("/count/{id}")
+    public ResponseEntity<Integer> countMine(@PathVariable Long id) {
+        return new ResponseEntity<>(readService.count(id), HttpStatus.OK);
+    }
+
     @Data
     public static class ReadRequest {
         private long user;

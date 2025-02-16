@@ -63,8 +63,11 @@ public class FavoriteService implements ActionService<FavoriteStories> {
             fav.setAddedAt(ZonedDateTime.now());
             favoriteRepository.save(fav);
             return true;
+        } catch (EntityNotFoundException e) {
+            log.error("Entity not found: {}", e.getMessage());
+            throw e;
         } catch (Exception e) {
-            log.error("Error while adding/removing favorite: {}", e.getMessage());
+            log.error("Unexpected error while adding/removing faves: {}", e.getMessage());
             throw new RuntimeException("Error occurred while processing the favorite action");
         }
     }
@@ -82,11 +85,24 @@ public class FavoriteService implements ActionService<FavoriteStories> {
     @Override
     public Page<StoryDAO> get(int page, int size, long id) {
         Pageable pageable = PageRequest.of(page -1, size);
-        List<Story> favStories = null;
+        List<Story> favStories;
+        List<StoryDAO> daos = new ArrayList<>();
         Optional<Author> author = authorService.find(id);
+        if (author.isPresent()) {
             favStories = favoriteRepository.findByAuthor(author.get(), pageable).stream().map(FavoriteStories::getStory).toList();
-            List<StoryDAO> daos = new ArrayList<>();
             favStories.forEach(story -> daos.add(storyService.from(story)));
             return  new PageImpl<>(daos, pageable, favStories.size());
         }
+        return  new PageImpl<>(daos, pageable, 0);
+        }
+
+    @Override
+    public void delete(long id) {
+        favoriteRepository.deleteByStoryId(id);
+    }
+
+    @Override
+    public int count(long id) {
+        return favoriteRepository.countByAuthorId(id);
+    }
 }

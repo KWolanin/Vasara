@@ -17,4 +17,7 @@ public interface FavoriteRepository extends JpaRepository<FavoriteStories, Long>
 
     Page<FavoriteStories> findByAuthor(Author author, Pageable pageable);
 
+    void deleteByStoryId(long id);
+
+    int countByAuthorId(long id);
 }

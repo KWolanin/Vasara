@@ -41,7 +41,7 @@
 </template>
 
 <script setup lang="ts">
-import { findMyReads } from "src/services/readservice";
+import { findMyReads, countReads } from "src/services/readservice";
 import { Story } from "src/types/Story";
 import { computed, onMounted, ref } from "vue";
 import { useUserStore } from "src/stores/user";
@@ -59,6 +59,10 @@ const myReads = ref<Story[]>([]);
 
 onMounted(() => {
 loading.value = true
+countReads()
+  .then((response) =>{
+    storiesAmount.value = response
+  })
 findMyReads(currentPage.value, storiesPerPage, store.id).then((response) => {
   myReads.value = response.content;
   loading.value = false;

@@ -1,5 +1,7 @@
 import { StoryPage } from "src/types/StoryPage";
 import { api } from "../boot/axios";
+import { useUserStore } from "../stores/user";
+
 
 
 export const addToFollows = async (user: number, story: number) : Promise<Boolean> => {
@@ -33,3 +35,16 @@ export const findMyFollows = async (page: number, size: number, id: number): Pro
     throw error;
   }
 };
+
+
+export const countFollows = async () : Promise<number> => {
+  try {
+    const userStore = useUserStore();
+    const id = userStore.id;
+    const response = await api.get(`/follows/count/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error counting my follows stories:", error);
+    throw error;
+  }
+}

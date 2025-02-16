@@ -1,6 +1,5 @@
 package com.kai.Vasara.model;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.springframework.stereotype.Component;
 

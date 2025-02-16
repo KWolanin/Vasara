@@ -2,6 +2,7 @@ package com.kai.Vasara.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kai.Vasara.entity.Author;
+import com.kai.Vasara.entity.FavoriteStories;
 import com.kai.Vasara.entity.Story;
 import com.kai.Vasara.model.Criteria;
 import com.kai.Vasara.model.StoryDAO;
@@ -41,6 +42,15 @@ class StoryServiceTest {
 
     @Mock
     ObjectMapper objectMapper;
+
+    @Mock
+    FavoriteService favoriteService;
+
+    @Mock
+    FollowingService followingService;
+
+    @Mock
+    ReadService readService;
 
     @BeforeEach
     void setUp() {

@@ -6,9 +6,9 @@
       <div v-if="msg" class="msg">{{ msg }}</div>
       <div v-if="msgSuccess" class="msg-success">{{ msgSuccess }}</div>
       <div class="row q-ml-md col-4">
-        <q-input v-model="email" :disable="!editingEmail"></q-input>
-        <q-btn class="q-ml-md" flat @click="changeUserEmail">
-          {{ editingEmail ? "Save 🔧" : "Change e-mail 🔧" }}
+        <q-input v-model="userData.email" :disable="!editing.email"></q-input>
+        <q-btn class="q-ml-md" flat @click="updateUserData('email')">
+          {{ editing.email ? "Save 🔧" : "Change e-mail 🔧" }}
           <q-tooltip>
             Change the email associated with your account, where you will
             receive notifications.
@@ -16,9 +16,9 @@
         </q-btn>
       </div>
       <div class="row q-ml-md col-4">
-        <q-input v-model="username" :disable="!editingUsername"></q-input>
-        <q-btn class="q-ml-md" flat @click="changeUserName">
-          {{ editingUsername ? "Save 🔧" : "Change username 🔧" }}
+        <q-input v-model="userData.username" :disable="!editing.username"></q-input>
+        <q-btn class="q-ml-md" flat @click="updateUserData('username')">
+          {{ editing.username ? "Save 🔧" : "Change username 🔧" }}
           <q-tooltip>
             Change the displayed username (the login will remain the same as the
             one provided during registration).
@@ -27,25 +27,25 @@
       </div>
       <div class="row q-ml-md col-4">
         <q-input
-          v-model="password"
-          :disable="!editingPassword"
+          v-model="userData.password"
+          :disable="!editing.password"
           type="password"
           placeholder="*******"
         ></q-input>
-        <q-btn class="q-ml-md" flat @click="changeUserPassword">
-          {{ editingPassword ? "Save 🔧" : "Set new password 🔧" }}
+        <q-btn class="q-ml-md" flat @click="updateUserData('password')">
+          {{ editing.password ? "Save 🔧" : "Set new password 🔧" }}
         </q-btn>
       </div>
       <div class="row q-ml-md q-mt-md col-4">
         <q-input
-          v-model="description"
-          :disable="!editingDescription"
+          v-model="userData.description"
+          :disable="!editing.description"
           filled
           type="textarea"
           placeholder="My name is..."
         ></q-input>
-        <q-btn class="q-ml-md" flat @click="changeDescription">
-          {{ editingDescription ? "Save 🔧" : "Set new description 🔧" }}
+        <q-btn class="q-ml-md" flat @click="updateUserData('description')">
+          {{ editing.description ? "Save 🔧" : "Set new description 🔧" }}
         </q-btn>
       </div>
     </q-card>
@@ -56,113 +56,81 @@
 import MainMenu from "../utils/MainMenu.vue";
 import { useUserStore } from "src/stores/user";
 import { ref, onMounted } from "vue";
-import {
-  changeEmail,
-  changeUsername,
-  changePassword,
-  changeDesc,
-} from "src/services/userservice";
-import {getAuthorDescriptionById} from "src/services/authorservice"
+import { change } from "src/services/userservice";
+import { getAuthorDescriptionById } from "src/services/authorservice";
+import { UpdateAuthorRequest } from "src/types/UpdateAuthorRequest";
 
 const userStore = useUserStore();
 
-const email = ref<string>("");
-const oldEmail = ref<string>("");
-
-onMounted(() => {
-  email.value = userStore.email;
-  oldEmail.value = userStore.email;
-  username.value = userStore.username;
-  oldusername.value = userStore.username;
-
-  getAuthorDescriptionById(userStore.id).then((desc) => {
-    description.value = desc
-  })
+const userData = ref({
+  email: "",
+  oldEmail: "",
+  username: "",
+  oldUsername: "",
+  password: "",
+  description: "",
+  oldDescription: "",
 });
 
-const editingEmail = ref<boolean>(false);
-const msg = ref<string>("");
-const msgSuccess = ref<string>("");
+const editing = ref({
+  email: false,
+  username: false,
+  password: false,
+  description: false,
+});
 
-const changeUserEmail = async (): Promise<void> => {
+const msg = ref("");
+const msgSuccess = ref("");
+
+onMounted(() => {
+  userData.value.email = userStore.email;
+  userData.value.oldEmail = userStore.email;
+  userData.value.username = userStore.username;
+  userData.value.oldUsername = userStore.username;
+
+  getAuthorDescriptionById(userStore.id).then((desc) => {
+    userData.value.description = desc;
+    userData.value.oldDescription = desc;
+  });
+});
+
+const updateUserData = async (field: keyof UpdateAuthorRequest): Promise<void> => {
   msg.value = "";
-  if (editingEmail.value) {
-    if (oldEmail.value !== email.value) {
-      changeEmail(email.value, userStore.id)
-        .then((data) => {
-          userStore.updateEmail(email.value);
-          oldEmail.value = email.value;
-          msg.value = "";
-          msgSuccess.value = "Email updated successfully";
-        })
-        .catch((error) => {
-          console.error(error);
-          msg.value = "Failed to update email";
-        });
+  if (editing.value[field]) {
+    const updatedValue = userData.value[field as keyof typeof userData.value];
+    const oldValue = userData.value[`old${capitalize(field)}` as keyof typeof userData.value];
+
+    if (field !== "password" && updatedValue === oldValue) {
+      editing.value[field] = false;
+      return;
+    }
+
+    const updatePayload: UpdateAuthorRequest = {
+      id: userStore.id,
+      email: null,
+      username: null,
+      password: null,
+      description: null,
+      [field]: updatedValue,
+    };
+
+    try {
+      await change(updatePayload);
+      msg.value = "";
+      msgSuccess.value = `${capitalize(field)} updated successfully`;
+
+      if (field === "email") userStore.updateEmail(updatedValue as string);
+      if (field === "username") userStore.updateUsername(updatedValue as string);
+
+      userData.value[`old${capitalize(field)}` as keyof typeof userData.value] = updatedValue;
+    } catch {
+      msg.value = `Failed to update ${field}`;
     }
   }
-  editingEmail.value = !editingEmail.value;
+  editing.value[field] = !editing.value[field];
 };
 
-const username = ref<string>("");
-const oldusername = ref<string>("");
-const editingUsername = ref<boolean>(false);
-
-const changeUserName = async (): Promise<void> => {
-  msg.value = "";
-  if (editingUsername.value) {
-    if (oldusername.value !== username.value) {
-      changeUsername(username.value, userStore.id)
-        .then((data) => {
-          userStore.updateUsername(username.value);
-          oldusername.value = username.value;
-          msg.value = "";
-          msgSuccess.value = "Username updated successfully";
-        })
-        .catch(() => {
-          msg.value = "Failed to update username";
-        });
-    }
-  }
-  editingUsername.value = !editingUsername.value;
-};
-
-const password = ref<string>("");
-const editingPassword = ref<boolean>(false);
-
-const changeUserPassword = async (): Promise<void> => {
-  msg.value = "";
-  if (editingPassword.value) {
-    changePassword(password.value, userStore.id)
-      .then((data) => {
-        msg.value = "";
-        msgSuccess.value = "Password updated successfully";
-      })
-      .catch(() => {
-        msg.value = "Failed to update password";
-      });
-  }
-  editingPassword.value = !editingPassword.value;
-};
-
-const description = ref<string>("");
-const editingDescription = ref<boolean>(false);
-
-const changeDescription = async (): Promise<void> => {
-  msg.value = "";
-  if (editingDescription.value) {
-    changeDesc(userStore.id, description.value)
-      .then((data) => {
-        msg.value = "";
-        msgSuccess.value = "Description updated successfully";
-      })
-      .catch(() => {
-        msg.value = "Failed to update description";
-      });
-  }
-  editingDescription.value = !editingDescription.value;
-};
-
+const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
 </script>
 
 <style scoped>

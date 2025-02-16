@@ -16,4 +16,8 @@ public interface ActionService<T> {
     boolean is(long authorId, long storyId);
 
     Page<StoryDAO> get(int page, int size, long id);
+
+    void delete(long id);
+
+    int count(long id);
 }

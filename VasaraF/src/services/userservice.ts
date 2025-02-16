@@ -2,6 +2,7 @@ import { useUserStore } from "../stores/user";
 import { api } from "../boot/axios";
 import { Author } from "../types/Author";
 import { RegisterRequest } from "../types/RegisterRequest";
+import { UpdateAuthorRequest } from "src/types/UpdateAuthorRequest";
 
 export const login = async (loginData: Author): Promise<boolean> => {
   try {
@@ -28,40 +29,9 @@ export const register = async (
   }
 };
 
-
-export const changeEmail = async (email: string, id: number) : Promise<Boolean> => {
+export const change = async (updateAuthorRequest : UpdateAuthorRequest) : Promise<Boolean> => {
   try {
-    const response = await api.post(`/authors/email`, { email: email, id: id });
-    return response.data;
-  } catch (error) {
-    console.error("Error changing email:", error);
-    return error;
-  }
-}
-
-export const changeUsername = async (username: string, id: number) : Promise<Boolean> => {
-  try {
-    const response = await api.post(`/authors/username`, { username: username, id: id });
-    return response.data;
-  } catch (error) {
-    console.error("Error changing username:", error);
-    return error;
-  }
-}
-
-export const changePassword = async (password: string, id: number) : Promise<Boolean> => {
-  try {
-    const response = await api.post(`/authors/password`, { password: password, id: id });
-    return response.data;
-  } catch (error) {
-    console.error("Error changing password:", error);
-    return error;
-  }
-}
-
-export const changeDesc = async (id: number, description: string) : Promise<Boolean> => {
-  try {
-    const response = await api.post(`/authors/desc`, { description: description, id: id });
+    const response = await api.patch(`/authors`, updateAuthorRequest);
     return response.data;
   } catch (error) {
     console.error("Error changing description:", error);
