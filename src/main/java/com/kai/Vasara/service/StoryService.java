@@ -12,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
@@ -58,6 +60,7 @@ public class StoryService {
         return daos;
     }
 
+    @Cacheable(value = "storiesCache", key = "{#page, #size, #criteria.hashCode(), #sortBy}")
     public Page<StoryDAO> getPage(int page, int size, Criteria criteria, String sortBy) {
         return criteria.areFieldsEmpty() ?  getPageWithoutCriteria(page, size, sortBy)
             : getPageWithCriteria(page, size, criteria, sortBy);
@@ -152,7 +155,7 @@ public class StoryService {
     }
 
 
-
+    @Cacheable(value = "userStoriesCache", key = "#id")
     public Page<StoryDAO> getMyStories(Long id, int page, int size) {
         Pageable pageable = PageRequest.of(page -1, size);
         Page<Story> stories = storyRepository.findAllByAuthorId(id, pageable);
@@ -167,6 +170,7 @@ public class StoryService {
         return opt.map(this::from).orElse(null);
     }
 
+    @CacheEvict(value = "userStoriesCache", allEntries = true)
     public Boolean saveStory(StoryDAO story) {
         try {
             storyRepository.save(from(story));
@@ -267,7 +271,6 @@ public class StoryService {
 
     @Transactional
     public Boolean deleteStory(Long id) {
-        // todo
         chapterService.deleteChaptersForStory(id);
         favoriteService.delete(id);
         followingService.delete(id);
