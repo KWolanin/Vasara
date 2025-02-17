@@ -30,7 +30,7 @@ In the future user will be able to:
 
 
 # Tech stack
-Vue.js, Quasar, Pinia, Javascript/Typescript (frontend), Java 8 (backend), Railway (build and deploy service), RabbitMQ
+Vue.js, Quasar, Pinia, Javascript/Typescript (frontend), Java 8 (backend), String Boot, String Cache, Railway (build and deploy service), RabbitMQ
 
 You can use Vasara here:
 [Vasara app](https://vasaraf-production.up.railway.app/#/)
