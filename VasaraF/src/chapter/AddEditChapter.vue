@@ -77,6 +77,7 @@ const saveChapter = (): void => {
       Notify.create({
         message: `Chapter ${msg} successfully!`,
         position: "bottom-right",
+        type: "positive"
       });
     })
     .catch((error: unknown) => {
@@ -84,6 +85,7 @@ const saveChapter = (): void => {
       Notify.create({
         message: `Error occurred!`,
         position: "bottom-right",
+        type: "negative"
       });
     });
 };

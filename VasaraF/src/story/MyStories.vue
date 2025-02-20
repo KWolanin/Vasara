@@ -105,6 +105,7 @@ const reloadStories = async () => {
   Notify.create({
     message: "Story was deleted!",
     position: "bottom-right",
+    type: "positive"
   });
   await fetchStories();
 };

@@ -13,7 +13,7 @@ export const login = async (loginData: Author): Promise<boolean> => {
     return response.data;
   } catch (error) {
     console.error("Error logging in:", error);
-    return error;
+    throw error;
   }
 };
 
@@ -25,7 +25,7 @@ export const register = async (
     return response.data;
   } catch (error) {
     console.error("Error registering:", error);
-    return error;
+    throw error;
   }
 };
 
@@ -34,7 +34,7 @@ export const change = async (updateAuthorRequest : UpdateAuthorRequest) : Promis
     const response = await api.patch(`/authors`, updateAuthorRequest);
     return response.data;
   } catch (error) {
-    console.error("Error changing description:", error);
-    return error;
+    console.error("Error changing user details:", error);
+    throw error;
   }
 }

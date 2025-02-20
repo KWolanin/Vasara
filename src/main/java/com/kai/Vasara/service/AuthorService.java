@@ -3,6 +3,8 @@ package com.kai.Vasara.service;
 
 import com.kai.Vasara.controller.AuthorController;
 import com.kai.Vasara.entity.Author;
+import com.kai.Vasara.exception.AuthorError;
+import com.kai.Vasara.exception.AuthorException;
 import com.kai.Vasara.model.AuthorDAO;
 import com.kai.Vasara.repository.AuthorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,24 +86,20 @@ public class AuthorService {
         return author;
     }
 
-    public Author register(String username, String login, String rawPassword, String email) {
-        if (authorRepository.findByLogin(login).isPresent()) {
-            throw new IllegalArgumentException("User with this login already exists");
+    public Author register(Author author) {
+        if (authorRepository.existsByLogin(author.getLogin())) {
+            throw new AuthorException(AuthorError.AUTHOR_LOGIN_EXISTS);
         }
-        if (authorRepository.findByUsername(username).isPresent()) {
-            throw new IllegalArgumentException("User with this username already exists");
+        if (authorRepository.existsByUsername(author.getUsername())) {
+            throw new AuthorException(AuthorError.AUTHOR_USERNAME_EXISTS);
         }
-        if (authorRepository.findByEmail(email).isPresent()) {
-            throw new IllegalArgumentException("User with this email already exists");
+        if (authorRepository.existsByEmail(author.getEmail())) {
+            throw new AuthorException(AuthorError.AUTHOR_EMAIL_EXISTS);
         }
-        if (!emailValid(email)) {
-            throw new IllegalArgumentException("Email is incorrect");
+        if (!emailValid(author.getEmail())) {
+            throw new AuthorException(AuthorError.AUTHOR_EMAIL_INCORRECT);
         }
-        Author author = new Author();
-        author.setLogin(login);
-        author.setUsername(username);
-        author.setPassword(passwordEncoder.encode(rawPassword));
-        author.setEmail(email);
+        author.setPassword(passwordEncoder.encode(author.getPassword()));
         return authorRepository.save(author);
     }
 
@@ -127,9 +125,9 @@ public class AuthorService {
 
     public Author authenticate(String login, String rawPassword) {
         Author author = authorRepository.findByLogin(login)
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+                .orElseThrow(() -> new AuthorException(AuthorError.AUTHOR_NOT_FOUND));
         if (!passwordEncoder.matches(rawPassword, author.getPassword())) {
-            throw new IllegalArgumentException("Invalid login or password");
+            throw new AuthorException(AuthorError.AUTHOR_INVALID_CREDENTIALS);
         }
         return author;
     }
@@ -145,40 +143,76 @@ public class AuthorService {
 
     public boolean updateAuthor(AuthorController.UpdateAuthorRequest request) {
         Author author = authorRepository.findById(request.getId())
-                .orElseThrow(() -> new IllegalArgumentException("Author not found"));
+                .orElseThrow(() -> new AuthorException(AuthorError.AUTHOR_NOT_FOUND));
 
         if (request.getEmail() != null) {
             if (!emailValid(request.getEmail())) {
-                throw new IllegalArgumentException("Invalid email");
+                throw new AuthorException(AuthorError.AUTHOR_INVALID_EMAIL);
             }
-            if (authorRepository.findByEmail(request.getEmail() ).isPresent()) {
-                throw new IllegalArgumentException("User with this email already exists");
+            if (authorRepository.existsByEmail(request.getEmail()) && !author.getEmail().equals(request.getEmail())) {
+                throw new AuthorException(AuthorError.AUTHOR_EMAIL_EXISTS);
             }
             author.setEmail(request.getEmail());
         }
         if (request.getUsername() != null) {
             if (!usernameValid(request.getUsername())) {
-                throw new IllegalArgumentException("Invalid username");
+                throw new AuthorException(AuthorError.AUTHOR_INVALID_USERNAME);
             }
-            if (authorRepository.findByUsername(request.getUsername()).isPresent()) {
-                throw new IllegalArgumentException("User with this username already exists");
+            if (authorRepository.existsByUsername(request.getUsername())) {
+                throw new AuthorException(AuthorError.AUTHOR_USERNAME_EXISTS);
             }
             author.setUsername(request.getUsername());
         }
         if (request.getPassword() != null) {
             if (!StringUtils.hasText(request.getPassword())) {
-                throw new IllegalArgumentException("Invalid password");
+                throw new AuthorException(AuthorError.AUTHOR_INVALID_PASSWORD);
             }
             author.setPassword(passwordEncoder.encode(request.getPassword()));
         }
         if (request.getDescription() != null) {
             if (!StringUtils.hasText(request.getDescription())) {
-                throw new IllegalArgumentException("Invalid description");
+                throw new AuthorException(AuthorError.AUTHOR_INVALID_DESCRIPTION);
             }
             author.setDescription(request.getDescription());
         }
 
         authorRepository.save(author);
+        return true;
+    }
+
+    public boolean updateAuthor(Author author) {
+        Author authorInDb = authorRepository.findById(author.getId())
+                .orElseThrow(() -> new AuthorException(AuthorError.AUTHOR_NOT_FOUND));
+
+        if (author.getEmail() != null) {
+            if (!emailValid(author.getEmail())) {
+                throw new AuthorException(AuthorError.AUTHOR_INVALID_EMAIL);
+            }
+            if (authorRepository.existsByEmail(author.getEmail()) && !authorInDb.getEmail().equals(author.getEmail())) {
+                throw new AuthorException(AuthorError.AUTHOR_EMAIL_EXISTS);
+            }
+            authorInDb.setEmail(author.getEmail());
+        }
+        if (author.getUsername() != null) {
+            if (authorRepository.existsByUsername(author.getUsername())) {
+                throw new AuthorException(AuthorError.AUTHOR_USERNAME_EXISTS);
+            }
+            authorInDb.setUsername(author.getUsername());
+        }
+        if (author.getPassword() != null) {
+            if (!StringUtils.hasText(author.getPassword())) {
+                throw new AuthorException(AuthorError.AUTHOR_INVALID_PASSWORD);
+            }
+            authorInDb.setPassword(passwordEncoder.encode(author.getPassword()));
+        }
+        if (author.getDescription() != null) {
+            if (!StringUtils.hasText(author.getDescription())) {
+                throw new AuthorException(AuthorError.AUTHOR_INVALID_DESCRIPTION);
+            }
+            authorInDb.setDescription(author.getDescription());
+        }
+
+        authorRepository.save(authorInDb);
         return true;
     }
 

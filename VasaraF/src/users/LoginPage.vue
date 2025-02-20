@@ -49,7 +49,7 @@ const msg = ref("");
 
 const loginUser = () => {
   if (!log.value || !password.value) {
-    msg.value = "Please fill login and password";
+    msg.value = "Please fill login and password".toUpperCase();
     return;
   }
   login({ login: log.value, password: password.value }).then((response) => {

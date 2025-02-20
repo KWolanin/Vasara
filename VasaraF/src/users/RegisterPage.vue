@@ -33,6 +33,8 @@
 import { ref } from "vue";
 import { register } from "src/services/userservice";
 import { useRouter } from "vue-router";
+import { Notify } from "quasar";
+
 
 const router = useRouter();
 
@@ -53,13 +55,17 @@ const registerUser = () => {
     login: login.value,
     password: password.value,
     email: email.value
-  }).then((response) => {
-    if (response instanceof Error) {
-      msg.value = `Error! ${response.response.data}`;
-    } else {
+  }).then(() => {
       msg.value = "";
+      Notify.create({
+        message: "Account created successfully",
+        position: "bottom-right",
+        type: "positive",
+      });
       router.push("/login");
-    }
+  }).catch((error) => {
+    console.log(error)
+    msg.value = `Error during registration: ${error.response.data.message}`.toUpperCase();
   });
 };
 </script>

@@ -91,6 +91,7 @@ const saveChanges = () : void => {
       Notify.create({
         message: "Chapters order was changed!",
         position: "bottom-right",
+        type: "positive"
       });
     })
     .catch((err) => {
@@ -98,6 +99,7 @@ const saveChanges = () : void => {
       Notify.create({
         message: "Something went wrong!",
         position: "bottom-right",
+        type: "negative"
       });
     });
 };
@@ -122,11 +124,13 @@ const deleteChapter = () : void => {
           Notify.create({
             message: "Chapter has been deleted!",
             position: "bottom-right",
+            type: "positive"
           });
         } else {
           Notify.create({
             message: "Something went wrong!",
             position: "bottom-right",
+            type: "negative"
           });
         }
       })
@@ -135,6 +139,7 @@ const deleteChapter = () : void => {
         Notify.create({
           message: "Something went wrong!",
           position: "bottom-right",
+          type: "negative"
         });
       });
   }

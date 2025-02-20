@@ -96,6 +96,7 @@ onMounted(() => {
 
 const updateUserData = async (field: keyof UpdateAuthorRequest): Promise<void> => {
   msg.value = "";
+  msgSuccess.value = "";
   if (editing.value[field]) {
     const updatedValue = userData.value[field as keyof typeof userData.value];
     const oldValue = userData.value[`old${capitalize(field)}` as keyof typeof userData.value];
@@ -116,15 +117,14 @@ const updateUserData = async (field: keyof UpdateAuthorRequest): Promise<void> =
 
     try {
       await change(updatePayload);
-      msg.value = "";
-      msgSuccess.value = `${capitalize(field)} updated successfully`;
+      msgSuccess.value = `${capitalize(field)} updated successfully`.toUpperCase();
 
       if (field === "email") userStore.updateEmail(updatedValue as string);
       if (field === "username") userStore.updateUsername(updatedValue as string);
 
       userData.value[`old${capitalize(field)}` as keyof typeof userData.value] = updatedValue;
-    } catch {
-      msg.value = `Failed to update ${field}`;
+    } catch(error) {
+      msg.value = `Failed to update ${field}: ${error.response.data.message}`.toUpperCase();
     }
   }
   editing.value[field] = !editing.value[field];

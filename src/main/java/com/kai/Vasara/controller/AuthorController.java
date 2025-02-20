@@ -3,6 +3,7 @@ package com.kai.Vasara.controller;
 import com.kai.Vasara.entity.Author;
 import com.kai.Vasara.model.AuthorDAO;
 import com.kai.Vasara.service.AuthorService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -45,49 +46,22 @@ public class AuthorController {
         return new ResponseEntity<>(authorService.getAuthorDesc(id), HttpStatus.OK);
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<Boolean> addAuthor(@RequestBody Author author) {
-        return new ResponseEntity<>(authorService.saveAuthor(author), HttpStatus.CREATED);
-    }
-
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
-        try {
-            authorService.register(request.getUsername(), request.getLogin(), request.getPassword(), request.getEmail());
-            return ResponseEntity.ok().build();
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<Author> register(@RequestBody @Valid Author author) {
+        authorService.register(author);
+        return ResponseEntity.ok().build();
     }
 
     @PatchMapping
-    public ResponseEntity<Boolean> updateAuthor(@RequestBody UpdateAuthorRequest request) {
-        try {
-            boolean updated = authorService.updateAuthor(request);
-            return ResponseEntity.ok(updated);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(false);
-        }
+    public ResponseEntity<Boolean> updateAuthor(@RequestBody Author author) {
+        boolean updated = authorService.updateAuthor(author);
+        return ResponseEntity.ok(updated);
     }
-
-
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
-        try {
             Author author = authorService.authenticate(request.getLogin(), request.getPassword());
             return ResponseEntity.ok(new LoggedUser(author.getId(), author.getUsername(), author.getLogin(), author.getEmail()));
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
-
-    @Data
-    public static class RegisterRequest {
-        private String username;
-        private String login;
-        private String password;
-        private String email;
     }
 
     @Data

@@ -1,6 +1,7 @@
 package com.kai.Vasara.service;
 
 import com.kai.Vasara.entity.Author;
+import com.kai.Vasara.exception.AuthorException;
 import com.kai.Vasara.model.AuthorDAO;
 import com.kai.Vasara.repository.AuthorRepository;
 import org.junit.jupiter.api.Test;
@@ -19,7 +20,6 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class AuthorServiceTest {
-
 
     @Mock
     private AuthorRepository authorRepository;
@@ -139,107 +139,121 @@ class AuthorServiceTest {
 
     @Test
     void register_userWithExistingLogin_throwsIllegalArgumentException() {
-        String username = "newuser";
-        String login = "existinglogin";
-        String rawPassword = "password";
-        String email = "newuser@example.com";
-        when(authorRepository.findByLogin(login)).thenReturn(Optional.of(new Author()));
+        Author author = Author.builder()
+                .username("newuser")
+                .login("existinglogin")
+                .password("password")
+                .email("newuser@example.com")
+                        .build();
 
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            authorService.register(username, login, rawPassword, email);
+        when(authorRepository.existsByLogin(author.getLogin())).thenReturn(true);
+
+        AuthorException exception = assertThrows(AuthorException.class, () -> {
+            authorService.register(author);
         });
 
-        assertEquals("User with this login already exists", exception.getMessage());
-        verify(authorRepository).findByLogin(login);
+        assertEquals("User with this login already exists", exception.getAuthorError().getMessage());
+        verify(authorRepository).existsByLogin(author.getLogin());
         verifyNoMoreInteractions(authorRepository);
     }
 
     @Test
     void register_userWithExistingUsername_throwsIllegalArgumentException() {
-        String username = "existingusername";
-        String login = "newlogin";
-        String rawPassword = "password";
-        String email = "newuser@example.com";
-        when(authorRepository.findByLogin(login)).thenReturn(Optional.empty());
-        when(authorRepository.findByUsername(username)).thenReturn(Optional.of(new Author()));
+        Author author = Author.builder()
+                .username("existingusername")
+                .login("newlogin")
+                .password("password")
+                .email("newuser@example.com")
+                .build();
+        when(authorRepository.existsByLogin(author.getLogin())).thenReturn(false);
+        when(authorRepository.existsByUsername(author.getUsername())).thenReturn(true);
 
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            authorService.register(username, login, rawPassword, email);
+        AuthorException exception = assertThrows(AuthorException.class, () -> {
+            authorService.register(author);
         });
 
-        assertEquals("User with this username already exists", exception.getMessage());
-        verify(authorRepository).findByLogin(login);
-        verify(authorRepository).findByUsername(username);
+        assertEquals("User with this username already exists", exception.getAuthorError().getMessage());
+        verify(authorRepository).existsByLogin(author.getLogin());
+        verify(authorRepository).existsByUsername(author.getUsername());
         verifyNoMoreInteractions(authorRepository);
     }
 
     @Test
     void register_userWithExistingEmail_throwsIllegalArgumentException() {
-        String username = "newuser";
-        String login = "newlogin";
-        String rawPassword = "password";
-        String email = "existingemail@example.com";
-        when(authorRepository.findByLogin(login)).thenReturn(Optional.empty());
-        when(authorRepository.findByUsername(username)).thenReturn(Optional.empty());
-        when(authorRepository.findByEmail(email)).thenReturn(Optional.of(new Author()));
+        Author author = Author.builder()
+                .username("newuser")
+                .login("newlogin")
+                .password("password")
+                .email("existingemail@example.com")
+                .build();
 
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            authorService.register(username, login, rawPassword, email);
+        when(authorRepository.existsByLogin(author.getLogin())).thenReturn(false);
+        when(authorRepository.existsByUsername(author.getUsername())).thenReturn(false);
+        when(authorRepository.existsByEmail(author.getEmail())).thenReturn(true);
+
+        AuthorException exception = assertThrows(AuthorException.class, () -> {
+            authorService.register(author);
         });
 
-        assertEquals("User with this email already exists", exception.getMessage());
-        verify(authorRepository).findByLogin(login);
-        verify(authorRepository).findByUsername(username);
-        verify(authorRepository).findByEmail(email);
+        assertEquals("User with this email already exists", exception.getAuthorError().getMessage());
+        verify(authorRepository).existsByLogin(author.getLogin());
+        verify(authorRepository).existsByUsername(author.getUsername());
+        verify(authorRepository).existsByEmail(author.getEmail());
         verifyNoMoreInteractions(authorRepository);
     }
 
     @Test
     void register_invalidEmail_throwsIllegalArgumentException() {
-        String username = "newuser";
-        String login = "newlogin";
-        String rawPassword = "password";
-        String email = "invalid-email";
-        when(authorRepository.findByLogin(login)).thenReturn(Optional.empty());
-        when(authorRepository.findByUsername(username)).thenReturn(Optional.empty());
-        when(authorRepository.findByEmail(email)).thenReturn(Optional.empty());
+        Author author = Author.builder()
+                .username("newuser")
+                .login("newlogin")
+                .password("password")
+                .email("invalid-email")
+                .build();
 
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            authorService.register(username, login, rawPassword, email);
+        when(authorRepository.existsByLogin(author.getLogin())).thenReturn(false);
+        when(authorRepository.existsByUsername(author.getUsername())).thenReturn(false);
+        when(authorRepository.existsByEmail(author.getEmail())).thenReturn(false);
+
+        AuthorException exception = assertThrows(AuthorException.class, () -> {
+            authorService.register(author);
         });
 
-        assertEquals("Email is incorrect", exception.getMessage());
-        verify(authorRepository).findByLogin(login);
-        verify(authorRepository).findByUsername(username);
-        verify(authorRepository).findByEmail(email);
+        assertEquals("Email is incorrect", exception.getAuthorError().getMessage());
+        verify(authorRepository).existsByLogin(author.getLogin());
+        verify(authorRepository).existsByUsername(author.getUsername());
+        verify(authorRepository).existsByEmail(author.getEmail());
         verifyNoMoreInteractions(authorRepository);
     }
 
     @Test
     void register_validData_savesAuthor() {
-        String username = "newuser";
-        String login = "newlogin";
-        String rawPassword = "password";
-        String email = "newuser@example.com";
-        when(authorRepository.findByLogin(login)).thenReturn(Optional.empty());
-        when(authorRepository.findByUsername(username)).thenReturn(Optional.empty());
-        when(authorRepository.findByEmail(email)).thenReturn(Optional.empty());
+        Author author = Author.builder()
+                .username("newuser")
+                .login("newlogin")
+                .password("password")
+                .email("newuser@example.com")
+                .build();
+
+        when(authorRepository.existsByLogin(author.getLogin())).thenReturn(false);
+        when(authorRepository.existsByUsername(author.getUsername())).thenReturn(false);
+        when(authorRepository.existsByEmail(author.getEmail())).thenReturn(false);
 
         Author savedAuthor = new Author();
-        savedAuthor.setLogin(login);
-        savedAuthor.setUsername(username);
-        savedAuthor.setEmail(email);
+        savedAuthor.setLogin(author.getLogin());
+        savedAuthor.setUsername(author.getUsername());
+        savedAuthor.setEmail(author.getEmail());
         when(authorRepository.save(any(Author.class))).thenReturn(savedAuthor);
 
-        Author result = authorService.register(username, login, rawPassword, email);
+        Author result = authorService.register(author);
 
         assertNotNull(result);
-        assertEquals(login, result.getLogin());
-        assertEquals(username, result.getUsername());
-        assertEquals(email, result.getEmail());
-        verify(authorRepository).findByLogin(login);
-        verify(authorRepository).findByUsername(username);
-        verify(authorRepository).findByEmail(email);
+        assertEquals(author.getLogin(), result.getLogin());
+        assertEquals(author.getUsername(), result.getUsername());
+        assertEquals(author.getEmail(), result.getEmail());
+        verify(authorRepository).existsByLogin(author.getLogin());
+        verify(authorRepository).existsByUsername(author.getUsername());
+        verify(authorRepository).existsByEmail(author.getEmail());
         verify(authorRepository).save(any(Author.class));
         verifyNoMoreInteractions(authorRepository);
     }
@@ -251,11 +265,11 @@ class AuthorServiceTest {
 
         when(authorRepository.findByLogin(login)).thenReturn(Optional.empty());
 
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        AuthorException exception = assertThrows(AuthorException.class, () -> {
             authorService.authenticate(login, rawPassword);
         });
 
-        assertEquals("User not found", exception.getMessage());
+        assertEquals("User not found", exception.getAuthorError().getMessage());
         verify(authorRepository).findByLogin(login);
         verifyNoMoreInteractions(authorRepository);
     }
@@ -272,11 +286,11 @@ class AuthorServiceTest {
         when(authorRepository.findByLogin(login)).thenReturn(Optional.of(author));
         when(passwordEncoder.matches(rawPassword, storedPassword)).thenReturn(false);
 
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        AuthorException exception = assertThrows(AuthorException.class, () -> {
             authorService.authenticate(login, rawPassword);
         });
 
-        assertEquals("Invalid login or password", exception.getMessage());
+        assertEquals("Invalid login or password", exception.getAuthorError().getMessage());
         verify(authorRepository).findByLogin(login);
         verify(passwordEncoder).matches(rawPassword, storedPassword);
         verifyNoMoreInteractions(authorRepository, passwordEncoder);
