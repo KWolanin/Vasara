@@ -13,12 +13,10 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -202,17 +200,19 @@ class StoryServiceTest {
         Story story1 = new Story();
         story1.setId(1L);
         story1.setTitle("Story 1");
+        story1.setUpdateDt(ZonedDateTime.now());
         story1.setAuthor(Author.builder().id(1L).username("username").build());
 
-        Page<Story> page = new PageImpl<>(List.of(story1), PageRequest.of(0, 1), 1);
-        when(storyRepository.findAllByAuthorId(1L, PageRequest.of(0, 1))).thenReturn(page);
+        Sort sort = Sort.by(Sort.Order.desc("updateDt"));
+        Page<Story> page = new PageImpl<>(List.of(story1), PageRequest.of(0, 1, sort), 1);
+        when(storyRepository.findAllByAuthorId(1L, PageRequest.of(0, 1, sort))).thenReturn(page);
 
         Page<StoryDAO> result = storyService.getMyStories(1L, 1, 1);
 
         assertNotNull(result);
         assertEquals(1, result.getTotalElements());
         assertEquals("Story 1", result.getContent().get(0).getTitle());
-        verify(storyRepository).findAllByAuthorId(1L, PageRequest.of(0, 1));
+        verify(storyRepository).findAllByAuthorId(1L, PageRequest.of(0, 1, sort));
         verifyNoMoreInteractions(storyRepository);
     }
 
