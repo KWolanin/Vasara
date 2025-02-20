@@ -1,10 +1,9 @@
 <template>
   <main-menu />
   <div class="row justify-center q-ml-md q-mb-sm">
-    <div class="col-8">
-    <q-btn color="pink" class="btn" unelevated>
-      <RouterLink to="create">Add a new work</RouterLink>
-    </q-btn>
+    <div class="col-10">
+      <q-btn class="q-ma-sm btn"flat icon="add_circle_outline"
+    @click="addNew"> ADD </q-btn>
     </div>
   </div>
 
@@ -32,9 +31,6 @@
         <p>
           Maybe you should add a new story?
         </p>
-        <Router-link to="create">
-          <q-btn class="q-ml-md btn" label="+ Add" flat />
-        </Router-link>
       </q-card>
     </div>
     <div class="row justify-center q-py-lg">
@@ -66,7 +62,10 @@ import MainMenu from "../utils/MainMenu.vue";
 import EditStoryMenu from "../story/EditStoryMenu.vue";
 import { Notify } from "quasar";
 import { Story } from "src/types/Story";
+import { useRouter } from "vue-router";
 
+
+const router = useRouter();
 const stories = ref<Story[]>([]);
 const loading = ref<boolean>(true);
 
@@ -126,6 +125,10 @@ const setPage = (newPage: number) => {
       console.error(error);
     });
 }
+
+const addNew = () => {
+  router.push({ name: "create" });
+};
 
 
 </script>

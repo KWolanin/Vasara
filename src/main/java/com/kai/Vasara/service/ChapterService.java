@@ -7,6 +7,7 @@ import com.kai.Vasara.model.StoryDAO;
 import com.kai.Vasara.repository.ChapterRepository;
 import com.kai.Vasara.repository.StoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,6 +37,7 @@ public class ChapterService {
         else return new ChapterDAO();
     }
 
+    @CacheEvict(value = { "userStoriesCache", "storiesCache" }, allEntries = true)
     public Boolean saveChapter(ChapterDAO chapterDAO) {
         try {
             Chapter chapter = from(chapterDAO);

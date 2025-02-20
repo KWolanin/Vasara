@@ -32,7 +32,6 @@ public class Author {
     @Email
     private String email;
 
-    @NotBlank
     private String description;
 
 }

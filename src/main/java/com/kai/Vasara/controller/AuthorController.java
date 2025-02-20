@@ -47,7 +47,7 @@ public class AuthorController {
 
     @PostMapping("/add")
     public ResponseEntity<Boolean> addAuthor(@RequestBody Author author) {
-        return new ResponseEntity<>(authorService.saveAuthor(author), HttpStatus.OK);
+        return new ResponseEntity<>(authorService.saveAuthor(author), HttpStatus.CREATED);
     }
 
     @PostMapping("/register")

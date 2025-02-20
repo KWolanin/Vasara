@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.Caching;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
@@ -158,7 +157,8 @@ public class StoryService {
 
     @Cacheable(value = "userStoriesCache", key = "{#id, #page, #size}")
     public Page<StoryDAO> getMyStories(Long id, int page, int size) {
-        Pageable pageable = PageRequest.of(page -1, size);
+        Sort sort = Sort.by(Sort.Order.desc("updateDt"));
+        Pageable pageable = PageRequest.of(page -1, size, sort);
         Page<Story> stories = storyRepository.findAllByAuthorId(id, pageable);
         List<StoryDAO> daos = new ArrayList<>();
         stories.forEach(story -> daos.add(from(story)));
@@ -171,10 +171,8 @@ public class StoryService {
         return opt.map(this::from).orElse(null);
     }
 
-    @Caching(evict = {
-            @CacheEvict(value = "userStoriesCache", key = "#story.authorId"),
-            @CacheEvict(value = "storiesCache", allEntries = true)
-    })    public Boolean saveStory(StoryDAO story) {
+    @CacheEvict(value = { "userStoriesCache", "storiesCache" }, allEntries = true)
+    public Boolean saveStory(StoryDAO story) {
         try {
             storyRepository.save(from(story));
             return true;
