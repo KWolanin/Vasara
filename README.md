@@ -27,6 +27,7 @@ In the future user will be able to:
 - change to dark theme
 - set rating to its work (r.g. for kids, teen, adults)
 - add author to following authors and get email when they publish something new
+- add/receive coments for works (with possibility to delete and/or mark as spam)
 
 
 # Tech stack
