@@ -31,13 +31,15 @@ public class ChapterController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Boolean> addChapter(@RequestBody ChapterDAO chapterDAO) {
-        return new ResponseEntity<>(chapterService.saveChapter(chapterDAO), HttpStatus.OK);
+    public ResponseEntity<?> addChapter(@RequestBody ChapterDAO chapterDAO) {
+        chapterService.saveChapter(chapterDAO);
+        return ResponseEntity.ok().build();
     }
 
     @PatchMapping("/editOrder")
-    public ResponseEntity<Boolean> editChaptersOrder(@RequestBody List<ChapterDAO> chapters) {
-        return new ResponseEntity<>(chapterService.editChaptersOrder(chapters), HttpStatus.OK);
+    public ResponseEntity<?> editChaptersOrder(@RequestBody List<ChapterDAO> chapters) {
+        chapterService.editChaptersOrder(chapters);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/isNextOrPrevious/{storyId}/{chapterNo}")
@@ -51,7 +53,8 @@ public class ChapterController {
     }
 
     @DeleteMapping("/delete/{chapterId}")
-    public ResponseEntity<Boolean> deleteChapter(@PathVariable Long chapterId) {
-        return new ResponseEntity<>(chapterService.deleteChapter(chapterId), HttpStatus.OK);
+    public ResponseEntity<?> deleteChapter(@PathVariable Long chapterId) {
+        chapterService.deleteChapter(chapterId);
+        return ResponseEntity.ok().build();
     }
 }

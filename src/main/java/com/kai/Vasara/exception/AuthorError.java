@@ -15,6 +15,7 @@ public enum AuthorError {
     AUTHOR_INVALID_EMAIL("Email is invalid"),
     AUTHOR_INVALID_PASSWORD("Password is invalid"),
     AUTHOR_INVALID_DESCRIPTION("Description is invalid"),
-    AUTHOR_INVALID_USERNAME("Username is invalid");
+    AUTHOR_INVALID_USERNAME("Username is invalid"),
+    AUTHOR_DETAILS_NOT_FOUND("Details not found");
     private final String message;
 }

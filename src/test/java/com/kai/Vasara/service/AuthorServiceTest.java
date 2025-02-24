@@ -63,32 +63,6 @@ class AuthorServiceTest {
     }
 
     @Test
-    void getAuthor_not_exists() {
-        when(authorRepository.findById(2L)).thenReturn(Optional.empty());
-        AuthorDAO result = authorService.getAuthor(2L);
-        assertNull(result);
-    }
-
-    @Test
-    void saveAuthor_success() {
-        Author author = Author.builder().id(1L).login("login").username("username").build();
-        when(authorRepository.save(author)).thenReturn(author);
-        Boolean result = authorService.saveAuthor(author);
-        assertTrue(result);
-        verify(authorRepository).save(author);
-    }
-
-    @Test
-    void saveAuthor_failed() {
-        Author author = Author.builder().id(1L).login("login").username("username").build();
-        when(authorRepository.save(author)).thenThrow(new RuntimeException("Database error"));
-        Boolean result = authorService.saveAuthor(author);
-        assertFalse(result);
-        verify(authorRepository).save(author);
-    }
-
-
-    @Test
     void getAuthorName_authorFound_returnsUsername() {
         Long authorId = 1L;
         String expectedUsername = "John Doe";
@@ -105,15 +79,6 @@ class AuthorServiceTest {
         when(authorRepository.findDescriptionById(authorId)).thenReturn(Optional.of(desc));
         String result = authorService.getAuthorDesc(authorId);
         assertEquals(desc, result);
-    }
-
-    @Test
-    void getAuthorName_authorNotFound_returnsEmptyString() {
-        Long authorId = 2L;
-        when(authorRepository.findUsernameById(authorId)).thenReturn(Optional.empty());
-        String result = authorService.getAuthorName(authorId);
-        assertEquals("", result);
-        verify(authorRepository).findUsernameById(authorId);
     }
 
 

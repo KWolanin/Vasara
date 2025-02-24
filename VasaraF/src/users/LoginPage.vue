@@ -53,13 +53,12 @@ const loginUser = () => {
     return;
   }
   login({ login: log.value, password: password.value }).then((response) => {
-    if (response instanceof Error) {
-      msg.value = `Error! ${response.response.data}`;
-    } else {
       msg.value = "";
       router.push("/mines");
-    }
-  });
+  })
+  .catch((error) => {
+    msg.value = `Error during login: ${error.response.data.message}`.toUpperCase();
+  })  ;
 };
 </script>
 

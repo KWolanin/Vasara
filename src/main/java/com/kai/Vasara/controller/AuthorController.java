@@ -6,8 +6,6 @@ import com.kai.Vasara.service.AuthorService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -53,9 +51,9 @@ public class AuthorController {
     }
 
     @PatchMapping
-    public ResponseEntity<Boolean> updateAuthor(@RequestBody Author author) {
-        boolean updated = authorService.updateAuthor(author);
-        return ResponseEntity.ok(updated);
+    public ResponseEntity<?> updateAuthor(@RequestBody Author author) {
+        authorService.updateAuthor(author);
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/login")
@@ -77,16 +75,5 @@ public class AuthorController {
         private String login;
         private String username;
         private String email;
-    }
-
-    @Getter
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class UpdateAuthorRequest {
-        private Long id;
-        private String email;
-        private String username;
-        private String password;
-        private String description;
     }
 }

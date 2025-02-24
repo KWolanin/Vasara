@@ -13,7 +13,7 @@
       create my own as my personal project.
     </p>
     <h5 class="q-ml-sm">Technological stack</h5>
-    <p class="q-ml-sm">Vue.js, Quasar, Pinia, Javascript, Java 8</p>
+    <p class="q-ml-sm">Vue.js, Quasar, Pinia, Javascript/TypeScript, Java 8, RabbitMQ</p>
     <h4 class="header q-ml-sm">About Author</h4>
     <p class="q-ml-sm">Katarzyna 'Kai' Wolanin - Junior FullStack Developer</p>
     <ul>

@@ -10,7 +10,7 @@ export const addToFollows = async (user: number, story: number) : Promise<Boolea
     return response.data;
   } catch (error) {
     console.error("Error during adding/removing to favorites:", error);
-    return error;
+    throw error;
   }
 }
 
@@ -21,7 +21,7 @@ export const isFollow = async (user: number, story: number) : Promise<Boolean> =
     return response.data;
   } catch (error) {
     console.error("Error checking following stories:", error);
-    return error;
+    throw error;
   }
 }
 

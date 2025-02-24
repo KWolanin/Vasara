@@ -1,7 +1,6 @@
 package com.kai.Vasara.service;
 
 
-import com.kai.Vasara.controller.AuthorController;
 import com.kai.Vasara.entity.Author;
 import com.kai.Vasara.exception.AuthorError;
 import com.kai.Vasara.exception.AuthorException;
@@ -18,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Service
 @Component
@@ -35,34 +35,29 @@ public class AuthorService {
     }
 
     public List<AuthorDAO> getAll() {
-        List<Author> authors = authorRepository.findAll();
-        List<AuthorDAO> daos = new ArrayList<>();
-        authors.forEach(story -> daos.add(from(story)));
-        return daos;
+        return authorRepository.findAll()
+                .stream()
+                .map(this::from)
+                .collect(Collectors.toList());
     }
 
     public AuthorDAO getAuthor(Long id) {
-        Optional<Author> opt = authorRepository.findById(id);
-        return opt.map(this::from).orElse(null);
+        return authorRepository.findById(id).map(this::from)
+                .orElseThrow(() -> new AuthorException(AuthorError.AUTHOR_NOT_FOUND));
     }
 
-    public Boolean saveAuthor(Author author) {
-        try {
-            authorRepository.save(author);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+    public void saveAuthor(Author author) {
+        authorRepository.save(author);
     }
 
     public String getAuthorName(Long id) {
-        Optional<String> opt = authorRepository.findUsernameById(id);
-        return opt.orElse("");
+        return authorRepository.findUsernameById(id)
+                .orElseThrow(() -> new AuthorException(AuthorError.AUTHOR_DETAILS_NOT_FOUND));
     }
 
     public String getAuthorDesc(Long id) {
-        Optional<String> opt = authorRepository.findDescriptionById(id);
-        return opt.orElse("");
+        return authorRepository.findDescriptionById(id)
+                        .orElseThrow(() -> new AuthorException(AuthorError.AUTHOR_DETAILS_NOT_FOUND));
     }
 
     public AuthorDAO from(Author author) {
@@ -114,15 +109,6 @@ public class AuthorService {
     }
 
 
-    private boolean usernameValid(String username) {
-        String USERNAME_REGEX = "^(?=.{3,20}$)(?![_\\.\\-])[A-Za-z0-9._-]+(?<![_\\.\\-])$";
-        Pattern USERNAME_PATTERN = Pattern.compile(USERNAME_REGEX);
-        if (StringUtils.hasText(username)) {
-            return USERNAME_PATTERN.matcher(username).matches();
-        }
-        return false;
-    }
-
     public Author authenticate(String login, String rawPassword) {
         Author author = authorRepository.findByLogin(login)
                 .orElseThrow(() -> new AuthorException(AuthorError.AUTHOR_NOT_FOUND));
@@ -141,46 +127,7 @@ public class AuthorService {
         return authorRepository.findById(id);
     }
 
-    public boolean updateAuthor(AuthorController.UpdateAuthorRequest request) {
-        Author author = authorRepository.findById(request.getId())
-                .orElseThrow(() -> new AuthorException(AuthorError.AUTHOR_NOT_FOUND));
-
-        if (request.getEmail() != null) {
-            if (!emailValid(request.getEmail())) {
-                throw new AuthorException(AuthorError.AUTHOR_INVALID_EMAIL);
-            }
-            if (authorRepository.existsByEmail(request.getEmail()) && !author.getEmail().equals(request.getEmail())) {
-                throw new AuthorException(AuthorError.AUTHOR_EMAIL_EXISTS);
-            }
-            author.setEmail(request.getEmail());
-        }
-        if (request.getUsername() != null) {
-            if (!usernameValid(request.getUsername())) {
-                throw new AuthorException(AuthorError.AUTHOR_INVALID_USERNAME);
-            }
-            if (authorRepository.existsByUsername(request.getUsername())) {
-                throw new AuthorException(AuthorError.AUTHOR_USERNAME_EXISTS);
-            }
-            author.setUsername(request.getUsername());
-        }
-        if (request.getPassword() != null) {
-            if (!StringUtils.hasText(request.getPassword())) {
-                throw new AuthorException(AuthorError.AUTHOR_INVALID_PASSWORD);
-            }
-            author.setPassword(passwordEncoder.encode(request.getPassword()));
-        }
-        if (request.getDescription() != null) {
-            if (!StringUtils.hasText(request.getDescription())) {
-                throw new AuthorException(AuthorError.AUTHOR_INVALID_DESCRIPTION);
-            }
-            author.setDescription(request.getDescription());
-        }
-
-        authorRepository.save(author);
-        return true;
-    }
-
-    public boolean updateAuthor(Author author) {
+    public void updateAuthor(Author author) {
         Author authorInDb = authorRepository.findById(author.getId())
                 .orElseThrow(() -> new AuthorException(AuthorError.AUTHOR_NOT_FOUND));
 
@@ -213,7 +160,6 @@ public class AuthorService {
         }
 
         authorRepository.save(authorInDb);
-        return true;
     }
 
 }

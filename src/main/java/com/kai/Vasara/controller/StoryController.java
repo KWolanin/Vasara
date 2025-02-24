@@ -43,18 +43,21 @@ public class StoryController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Boolean> addStory(@RequestBody StoryDAO storyDAO) {
-        return new ResponseEntity<>(storyService.saveStory(storyDAO), HttpStatus.OK);
+    public ResponseEntity<?> addStory(@RequestBody StoryDAO storyDAO) {
+        storyService.saveStory(storyDAO);
+        return ResponseEntity.ok().build();
     }
 
     @PatchMapping("/edit")
-    public ResponseEntity<Boolean> editStory(@RequestBody StoryDAO storyDAO) {
-        return new ResponseEntity<>(storyService.editStory(storyDAO), HttpStatus.OK);
+    public ResponseEntity<?> editStory(@RequestBody StoryDAO storyDAO) {
+        storyService.editStory(storyDAO);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Boolean> deleteStory(@PathVariable Long id) {
-        return new ResponseEntity<>(storyService.deleteStory(id), HttpStatus.OK);
+    public ResponseEntity<?> deleteStory(@PathVariable Long id) {
+        storyService.deleteStory(id);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/count")

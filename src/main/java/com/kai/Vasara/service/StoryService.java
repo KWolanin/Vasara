@@ -3,6 +3,8 @@ package com.kai.Vasara.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kai.Vasara.entity.Author;
 import com.kai.Vasara.entity.Story;
+import com.kai.Vasara.exception.StoryError;
+import com.kai.Vasara.exception.StoryException;
 import com.kai.Vasara.model.AuthorDAO;
 import com.kai.Vasara.model.Criteria;
 import com.kai.Vasara.model.StoryDAO;
@@ -54,10 +56,10 @@ public class StoryService {
     }
 
     public List<StoryDAO> getAll() {
-        List<Story> stories = storyRepository.findAll();
-        List<StoryDAO> daos = new ArrayList<>();
-        stories.forEach(story -> daos.add(from(story)));
-        return daos;
+        return storyRepository.findAll()
+                .stream()
+                .map(this::from)
+                .collect(Collectors.toList());
     }
 
     @Cacheable(value = "storiesCache", key = "{#page, #size, #criteria.hashCode(), #sortBy}")
@@ -155,30 +157,26 @@ public class StoryService {
     }
 
 
-    @Cacheable(value = "userStoriesCache", key = "{#id, #page, #size}")
-    public Page<StoryDAO> getMyStories(Long id, int page, int size) {
-        Sort sort = Sort.by(Sort.Order.desc("updateDt"));
-        Pageable pageable = PageRequest.of(page -1, size, sort);
-        Page<Story> stories = storyRepository.findAllByAuthorId(id, pageable);
-        List<StoryDAO> daos = new ArrayList<>();
-        stories.forEach(story -> daos.add(from(story)));
-        return  new PageImpl<>(daos, pageable, stories.getTotalElements());
-    }
+        @Cacheable(value = "userStoriesCache", key = "{#id, #page, #size}")
+        public Page<StoryDAO> getMyStories(Long id, int page, int size) {
+            Sort sort = Sort.by(Sort.Order.desc("updateDt"));
+            Pageable pageable = PageRequest.of(page -1, size, sort);
+            Page<Story> stories = storyRepository.findAllByAuthorId(id, pageable);
+            List<StoryDAO> daos = new ArrayList<>();
+            stories.forEach(story -> daos.add(from(story)));
+            return  new PageImpl<>(daos, pageable, stories.getTotalElements());
+        }
 
 
     public StoryDAO getStory(Long id) {
-        Optional<Story> opt = storyRepository.findById(id);
-        return opt.map(this::from).orElse(null);
+        return storyRepository.findById(id)
+                .map(this::from)
+                .orElseThrow(() -> new StoryException(StoryError.STORY_NOT_FOUND));
     }
 
     @CacheEvict(value = { "userStoriesCache", "storiesCache" }, allEntries = true)
-    public Boolean saveStory(StoryDAO story) {
-        try {
-            storyRepository.save(from(story));
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+    public void saveStory(StoryDAO story) {
+        storyRepository.save(from(story));
     }
 
     public StoryDAO from(Story story) {
@@ -271,16 +269,17 @@ public class StoryService {
 
 
     @Transactional
-    public Boolean deleteStory(Long id) {
+    @CacheEvict(value = { "userStoriesCache", "storiesCache" }, allEntries = true)
+    public void deleteStory(Long id) {
         chapterService.deleteChaptersForStory(id);
         favoriteService.delete(id);
         followingService.delete(id);
         readService.delete(id);
-        int storiesDeleted = storyRepository.deleteStoryById(id);
-        return storiesDeleted > 0;
+        storyRepository.deleteStoryById(id);
     }
 
-    public Boolean editStory(StoryDAO storyDAO) {
+    @CacheEvict(value = { "userStoriesCache", "storiesCache" }, allEntries = true)
+    public void editStory(StoryDAO storyDAO) {
         Optional<Story> story = storyRepository.findById(storyDAO.getId());
         if (story.isPresent()) {
             Story s = story.get();
@@ -290,9 +289,7 @@ public class StoryService {
             s.setFinished(storyDAO.isFinished());
             s.setTags(joinAndAddQuotes(storyDAO.getTags()));
              storyRepository.save(s);
-             return true;
         }
-        return false;
     }
 
     public long count() {

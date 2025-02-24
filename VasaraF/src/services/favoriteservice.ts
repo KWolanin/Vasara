@@ -10,7 +10,7 @@ export const addToFavorite = async (user: number, story: number) : Promise<Boole
     return response.data;
   } catch (error) {
     console.error("Error during adding/removing to favorites:", error);
-    return error;
+    throw error;
   }
 }
 
@@ -21,7 +21,7 @@ export const isFav = async (user: number, story: number) : Promise<Boolean> => {
     return response.data;
   } catch (error) {
     console.error("Error checking favorites:", error);
-    return error;
+    throw error;
   }
 }
 

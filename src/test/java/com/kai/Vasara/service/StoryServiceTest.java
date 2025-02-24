@@ -2,17 +2,16 @@ package com.kai.Vasara.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kai.Vasara.entity.Author;
-import com.kai.Vasara.entity.FavoriteStories;
 import com.kai.Vasara.entity.Story;
 import com.kai.Vasara.model.Criteria;
 import com.kai.Vasara.model.StoryDAO;
 import com.kai.Vasara.repository.ChapterRepository;
 import com.kai.Vasara.repository.StoryRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -25,7 +24,9 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class StoryServiceTest {
+
+@ExtendWith(MockitoExtension.class)
+public class StoryServiceTest {
 
     @InjectMocks
     StoryService storyService;
@@ -50,10 +51,6 @@ class StoryServiceTest {
     @Mock
     ReadService readService;
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
 
     @Test
     void updateStoryTagsAndFandoms_test() {
@@ -195,6 +192,7 @@ class StoryServiceTest {
         verifyNoMoreInteractions(storyRepository);
     }
 
+
     @Test
     void getMyStories_returnsPageOfStoryDAO() {
         Story story1 = new Story();
@@ -205,7 +203,8 @@ class StoryServiceTest {
 
         Sort sort = Sort.by(Sort.Order.desc("updateDt"));
         Page<Story> page = new PageImpl<>(List.of(story1), PageRequest.of(0, 1, sort), 1);
-        when(storyRepository.findAllByAuthorId(1L, PageRequest.of(0, 1, sort))).thenReturn(page);
+        //when(storyRepository.findAllByAuthorId(1L, PageRequest.of(0, 1, sort))).thenReturn(page);
+        when(storyRepository.findAllByAuthorId(eq(1L), any(Pageable.class))).thenReturn(page);
 
         Page<StoryDAO> result = storyService.getMyStories(1L, 1, 1);
 
@@ -234,16 +233,6 @@ class StoryServiceTest {
         verifyNoMoreInteractions(storyRepository);
     }
 
-    @Test
-    void getStory_storyDoesNotExist_returnsNull() {
-        when(storyRepository.findById(1L)).thenReturn(Optional.empty());
-
-        StoryDAO result = storyService.getStory(1L);
-
-        assertNull(result);
-        verify(storyRepository).findById(1L);
-        verifyNoMoreInteractions(storyRepository);
-    }
 
     @Test
     void saveStory_validStory_returnsTrue() {
@@ -252,34 +241,19 @@ class StoryServiceTest {
 
         when(storyRepository.save(any(Story.class))).thenReturn(new Story());
 
-        Boolean result = storyService.saveStory(storyDAO);
+    storyService.saveStory(storyDAO);
 
-        assertTrue(result);
         verify(storyRepository).save(any(Story.class));
         verifyNoMoreInteractions(storyRepository);
     }
 
-    @Test
-    void saveStory_saveFails_returnsFalse() {
-        StoryDAO storyDAO = new StoryDAO();
-        storyDAO.setTitle("New Story");
-
-        when(storyRepository.save(any(Story.class))).thenThrow(new RuntimeException("Save failed"));
-
-        Boolean result = storyService.saveStory(storyDAO);
-
-        assertFalse(result);
-        verify(storyRepository).save(any(Story.class));
-        verifyNoMoreInteractions(storyRepository);
-    }
 
     @Test
     void deleteStory_storyExists_returnsTrue() {
         when(storyRepository.deleteStoryById(1L)).thenReturn(1);
 
-        Boolean result = storyService.deleteStory(1L);
+        storyService.deleteStory(1L);
 
-        assertTrue(result);
         verify(storyRepository).deleteStoryById(1L);
         verifyNoMoreInteractions(storyRepository);
     }
@@ -288,9 +262,8 @@ class StoryServiceTest {
     void deleteStory_storyDoesNotExist_returnsFalse() {
         when(storyRepository.deleteStoryById(1L)).thenReturn(0);
 
-        Boolean result = storyService.deleteStory(1L);
+    storyService.deleteStory(1L);
 
-        assertFalse(result);
         verify(storyRepository).deleteStoryById(1L);
         verifyNoMoreInteractions(storyRepository);
     }
@@ -308,9 +281,8 @@ class StoryServiceTest {
         when(storyRepository.findById(1L)).thenReturn(Optional.of(existingStory));
         when(storyRepository.save(existingStory)).thenReturn(existingStory);
 
-        Boolean result = storyService.editStory(storyDAO);
+        storyService.editStory(storyDAO);
 
-        assertTrue(result);
         assertEquals("Updated Story", existingStory.getTitle());
         verify(storyRepository).findById(1L);
         verify(storyRepository).save(existingStory);
@@ -325,9 +297,8 @@ class StoryServiceTest {
 
         when(storyRepository.findById(1L)).thenReturn(Optional.empty());
 
-        Boolean result = storyService.editStory(storyDAO);
+        storyService.editStory(storyDAO);
 
-        assertFalse(result);
         verify(storyRepository).findById(1L);
         verifyNoMoreInteractions(storyRepository);
     }

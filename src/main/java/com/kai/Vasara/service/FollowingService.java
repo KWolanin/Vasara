@@ -95,7 +95,6 @@ public class FollowingService implements ActionService<FollowingStories> {
             return  new PageImpl<>(daos, pageable, followStories.size());
         }
         return new PageImpl<>(daos, pageable, 0);
-
     }
 
     @Override

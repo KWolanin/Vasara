@@ -2,6 +2,8 @@ package com.kai.Vasara.service;
 
 import com.kai.Vasara.entity.Chapter;
 import com.kai.Vasara.entity.Story;
+import com.kai.Vasara.exception.ChapterError;
+import com.kai.Vasara.exception.ChapterException;
 import com.kai.Vasara.model.ChapterDAO;
 import com.kai.Vasara.model.StoryDAO;
 import com.kai.Vasara.repository.ChapterRepository;
@@ -32,14 +34,13 @@ public class ChapterService {
     }
 
     public ChapterDAO getChapter(Long id) {
-         Optional<Chapter> opt = chapterRepository.findById(id);
-         if (opt.isPresent()) return from(opt.get());
-        else return new ChapterDAO();
+        return chapterRepository.findById(id)
+                .map(this::from)
+                .orElseThrow(() -> new ChapterException(ChapterError.CHAPTER_NOT_FOUND));
     }
 
     @CacheEvict(value = { "userStoriesCache", "storiesCache" }, allEntries = true)
-    public Boolean saveChapter(ChapterDAO chapterDAO) {
-        try {
+    public void saveChapter(ChapterDAO chapterDAO) {
             Chapter chapter = from(chapterDAO);
             if (chapter.getStory() != null) {
                 Story story = chapter.getStory();
@@ -47,10 +48,6 @@ public class ChapterService {
             }
             chapterRepository.save(chapter);
             emailService.sendMessageToQueue(chapter);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
     }
 
     public int getChapterNumber(Long storyId) {
@@ -59,11 +56,9 @@ public class ChapterService {
 
     @Transactional
     public ChapterDAO getChapterByStoryIdAndNumber(Long storyId, Long chapterNo) {
-        Optional<Chapter> c = chapterRepository.findByStoryIdAndNumberNo(storyId, chapterNo);
-        if (c.isPresent()) {
-            return from(c.get());
-        }
-        return new ChapterDAO();
+        return chapterRepository.findByStoryIdAndChapterNo(storyId, chapterNo)
+                .map(this::from)
+                .orElseThrow(() -> new ChapterException(ChapterError.CHAPTER_NOT_FOUND));
     }
 
     public Chapter from(ChapterDAO chapterDAO) {
@@ -101,12 +96,11 @@ public class ChapterService {
 
     @Transactional
     public Boolean checkIsNextOrPrevious(Long storyId, Long chapterNo) {
-        Optional<Chapter> c = chapterRepository.findByStoryIdAndNumberNo(storyId, chapterNo);
-        return c.isPresent();
+        return chapterRepository.findByStoryIdAndChapterNo(storyId, chapterNo).isPresent();
     }
 
-    public Boolean deleteChaptersForStory(Long storyId) {
-        return chapterRepository.deleteAllByStoryId(storyId) > 0;
+    public void deleteChaptersForStory(Long storyId) {
+        chapterRepository.deleteAllByStoryId(storyId);
     }
 
     @Transactional
@@ -118,8 +112,7 @@ public class ChapterService {
     }
 
     @Transactional
-    public Boolean editChaptersOrder(List<ChapterDAO> chapters) {
-        try {
+    public void editChaptersOrder(List<ChapterDAO> chapters) {
             List<Long> chapterIds = chapters.stream()
                     .map(ChapterDAO::getId)
                     .collect(Collectors.toList());
@@ -134,18 +127,9 @@ public class ChapterService {
                         existingChapter.setChapterNo(chapterDAO.getChapterNo());
                     }));
             chapterRepository.saveAll(existingChapters);
-            return true;
-        } catch (Exception e) {
-            System.err.println("Error updating chapters order: " + e.getMessage());
-            return false;
-        }
     }
 
-    public Boolean deleteChapter(Long id) {
-        if (chapterRepository.existsById(id)) {
-            chapterRepository.deleteById(id);
-            return true;
-        }
-        return false;
+    public void deleteChapter(Long id) {
+        chapterRepository.deleteById(id);
     }
 }

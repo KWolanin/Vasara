@@ -1,7 +1,7 @@
 import { api } from "../boot/axios";
 import { Chapter } from "../types/Chapter";
 
-export const createChapter = async (chapterData: Chapter | Omit<Chapter, 'id'>): Promise<boolean> => {
+export const createChapter = async (chapterData: Chapter | Omit<Chapter, 'id'>): Promise<void> => {
   try {
     const response = await api.post("/chapters/add", chapterData);
     return response.data;
@@ -63,7 +63,7 @@ export const updateChaptersOrder = async (chapters : Chapter[]) => {
   }
 }
 
-export const deleteChapterFromDb = async (id: number): Promise<boolean> => {
+export const deleteChapterFromDb = async (id: number): Promise<void> => {
   try {
     const response = await api.delete(`/chapters/delete/${id}`);
     return response.data;

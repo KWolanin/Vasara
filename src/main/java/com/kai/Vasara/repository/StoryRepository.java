@@ -15,7 +15,6 @@ public interface StoryRepository extends JpaRepository<Story, Long> {
     Page<Story> findAllByAuthorId(Long id, Pageable pageable);
 
     @Modifying
-    @Query("DELETE FROM Story s where s.id = :id")
     int deleteStoryById(Long id);
 
     @Query("select count(*) from Story s where s.author.id = :id")

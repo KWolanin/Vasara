@@ -4,7 +4,7 @@ import { Author } from "../types/Author";
 import { RegisterRequest } from "../types/RegisterRequest";
 import { UpdateAuthorRequest } from "src/types/UpdateAuthorRequest";
 
-export const login = async (loginData: Author): Promise<boolean> => {
+export const login = async (loginData: Author): Promise<void> => {
   try {
     const response = await api.post("/authors/login", loginData);
     const userStore = useUserStore();
@@ -19,7 +19,7 @@ export const login = async (loginData: Author): Promise<boolean> => {
 
 export const register = async (
   registerData: RegisterRequest
-): Promise<Boolean> => {
+): Promise<void> => {
   try {
     const response = await api.post("/authors/register", registerData);
     return response.data;
@@ -29,7 +29,7 @@ export const register = async (
   }
 };
 
-export const change = async (updateAuthorRequest : UpdateAuthorRequest) : Promise<Boolean> => {
+export const change = async (updateAuthorRequest : UpdateAuthorRequest) : Promise<void> => {
   try {
     const response = await api.patch(`/authors`, updateAuthorRequest);
     return response.data;

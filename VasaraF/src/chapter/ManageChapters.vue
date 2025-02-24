@@ -113,8 +113,7 @@ const deleteChapter = () : void => {
   if (chapterToDelete.value > 0) {
     const id = chapterToDelete.value;
     deleteChapterFromDb(id)
-      .then((response) => {
-        if (response) {
+      .then(() => {
           currentChapters.value = currentChapters.value.filter(
             (c) => c.id !== id
           );
@@ -126,13 +125,6 @@ const deleteChapter = () : void => {
             position: "bottom-right",
             type: "positive"
           });
-        } else {
-          Notify.create({
-            message: "Something went wrong!",
-            position: "bottom-right",
-            type: "negative"
-          });
-        }
       })
       .catch((err) => {
         console.error(err);
