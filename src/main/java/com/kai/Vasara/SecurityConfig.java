@@ -12,6 +12,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 
     @Configuration
     public class SecurityConfig {
+        // todo: better security
 
         @Bean
         public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -26,7 +27,13 @@ import static org.springframework.security.config.Customizer.withDefaults;
                             .requestMatchers("/api/follows/**").permitAll()
                             .requestMatchers("/api/reads/**").permitAll()
                             .requestMatchers("/actuator/**").permitAll()
-                            .anyRequest().authenticated());
+                            .requestMatchers("/h2-console/**").permitAll() // temporary config for h2db
+                            .anyRequest().authenticated())
+
+                    // temporary config for h2 db console access in the browser
+                    .headers(headers -> headers
+                            .addHeaderWriter((request, response) ->
+                                    response.setHeader("X-Frame-Options", "ALLOW-FROM http://localhost:8080")));
 
             return http.build();
         }
