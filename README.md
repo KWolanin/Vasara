@@ -30,6 +30,7 @@ In the future user will be able to:
 - add/receive coments for works (with possibility to delete and/or mark as spam)
 
 
+
 # Tech stack
 Vue.js, Quasar, Pinia, Javascript/Typescript (frontend), Java 8 (backend), String Boot, String Cache, Railway (build and deploy service), RabbitMQ
 
@@ -37,4 +38,7 @@ You can use Vasara here:
 [Vasara app](https://vasaraf-production.up.railway.app/#/)
 
 use guest account (guest/guest) and feel free to play with Vasara publishing platform!
+
+Local dev:
+In application.properties there is commented out local H2 file database configuration; it can be used to check the project on local machine
 
