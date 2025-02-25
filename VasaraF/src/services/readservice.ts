@@ -4,7 +4,7 @@ import { useUserStore } from "../stores/user";
 
 
 
-export const addToReads = async (user: number, story: number) : Promise<Boolean> => {
+export const addToReads = async (user: number, story: number) : Promise<boolean> => {
   try {
     const response = await api.post(`/reads/addRead`, { user: user, story: story });
     return response.data;
@@ -20,7 +20,7 @@ export const isReads = async (user: number, story: number) : Promise<Boolean> =>
     const response = await api.post(`/reads/isRead`, { user: user, story: story });
     return response.data;
   } catch (error) {
-    console.error("Error checking following stories:", error);
+    console.error("Error checking read later stories:", error);
     throw error;
   }
 }
@@ -43,7 +43,19 @@ export const countReads = async () : Promise<number> => {
     const response = await api.get(`/reads/count/${id}`);
     return response.data;
   } catch (error) {
-    console.error("Error counting my follows stories:", error);
+    console.error("Error counting my read later stories:", error);
+    throw error;
+  }
+}
+
+export const getRandom = async () : Promise<Map<number, string>> => {
+  try {
+    const userStore = useUserStore();
+    const id = userStore.id;
+    const response = await api.get(`/reads/random/${id}`);
+    return response.data;
+  } catch (error) {
+    // when user has no read later stories, error is excepted
     throw error;
   }
 }

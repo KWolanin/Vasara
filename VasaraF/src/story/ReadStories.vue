@@ -6,8 +6,17 @@
   </q-inner-loading>
   <div>
     <div class="row justify-center q-pa-lg">
-      <sort-and-filter @criteria-changed="filterBy" @sort-changed="sortBy"/>
-    </div>
+  <div class="col-md-2">
+    <random-read v-if="readsAvailable"/>
+  </div>
+  <div class="col-md-8 flex justify-center">
+    <sort-and-filter @criteria-changed="filterBy" @sort-changed="sortBy"/>
+  </div>
+  <div class="col-md-2">
+
+  </div>
+</div>
+
     <div v-if="!loading"
       v-for="story in stories"
       :key="story.id"
@@ -50,6 +59,8 @@ import { Story } from "src/types/Story";
 import { Criteria } from "../types/Criteria";
 import FavAndFollow from "../utils/FavAndFollow.vue";
 import { useUserStore } from "src/stores/user";
+import RandomRead from "./RandomRead.vue";
+import { countReads } from "src/services/readservice";
 
 const userStore = useUserStore();
 const isLoggedIn = computed(() => !!userStore.id);
@@ -61,12 +72,15 @@ const storiesPerPage : number = 5
 const currentPage = ref<number>(1)
 const sortCriteria = ref<string>("updateDt")
 
+const readsAvailable = ref<number>(0)
+
 let criteria: Criteria = {
   title: "",
   author: "",
   fandoms: [],
   tags: [],
-  description: ""
+  description: "",
+  rating: ""
 }
 
 onMounted(() => {
@@ -74,6 +88,11 @@ onMounted(() => {
   count()
   .then((response) => {
     storiesAmount.value = response;
+  })
+
+  countReads()
+  .then((response) =>{
+    readsAvailable.value = response
   })
 
   fetchStories(1, storiesPerPage, criteria, sortCriteria.value)

@@ -1,20 +1,30 @@
 <template>
-<q-card class="col-7 q-pa-lg card" flat>
-  <div class="q-ma-sm ask">What do you want to read today?</div>
-  <div class="search">
-  <q-input outlined v-model="criteria.title" label="Title"  />
-  <q-input outlined v-model="criteria.author" label="Author" />
-  <q-input outlined v-model="criteria.description" label="Desciption" />
-  <tag-input v-model="criteria.fandoms" label="Fandom(s)" />
-  <tag-input v-model="criteria.tags" label="Tag(s)" />
-  <q-select class="custom-width" v-model="criteria.rating" :options="ratingOptions"
-  label="Rating" outlined clearable placeholder="Rating" stack-label/>
-  </div>
-  <div>
-  </div>
-</q-card>
-
-<q-btn-dropdown color="gold" label="Sort by" size="xs" text-color="black" class="q-ml-md card">
+  <q-card class="col-7 q-pa-lg card" flat>
+    <div class="q-ma-sm ask flex justify-center">What do you want to read today?</div>
+    <div class="search flex justify-center col-6">
+      <q-input outlined v-model="criteria.title" label="Title" />
+      <q-input outlined v-model="criteria.author" label="Author" />
+      <q-input outlined v-model="criteria.description" label="Desciption" />
+      <tag-input v-model="criteria.fandoms" label="Fandom(s)" />
+      <tag-input v-model="criteria.tags" label="Tag(s)" />
+      <q-select
+        class="custom-width"
+        v-model="criteria.rating"
+        :options="ratingOptions"
+        label="Rating"
+        outlined
+        clearable
+        placeholder="Rating"
+        stack-label
+      />
+      <q-btn-dropdown
+      color="gold"
+      label="Sort by"
+      size="xs"
+      text-color="black"
+      class="q-ml-md q-mb-md card"
+      unelevated
+    >
       <q-list>
         <q-item clickable v-close-popup @click="sort">
           <q-item-section>
@@ -52,14 +62,17 @@
         </q-item>
       </q-list>
     </q-btn-dropdown>
+    </div>
+
+  </q-card>
 </template>
 
 <script setup lang="ts">
-import { reactive, watch } from "vue"
-import { Criteria } from "../types/Criteria"
+import { reactive, watch } from "vue";
+import { Criteria } from "../types/Criteria";
 import TagInput from "./TagInput.vue";
 
-const emit = defineEmits(['criteria-changed', 'sort-changed']);
+const emit = defineEmits(["criteria-changed", "sort-changed"]);
 
 const criteria = reactive<Criteria>({
   title: "",
@@ -67,33 +80,29 @@ const criteria = reactive<Criteria>({
   fandoms: [],
   tags: [],
   description: "",
-  rating: ""
-})
+  rating: "",
+});
 
-let timeout: NodeJS.Timeout | null = null
+let timeout: NodeJS.Timeout | null = null;
 
 watch(criteria, () => {
   if (timeout) {
-    clearTimeout(timeout)
+    clearTimeout(timeout);
   }
   timeout = setTimeout(() => {
-    emit("criteria-changed", criteria)
-  }, 100)
-})
+    emit("criteria-changed", criteria);
+  }, 100);
+});
 
 const sort = (event: MouseEvent) => {
   const target = event.target as HTMLElement;
-  emit('sort-changed', target.innerText);
+  emit("sort-changed", target.innerText);
 };
 
-const ratingOptions = ["KIDS", "TEEN", "ADULT", "MATURE"]
-
-
+const ratingOptions = ["KIDS", "TEEN", "ADULT", "MATURE"];
 </script>
 
-
 <style scoped>
-
 .search {
   display: flex;
   gap: 10px;
@@ -104,12 +113,9 @@ const ratingOptions = ["KIDS", "TEEN", "ADULT", "MATURE"]
   color: #333 !important;
   font-weight: 500;
   font-size: 1.5rem;
-
 }
 
 .custom-width {
   width: 25%;
 }
-
-
 </style>

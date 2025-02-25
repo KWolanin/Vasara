@@ -11,6 +11,9 @@ import com.kai.Vasara.model.StoryDAO;
 import com.kai.Vasara.repository.AuthorRepository;
 import com.kai.Vasara.repository.ReadRepository;
 import com.kai.Vasara.repository.StoryRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
+import jakarta.persistence.Query;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,9 +24,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Component
 @Service
@@ -35,15 +36,17 @@ public class ReadService implements ActionService<ReadStories> {
     private final ReadRepository readRepository;
     private final AuthorService authorService;
     private final StoryService storyService;
+    private final EntityManager entityManager;
 
     @Autowired
     public ReadService(AuthorRepository authorRepository, StoryRepository storyRepository, ReadRepository readRepository,
-                            AuthorService authorService, StoryService storyService) {
+                       AuthorService authorService, StoryService storyService, EntityManager entityManager) {
         this.authorRepository = authorRepository;
         this.storyRepository = storyRepository;
         this.readRepository = readRepository;
         this.authorService = authorService;
         this.storyService = storyService;
+        this.entityManager = entityManager;
     }
 
     @Override
@@ -101,4 +104,31 @@ public class ReadService implements ActionService<ReadStories> {
     public int count(long id) {
        return readRepository.countByAuthorId(id);
     }
+
+    public Map<Long, String> getRandom(Long id) {
+        String nativeQuery = "SELECT rs.story_id, s.title " +
+                "FROM read_story rs " +
+                "JOIN story s ON rs.story_id = s.id " +
+                "WHERE rs.author_id = :authorId " +
+                "ORDER BY " + (isPostgreSQL() ? "RANDOM()" : "RAND()") + " LIMIT 1";
+
+        Query query = entityManager.createNativeQuery(nativeQuery);
+        query.setParameter("authorId", id);
+
+        Object[] result;
+        try {
+            result = (Object[]) query.getSingleResult();
+        } catch (NoResultException e) {
+            throw new StoryException(StoryError.STORY_NOT_FOUND);
+        }
+        Long storyId = ((Number) result[0]).longValue();
+        String title = (String) result[1];
+        return Map.of(storyId, title);
+    }
+
+    private boolean isPostgreSQL() {
+        return entityManager.createNativeQuery("SELECT version()").getSingleResult().toString().toLowerCase().contains("postgresql");
+    }
+
+
 }

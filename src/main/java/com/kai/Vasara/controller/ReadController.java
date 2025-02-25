@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RequestMapping("/api/reads")
 @RestController
 public class ReadController {
@@ -38,6 +40,11 @@ public class ReadController {
     @GetMapping("/count/{id}")
     public ResponseEntity<Integer> countMine(@PathVariable Long id) {
         return new ResponseEntity<>(readService.count(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/random/{id}")
+    public ResponseEntity<Map<Long, String>> getRandom(@PathVariable Long id) {
+        return new ResponseEntity<>(readService.getRandom(id), HttpStatus.OK);
     }
 
     @Data
