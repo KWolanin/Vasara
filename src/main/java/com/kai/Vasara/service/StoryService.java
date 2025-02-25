@@ -151,6 +151,9 @@ public class StoryService {
                     ));
                 }
             }
+            if (criteria.getRating() != null && !criteria.getRating().isEmpty()) {
+                predicates.add(builder.equal(root.get("rating"), criteria.getRating()));
+            }
             predicates.add(builder.isNotEmpty(root.get("chapters")));
             return builder.and(predicates.toArray(new Predicate[0]));
         };
@@ -192,6 +195,7 @@ public class StoryService {
         s.setPublishDt(story.getPublishDt());
         s.setUpdateDt(story.getUpdateDt());
         s.setChaptersNumber(chapterService.getChapterNumber(story.getId()));
+        s.setRating(story.getRating());
 
         if (story.getAuthor() != null) {
             AuthorDAO authorDAO = new AuthorDAO();
@@ -210,6 +214,7 @@ public class StoryService {
         story.setFinished(storyDAO.isFinished());
         story.setPublishDt(storyDAO.getPublishDt());
         story.setUpdateDt(storyDAO.getUpdateDt());
+        story.setRating(storyDAO.getRating());
 
         if (storyDAO.getAuthorId() > 0) {
             Optional<Author> author = authorService.find(storyDAO.getAuthorId());
@@ -288,6 +293,7 @@ public class StoryService {
             s.setFandoms(joinAndAddQuotes(storyDAO.getFandoms()));
             s.setFinished(storyDAO.isFinished());
             s.setTags(joinAndAddQuotes(storyDAO.getTags()));
+            s.setRating(storyDAO.getRating());
              storyRepository.save(s);
         }
     }

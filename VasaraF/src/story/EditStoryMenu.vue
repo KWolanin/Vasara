@@ -16,7 +16,7 @@
   >
 
   <q-dialog v-model="deleteDialogVisible" persistent>
-    <q-card>
+    <q-card class="q-ma-lg q-pa-sm" flat>
       <q-card-section class="row items-center">
         <span class="q-ml-sm"
           >Are you sure you want to delete this story? It cannot be

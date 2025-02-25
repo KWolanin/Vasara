@@ -1,5 +1,6 @@
 package com.kai.Vasara.entity;
 
+import com.kai.Vasara.model.Rating;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,6 +20,7 @@ public class Story {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(length = 500)
     private String description;
     private String title;
     private String tags;
@@ -36,4 +38,7 @@ public class Story {
     @ManyToOne
     @JoinColumn(name = "authorid")
     private Author author;
+
+    @Enumerated(EnumType.STRING)
+    private Rating rating = Rating.KIDS;
 }

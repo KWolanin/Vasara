@@ -33,7 +33,7 @@
     <div class="q-mb-md chapter">
       <h4>{{ data.chapterTitle }}</h4>
       <q-card class="q-pa-md q-mb-lg content" flat>
-        <div :style="{ fontSize: fontSize + 'px' }" v-html="data.content" />
+        <div class="q-ma-md" :style="{ fontSize: fontSize + 'px' }" v-html="data.content" />
       </q-card>
     </div>
   </div>
@@ -108,7 +108,6 @@ const loadChapter = () : void => {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  text-align: center;
   width: 100%;
   padding: 0;
   margin: 0 auto;

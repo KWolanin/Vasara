@@ -3,11 +3,14 @@ package com.kai.Vasara.service;
 import com.kai.Vasara.entity.Author;
 import com.kai.Vasara.entity.FollowingStories;
 import com.kai.Vasara.entity.Story;
+import com.kai.Vasara.exception.AuthorError;
+import com.kai.Vasara.exception.AuthorException;
+import com.kai.Vasara.exception.StoryError;
+import com.kai.Vasara.exception.StoryException;
 import com.kai.Vasara.model.StoryDAO;
 import com.kai.Vasara.repository.AuthorRepository;
 import com.kai.Vasara.repository.FollowingRepository;
 import com.kai.Vasara.repository.StoryRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -46,7 +49,6 @@ public class FollowingService implements ActionService<FollowingStories> {
 
     @Override
     public boolean add(long authorId, long storyId) {
-        try {
             Optional<FollowingStories> follow = check(authorId, storyId);
             if (follow.isPresent()) {
                 log.warn("Story is removed from follows");
@@ -54,22 +56,15 @@ public class FollowingService implements ActionService<FollowingStories> {
                 return false;
             }
             Author author = authorRepository.findById(authorId)
-                    .orElseThrow(() -> new EntityNotFoundException("Author not found"));
+                .orElseThrow(() -> new AuthorException(AuthorError.AUTHOR_NOT_FOUND));
             Story story = storyRepository.findById(storyId)
-                    .orElseThrow(() -> new EntityNotFoundException("Story not found"));
+                .orElseThrow(() -> new StoryException(StoryError.STORY_NOT_FOUND));
             FollowingStories fol = new FollowingStories();
             fol.setAuthor(author);
             fol.setStory(story);
             fol.setAddedAt(ZonedDateTime.now());
             followingRepository.save(fol);
             return true;
-    } catch (EntityNotFoundException e) {
-        log.error("Entity not found: {}", e.getMessage());
-        throw e;
-    } catch (Exception e) {
-        log.error("Unexpected error while adding/removing following: {}", e.getMessage());
-        throw new RuntimeException("Error occurred while processing the following action");
-    }
     }
 
 

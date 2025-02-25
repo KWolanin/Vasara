@@ -2,13 +2,16 @@
   <main-menu />
   <div class="row justify-center">
     <q-card class="col-10 q-pa-md q-mb-md">
-      <q-btn @click="saveChapter" class="bg-accent-gold">
+      <form @submit.prevent.stop="saveChapter" class="q-gutter-md">
+      <q-btn  class="bg-accent-gold btn" flat type="submit">
         {{ route.name === "add" ? "Publish" : "Update" }}
       </q-btn>
       <q-input
         filled
+        ref="titleRef"
         v-model="chapterTitle"
         :label="chapterNumber"
+        :rules="[val => !!val || 'Title is required']"
         class="q-py-md"
       />
       <q-editor
@@ -18,6 +21,7 @@
         :toolbar="editorToolbar"
         :fonts="editorFonts"
       />
+    </form>
     </q-card>
   </div>
 </template>
@@ -38,6 +42,8 @@ const $q = useQuasar();
 const chapterTitle = ref<string>("");
 const content = ref<string>("");
 
+const titleRef = ref(null)
+
 const props = defineProps<{
   authorId: number;
   storyId: number;
@@ -49,7 +55,27 @@ const chapterNumber = computed<string>(() => {
   return `Chapter no. ${props.chapters + 1}`;
 });
 
+function isHtmlContentEmpty(html) {
+    const div = document.createElement("div")
+    div.innerHTML = html
+    return div.innerText.trim().length === 0
+}
+
 const saveChapter = (): void => {
+
+  titleRef.value.validate()
+  if (titleRef.value.hasError) {
+    return;
+  }
+
+  if (isHtmlContentEmpty(content.value)) {
+    Notify.create({
+      message: "Chapter must have a content!",
+      position: "bottom-right",
+      type: "warning"
+    });
+    return
+  }
   let c: Chapter | Omit<Chapter, "id">;
   const date = new Date().toISOString();
   if (route.name === "add") {
@@ -72,7 +98,8 @@ const saveChapter = (): void => {
   }
   createChapter(c)
     .then(() => {
-      router.push("/mines");
+    route.name === "add" ?
+     router.push("/mines") : router.push({ path: '/manage', query: { storyId: c.storyId } })
       const msg = route.name === "edit" ? "updated" : "published";
       Notify.create({
         message: `Chapter ${msg} successfully!`,

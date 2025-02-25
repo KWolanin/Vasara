@@ -129,6 +129,7 @@ public class ChapterService {
             chapterRepository.saveAll(existingChapters);
     }
 
+    @CacheEvict(value = { "userStoriesCache", "storiesCache" }, allEntries = true)
     public void deleteChapter(Long id) {
         chapterRepository.deleteById(id);
     }

@@ -3,11 +3,14 @@ package com.kai.Vasara.service;
 import com.kai.Vasara.entity.Author;
 import com.kai.Vasara.entity.ReadStories;
 import com.kai.Vasara.entity.Story;
+import com.kai.Vasara.exception.AuthorError;
+import com.kai.Vasara.exception.AuthorException;
+import com.kai.Vasara.exception.StoryError;
+import com.kai.Vasara.exception.StoryException;
 import com.kai.Vasara.model.StoryDAO;
 import com.kai.Vasara.repository.AuthorRepository;
 import com.kai.Vasara.repository.ReadRepository;
 import com.kai.Vasara.repository.StoryRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -45,30 +48,22 @@ public class ReadService implements ActionService<ReadStories> {
 
     @Override
     public boolean add(long authorId, long storyId) {
-        try {
             Optional<ReadStories> follow = check(authorId, storyId);
             if (follow.isPresent()) {
                 log.warn("Story is removed from read later");
                 readRepository.delete(follow.get());
                 return false;
             }
-            Author author = authorRepository.findById(authorId)
-                    .orElseThrow(() -> new EntityNotFoundException("Author not found"));
-            Story story = storyRepository.findById(storyId)
-                    .orElseThrow(() -> new EntityNotFoundException("Story not found"));
+        Author author = authorRepository.findById(authorId)
+                .orElseThrow(() -> new AuthorException(AuthorError.AUTHOR_NOT_FOUND));
+        Story story = storyRepository.findById(storyId)
+                .orElseThrow(() -> new StoryException(StoryError.STORY_NOT_FOUND));
             ReadStories read = new ReadStories();
             read.setAuthor(author);
             read.setStory(story);
             read.setAddedAt(ZonedDateTime.now());
             readRepository.save(read);
             return true;
-        } catch (EntityNotFoundException e) {
-            log.error("Entity not found: {}", e.getMessage());
-            throw e;
-        } catch (Exception e) {
-            log.error("Unexpected error while adding/removing read later: {}", e.getMessage());
-            throw new RuntimeException("Error occurred while processing the read later action");
-        }
     }
 
 

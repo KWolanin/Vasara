@@ -4,7 +4,8 @@
       <q-chip size="xs" flat square>
         {{ chapter.chapterNo }}
       </q-chip>
-      <q-input v-model="chapter.chapterTitle" outlined disable/>
+      <div>{{ chapter.chapterTitle }}</div>
+        <!-- <q-input v-model="chapter.chapterTitle" outlined disable/> -->
     </p>
     <q-space />
     <div style="display: flex; justify-content: flex-end">

@@ -1,14 +1,16 @@
 <template>
 <q-card class="col-7 q-pa-lg card" flat>
+  <div class="q-ma-sm ask">What do you want to read today?</div>
   <div class="search">
   <q-input outlined v-model="criteria.title" label="Title"  />
   <q-input outlined v-model="criteria.author" label="Author" />
   <q-input outlined v-model="criteria.description" label="Desciption" />
   <tag-input v-model="criteria.fandoms" label="Fandom(s)" />
   <tag-input v-model="criteria.tags" label="Tag(s)" />
+  <q-select class="custom-width" v-model="criteria.rating" :options="ratingOptions"
+  label="Rating" outlined clearable placeholder="Rating" stack-label/>
   </div>
   <div>
-
   </div>
 </q-card>
 
@@ -64,7 +66,8 @@ const criteria = reactive<Criteria>({
   author: "",
   fandoms: [],
   tags: [],
-  description: ""
+  description: "",
+  rating: ""
 })
 
 let timeout: NodeJS.Timeout | null = null
@@ -83,6 +86,9 @@ const sort = (event: MouseEvent) => {
   emit('sort-changed', target.innerText);
 };
 
+const ratingOptions = ["KIDS", "TEEN", "ADULT", "MATURE"]
+
+
 </script>
 
 
@@ -92,5 +98,18 @@ const sort = (event: MouseEvent) => {
   display: flex;
   gap: 10px;
 }
+
+.ask {
+  font-family: "Farro", cursive;
+  color: #333 !important;
+  font-weight: 500;
+  font-size: 1.5rem;
+
+}
+
+.custom-width {
+  width: 25%;
+}
+
 
 </style>

@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -324,5 +325,152 @@ class AuthorServiceTest {
         Optional<Author> a = authorService.findById(1L);
         assertFalse(a.isPresent());
     }
+
+    @Test
+    void updateAuthor_throws_not_found() {
+        Author newAuthorData = new Author();
+
+
+        AuthorException exception = assertThrows(AuthorException.class, () -> {
+            authorService.updateAuthor(newAuthorData);
+        });
+
+        assertEquals("User not found", exception.getAuthorError().getMessage());
+    }
+
+    @Test
+     void updateAuthor() {
+        Author newAuthorData = Author.builder()
+                .email("newemail@mail.com")
+                .username("newusername")
+                .password("newpassword")
+                .description("newdescription")
+                .build();
+
+        Author oldAuthorData = Author.builder()
+                .email("oldemail@mail.com")
+                .username("oldusername")
+                .password("oldpassword")
+                .description("olddescription")
+                .build();
+
+        Mockito.when(authorRepository.findById(any())).thenReturn(Optional.ofNullable(oldAuthorData));
+        when(passwordEncoder.encode("newpassword")).thenReturn("newpassword");
+        authorService.updateAuthor(newAuthorData);
+
+        assertEquals("newusername", oldAuthorData.getUsername());
+        assertEquals("newpassword", oldAuthorData.getPassword());
+        assertEquals("newemail@mail.com", oldAuthorData.getEmail());
+        assertEquals("newdescription", oldAuthorData.getDescription());
+        verify(authorRepository).save(oldAuthorData);
+    }
+
+    @Test
+    void updateAuthor_throws_email_invalid() {
+        Author newAuthorData = Author.builder()
+                .email("invalid_email")
+                .username("newusername")
+                .password("newpassword")
+                .description("newdescription")
+                .build();
+
+        Author oldAuthorData = Author.builder()
+                .email("oldemail@mail.com")
+                .username("oldusername")
+                .password("oldpassword")
+                .description("olddescription")
+                .build();
+
+        Mockito.when(authorRepository.findById(any())).thenReturn(Optional.ofNullable(oldAuthorData));
+
+
+        AuthorException exception = assertThrows(AuthorException.class, () -> {
+            authorService.updateAuthor(newAuthorData);
+        });
+
+        assertEquals("Email is invalid", exception.getAuthorError().getMessage());
+    }
+
+    @Test
+    void updateAuthor_throws_email_is_taken_by_another_user() {
+        Author newAuthorData = Author.builder()
+                .email("emailtaken@byanother.com")
+                .username("newusername")
+                .password("newpassword")
+                .description("newdescription")
+                .build();
+
+        Author oldAuthorData = Author.builder()
+                .email("oldemail@mail.com")
+                .username("oldusername")
+                .password("oldpassword")
+                .description("olddescription")
+                .build();
+
+        when(authorRepository.findById(any())).thenReturn(Optional.ofNullable(oldAuthorData));
+        when(authorRepository.existsByEmail(any())).thenReturn(true);
+
+
+        AuthorException exception = assertThrows(AuthorException.class, () -> {
+            authorService.updateAuthor(newAuthorData);
+        });
+
+        assertEquals("User with this email already exists", exception.getAuthorError().getMessage());
+    }
+
+    @Test
+    void updateAuthor_throws_username_is_taken_by_another_user() {
+        Author newAuthorData = Author.builder()
+                .email("emailtaken@byanother.com")
+                .username("newusername")
+                .password("newpassword")
+                .description("newdescription")
+                .build();
+
+        Author oldAuthorData = Author.builder()
+                .email("oldemail@mail.com")
+                .username("oldusername")
+                .password("oldpassword")
+                .description("olddescription")
+                .build();
+
+        when(authorRepository.findById(any())).thenReturn(Optional.ofNullable(oldAuthorData));
+        when(authorRepository.existsByUsername(any())).thenReturn(true);
+
+
+        AuthorException exception = assertThrows(AuthorException.class, () -> {
+            authorService.updateAuthor(newAuthorData);
+        });
+
+        assertEquals("User with this username already exists", exception.getAuthorError().getMessage());
+    }
+
+    @Test
+    void updateAuthor_throws_password_empty() {
+        Author newAuthorData = Author.builder()
+                .email("emailtaken@byanother.com")
+                .username("newusername")
+                .password("")
+                .description("newdescription")
+                .build();
+
+        Author oldAuthorData = Author.builder()
+                .email("oldemail@mail.com")
+                .username("oldusername")
+                .password("oldpassword")
+                .description("olddescription")
+                .build();
+
+        when(authorRepository.findById(any())).thenReturn(Optional.ofNullable(oldAuthorData));
+
+
+        AuthorException exception = assertThrows(AuthorException.class, () -> {
+            authorService.updateAuthor(newAuthorData);
+        });
+
+        assertEquals("Password is invalid", exception.getAuthorError().getMessage());
+    }
+
+
 
 }

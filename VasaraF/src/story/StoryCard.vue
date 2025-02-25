@@ -12,12 +12,14 @@
         >{{ fandom }}</q-chip
       >
       <q-space />
-      <q-chip v-if="!story.finished" color="pink" icon="hourglass_bottom"
-        >in progress</q-chip
+      <q-chip v-if="!story.finished" color="pink" icon="hourglass_bottom" class="text-caption"
+        > {{'in progress'.toUpperCase()}} </q-chip
       >
-      <q-chip v-else color="gold" icon="assignment_turned_in"
-        >completed</q-chip
+      <q-chip v-else color="gold" icon="assignment_turned_in" class="text-caption"
+        >{{ 'completed'.toUpperCase() }}</q-chip
       >
+      <q-chip v-if="story.rating" color="purple" class="text-caption"
+        >{{story.rating}}</q-chip>
     </div>
     <div>
       <q-chip

@@ -36,4 +36,5 @@ public class StoryDAO {
 
     private List<ChapterDAO> chapters;
     private AuthorDAO author;
+    private Rating rating = Rating.KIDS;
 }

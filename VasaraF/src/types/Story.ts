@@ -10,4 +10,5 @@ export interface Story {
   publishDt: string | Date;
   updateDt: string | Date;
   chaptersNumber: number;
+  rating: string;
 }

@@ -4,4 +4,5 @@ export interface Criteria {
   fandoms: string[]
   tags: string[]
   description: string
+  rating: string
 }

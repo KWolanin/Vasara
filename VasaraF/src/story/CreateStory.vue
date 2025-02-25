@@ -16,15 +16,24 @@
         @reset="clearForm"
         autofocus
       >
-        <q-input filled v-model="title" label="Title" />
+        <q-input filled
+        v-model="title"
+         label="Title"
+         ref="titleRef"
+         :rules="[val => !!val || 'Title is required']"
+         />
         <q-input
+          ref="descRef"
           filled
           v-model="description"
+          maxlength="500"
           label="Description"
           type="textarea"
+          :rules="[val => !!val || 'Description is required']"
         />
         <tag-input v-model="tags" label="Tag(s)" />
         <tag-input v-model="fandoms" label="Fandom(s)" />
+        <q-select v-model="rating" :options="ratingOptions" label="Rating" outlined />
         <q-checkbox v-model="finished" label="Mark as completed work" />
         <div>
           <q-btn
@@ -56,6 +65,7 @@ import { useRouter } from "vue-router";
 import { useUserStore } from "../stores/user";
 import { Story } from "src/types/Story";
 
+
 const userStore = useUserStore();
 
 const title = ref<string>("");
@@ -63,6 +73,7 @@ const description = ref<string>("");
 const fandoms = ref<string[]>([]);
 const tags = ref<string[]>([]);
 const finished = ref<boolean>(false)
+const rating = ref<string>('KIDS');
 
 const isEditing = ref<boolean>(false);
 const existingStory = ref<Story>(null);
@@ -71,6 +82,7 @@ const existingStory = ref<Story>(null);
 const router = useRouter();
 
 const createNewStory = () : void => {
+
   const id = userStore.id;
   let story: Story | Omit<Story, "id">;
   if (!isEditing.value) {
@@ -85,6 +97,7 @@ const createNewStory = () : void => {
       finished: finished.value,
       publishDt: new Date(),
       updateDt: new Date(),
+      rating: rating.value
     };
     createStory(story)
       .then(() => {
@@ -107,6 +120,7 @@ const createNewStory = () : void => {
       finished: finished.value,
       publishDt: existingStory.value.publishDt,
       updateDt: existingStory.value.updateDt,
+      rating: rating.value
     };
     updateStory(story)
       .then(() => {
@@ -138,8 +152,12 @@ onMounted(() => {
     finished.value = story.finished || false;
     isEditing.value = true;
     existingStory.value = story;
+    rating.value = story.rating;
     localStorage.removeItem("currentStory");
   }
 });
+
+const ratingOptions = ["KIDS", "TEEN", "ADULT", "MATURE"]
+
 </script>
 
