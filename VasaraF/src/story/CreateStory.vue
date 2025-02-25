@@ -27,6 +27,7 @@
           filled
           v-model="description"
           maxlength="500"
+          counter
           label="Description"
           type="textarea"
           :rules="[val => !!val || 'Description is required']"

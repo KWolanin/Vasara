@@ -4,6 +4,8 @@ import com.kai.Vasara.entity.Author;
 import com.kai.Vasara.entity.FavoriteStories;
 import com.kai.Vasara.entity.FollowingStories;
 import com.kai.Vasara.entity.Story;
+import com.kai.Vasara.exception.AuthorException;
+import com.kai.Vasara.exception.StoryException;
 import com.kai.Vasara.repository.AuthorRepository;
 import com.kai.Vasara.repository.FavoriteRepository;
 import com.kai.Vasara.repository.FollowingRepository;
@@ -54,22 +56,22 @@ class FavoriteServiceTest {
     }
 
     @Test
-    void add_no_author_throws_EntityNotFoundException() {
+    void add_no_author_throws_author_not_found() {
         long authorId = 1L;
         long storyId = 1L;
 
         when(favoriteService.check(authorId, storyId)).thenReturn(Optional.empty());
         when(authorRepository.findById(1L)).thenReturn(Optional.empty());
 
-        Exception exception = assertThrows(EntityNotFoundException.class, () -> {
+        AuthorException exception = assertThrows(AuthorException.class, () -> {
             favoriteService.add(authorId, storyId);
         });
-        assertEquals("Author not found", exception.getMessage());
+        assertEquals("User not found", exception.getAuthorError().getMessage());
         verifyNoMoreInteractions(favoriteRepository);
     }
 
     @Test
-    void add_no_story_throws_EntityNotFoundException() {
+    void add_no_story_throws_story_not_found() {
         long authorId = 1L;
         long storyId = 1L;
 
@@ -78,11 +80,11 @@ class FavoriteServiceTest {
         when(authorRepository.findById(1L)).thenReturn(Optional.of(new Author()));
         when(storyRepository.findById(1L)).thenReturn(Optional.empty());
 
-        Exception exception = assertThrows(EntityNotFoundException.class, () -> {
+        StoryException exception = assertThrows(StoryException.class, () -> {
             favoriteService.add(authorId, storyId);
         });
 
-        assertEquals("Story not found", exception.getMessage());
+        assertEquals("Story was not found", exception.getStoryError().getMessage());
         verifyNoMoreInteractions(favoriteRepository);
     }
 

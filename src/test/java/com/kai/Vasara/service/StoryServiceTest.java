@@ -203,7 +203,6 @@ public class StoryServiceTest {
 
         Sort sort = Sort.by(Sort.Order.desc("updateDt"));
         Page<Story> page = new PageImpl<>(List.of(story1), PageRequest.of(0, 1, sort), 1);
-        //when(storyRepository.findAllByAuthorId(1L, PageRequest.of(0, 1, sort))).thenReturn(page);
         when(storyRepository.findAllByAuthorId(eq(1L), any(Pageable.class))).thenReturn(page);
 
         Page<StoryDAO> result = storyService.getMyStories(1L, 1, 1);
