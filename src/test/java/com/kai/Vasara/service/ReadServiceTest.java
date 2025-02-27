@@ -8,7 +8,6 @@ import com.kai.Vasara.exception.StoryException;
 import com.kai.Vasara.repository.AuthorRepository;
 import com.kai.Vasara.repository.ReadRepository;
 import com.kai.Vasara.repository.StoryRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -24,7 +23,7 @@ import static org.mockito.Mockito.*;
 class ReadServiceTest {
 
     @InjectMocks
-    ReadService readService;
+    ReadServiceStory readService;
 
     @Mock
     ReadRepository readRepository;

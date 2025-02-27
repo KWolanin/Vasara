@@ -43,13 +43,13 @@ public class StoryServiceTest {
     ObjectMapper objectMapper;
 
     @Mock
-    FavoriteService favoriteService;
+    FavoriteServiceStory favoriteService;
 
     @Mock
-    FollowingService followingService;
+    FollowingServiceStory followingService;
 
     @Mock
-    ReadService readService;
+    ReadServiceStory readService;
 
 
     @Test

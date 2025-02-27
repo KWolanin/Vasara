@@ -1,7 +1,7 @@
 package com.kai.Vasara.controller;
 
 import com.kai.Vasara.model.StoryDAO;
-import com.kai.Vasara.service.FollowingService;
+import com.kai.Vasara.service.FollowingServiceStory;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.*;
 public class FollowingController {
 
     @Autowired
-    public FollowingController(FollowingService followingService) {
+    public FollowingController(FollowingServiceStory followingService) {
         this.followingService = followingService;
     }
-    private final FollowingService followingService;
+    private final FollowingServiceStory followingService;
 
     @PostMapping("/addFollow")
     public ResponseEntity<Boolean> addFollowing(@RequestBody FollowingController.FollowRequest fav) {

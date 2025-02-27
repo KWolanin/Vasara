@@ -34,4 +34,10 @@ public class Author {
 
     private String description;
 
+    @OneToMany(mappedBy = "followingAuthor")
+    private List<FollowingAuthors> following;
+
+    @OneToMany(mappedBy = "followedAuthor")
+    private List<FollowingAuthors> followers;
+
 }

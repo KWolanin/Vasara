@@ -5,6 +5,9 @@
     <div class="q-ml-md col-4">
       <div class="text-body1">{{ username }}'s profile</div>
       <div class="text-body2">{{description}}</div>
+      <q-btn v-if="isLoggedIn" push :color="followColor" flat round icon="email" class="q-pt-md" @click="follow">
+      <q-tooltip> Follow author  and get an e-mail when they publish new story </q-tooltip>
+    </q-btn>
       </div>
       <div class="q-ml-md col-4 q-mt-lg">
       <div class="text-body1">This user creates these stories: </div>
@@ -28,6 +31,8 @@ import { Story } from "src/types/Story";
 import StoryCard from "src/story/StoryCard.vue";
 import { useUserStore } from "src/stores/user";
 import FavAndFollow from "../utils/FavAndFollow.vue";
+import { addToFollows, isFollow } from "src/services/followauthorservice";
+import { Notify } from "quasar";
 
 const userStore = useUserStore();
 const isLoggedIn = computed(() => !!userStore.id);
@@ -44,5 +49,36 @@ getAuthor(Number(route.query.authorId)).then((author) => {
   stories.value = author.stories;
   description.value = author.description;
 });
+isFollow(userStore.id, Number(route.query.authorId)).then((data) => {
+    isFollowed.value = data
+  })
 })
+
+const isFollowed = ref<Boolean>(false)
+
+const followColor = computed(() => {
+  return isFollowed.value ? "purple" : "black"
+})
+
+const follow = () :void => {
+  addToFollows(userStore.id, Number(route.query.authorId))
+  .then((data) => {
+      const msg = data ? "Author followed" : "Author unfollowed";
+      isFollowed.value = data
+      Notify.create({
+        message: msg,
+        position: "bottom-right",
+        type: data ? "positive" : "negative",
+      });
+    })
+    .catch((err) => {
+      console.error("Follow error:", err);
+      Notify.create({
+        message: "Error occurred while adding or removing follow",
+        position: "bottom-right",
+        type: "negative",
+      });
+    });
+}
+
   </script>

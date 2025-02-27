@@ -47,7 +47,11 @@ public class ChapterService {
                 story.setUpdateDt(chapter.getUpdated());
             }
             chapterRepository.save(chapter);
-            emailService.sendMessageToQueue(chapter);
+            if (chapter.getChapterNo() == 1) {
+                emailService.sendMessageAboutNewStoryToQueue(chapter.getStory());
+            } else {
+                emailService.sendMessageAboutNewChapterToQueue(chapter);
+            }
     }
 
     public int getChapterNumber(Long storyId) {

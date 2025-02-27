@@ -40,7 +40,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { getRandom } from "src/services/readservice";
 import { addToReads } from "src/services/readservice";
 import { Notify } from "quasar";

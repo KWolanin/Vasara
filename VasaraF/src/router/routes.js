@@ -8,6 +8,7 @@ const routes = [
     path: "/create",
     name: "create",
     component: () => import("src/story/CreateStory.vue"),
+    meta: { requiresAuth: true }
   },
   {
     path: "/readAll",
@@ -18,6 +19,7 @@ const routes = [
     path: "/mines",
     name: "mines",
     component: () => import("src/story/MyStories.vue"),
+    meta: { requiresAuth: true }
   },
   {
     path: "/add",
@@ -28,6 +30,7 @@ const routes = [
       authorId: Number(route.query.authorId),
       chapters: Number(route.query.chapters),
     }),
+    meta: { requiresAuth: true }
   },
   {
     path: "/edit",
@@ -38,6 +41,7 @@ const routes = [
       authorId: Number(route.query.authorId),
       chapters: Number(route.query.chapters),
     }),
+    meta: { requiresAuth: true }
   },
   {
     path: "/read",
@@ -66,16 +70,19 @@ const routes = [
     props: (route) => ({
       storyId: Number(route.query.storyId),
     }),
+    meta: { requiresAuth: true }
   },
   {
     path: "/account",
     name: "Account",
     component: () => import("src/users/ManageAccount.vue"),
+    meta: { requiresAuth: true }
   },
   {
     path: "/favs",
     name: "Favorites and following",
     component: () => import("src/story/FavoritesAndFollowing.vue"),
+    meta: { requiresAuth: true }
   },
   {
     path: "/user",

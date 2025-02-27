@@ -1,7 +1,7 @@
 package com.kai.Vasara.controller;
 
 import com.kai.Vasara.model.StoryDAO;
-import com.kai.Vasara.service.ReadService;
+import com.kai.Vasara.service.ReadServiceStory;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,10 +16,10 @@ import java.util.Map;
 public class ReadController {
 
     @Autowired
-    public ReadController(ReadService readService) {
+    public ReadController(ReadServiceStory readService) {
         this.readService = readService;
     }
-    private final ReadService readService;
+    private final ReadServiceStory readService;
 
     @PostMapping("/addRead")
     public ResponseEntity<Boolean> addReadLater(@RequestBody ReadController.ReadRequest fav) {

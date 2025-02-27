@@ -29,7 +29,7 @@ import java.util.*;
 @Component
 @Service
 @Slf4j
-public class ReadService implements ActionService<ReadStories> {
+public class ReadServiceStory implements StoryActionService<ReadStories> {
 
     private final AuthorRepository authorRepository;
     private final StoryRepository storyRepository;
@@ -37,16 +37,18 @@ public class ReadService implements ActionService<ReadStories> {
     private final AuthorService authorService;
     private final StoryService storyService;
     private final EntityManager entityManager;
+    private final EnvironmentService environmentService;
 
     @Autowired
-    public ReadService(AuthorRepository authorRepository, StoryRepository storyRepository, ReadRepository readRepository,
-                       AuthorService authorService, StoryService storyService, EntityManager entityManager) {
+    public ReadServiceStory(AuthorRepository authorRepository, StoryRepository storyRepository, ReadRepository readRepository,
+                            AuthorService authorService, StoryService storyService, EntityManager entityManager, EnvironmentService environmentService) {
         this.authorRepository = authorRepository;
         this.storyRepository = storyRepository;
         this.readRepository = readRepository;
         this.authorService = authorService;
         this.storyService = storyService;
         this.entityManager = entityManager;
+        this.environmentService = environmentService;
     }
 
     @Override
@@ -110,7 +112,7 @@ public class ReadService implements ActionService<ReadStories> {
                 "FROM read_story rs " +
                 "JOIN story s ON rs.story_id = s.id " +
                 "WHERE rs.author_id = :authorId " +
-                "ORDER BY " + (isPostgreSQL() ? "RANDOM()" : "RAND()") + " LIMIT 1";
+                "ORDER BY " + (environmentService.isPostgreSQL() ? "RANDOM()" : "RAND()") + " LIMIT 1";
 
         Query query = entityManager.createNativeQuery(nativeQuery);
         query.setParameter("authorId", id);
@@ -125,10 +127,4 @@ public class ReadService implements ActionService<ReadStories> {
         String title = (String) result[1];
         return Map.of(storyId, title);
     }
-
-    private boolean isPostgreSQL() {
-        return entityManager.createNativeQuery("SELECT version()").getSingleResult().toString().toLowerCase().contains("postgresql");
-    }
-
-
 }

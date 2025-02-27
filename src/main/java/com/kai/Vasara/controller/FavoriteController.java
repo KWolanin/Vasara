@@ -1,7 +1,7 @@
 package com.kai.Vasara.controller;
 
 import com.kai.Vasara.model.StoryDAO;
-import com.kai.Vasara.service.FavoriteService;
+import com.kai.Vasara.service.FavoriteServiceStory;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.*;
 public class FavoriteController {
 
     @Autowired
-    public FavoriteController(FavoriteService favouriteService) {
+    public FavoriteController(FavoriteServiceStory favouriteService) {
         this.favouriteService = favouriteService;
     }
-   private final FavoriteService favouriteService;
+   private final FavoriteServiceStory favouriteService;
 
     @PostMapping("/addfavorite")
     public ResponseEntity<Boolean> addFavorite(@RequestBody FavRequest fav) {

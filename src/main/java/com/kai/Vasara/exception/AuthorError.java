@@ -16,6 +16,7 @@ public enum AuthorError {
     AUTHOR_INVALID_PASSWORD("Password is invalid"),
     AUTHOR_INVALID_DESCRIPTION("Description is invalid"),
     AUTHOR_INVALID_USERNAME("Username is invalid"),
-    AUTHOR_DETAILS_NOT_FOUND("Details not found");
+    AUTHOR_DETAILS_NOT_FOUND("Details not found"),
+    CANNOT_FOLLOW_ITSELF("User cannot follow themself");
     private final String message;
 }

@@ -2,15 +2,12 @@ package com.kai.Vasara.service;
 
 import com.kai.Vasara.entity.Author;
 import com.kai.Vasara.entity.FollowingStories;
-import com.kai.Vasara.entity.ReadStories;
 import com.kai.Vasara.entity.Story;
 import com.kai.Vasara.exception.AuthorException;
 import com.kai.Vasara.exception.StoryException;
 import com.kai.Vasara.repository.AuthorRepository;
 import com.kai.Vasara.repository.FollowingRepository;
-import com.kai.Vasara.repository.ReadRepository;
 import com.kai.Vasara.repository.StoryRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -28,7 +25,7 @@ import static org.mockito.Mockito.atMostOnce;
 class FollowingServiceTest {
 
     @InjectMocks
-    FollowingService followingService;
+    FollowingServiceStory followingService;
 
     @Mock
     FollowingRepository followingRepository;

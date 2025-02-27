@@ -38,21 +38,22 @@ public class StoryService {
     private final StoryRepository storyRepository;
     private final AuthorService authorService;
     private final ChapterService chapterService;
-    private final FavoriteService favoriteService;
-    private final FollowingService followingService;
-    private final ReadService readService;
-    private static final Logger logger = LoggerFactory.getLogger(StoryService.class);
+    private final FavoriteServiceStory favoriteService;
+    private final FollowingServiceStory followingService;
+    private final ReadServiceStory readService;
+    private final EmailService emailService;
 
     @Autowired
     public StoryService(StoryRepository storyRepository, AuthorService authorService,
-                        ChapterService chapterService, @Lazy FavoriteService favoriteService,
-                        @Lazy FollowingService followingService, @Lazy ReadService readService) {
+                        ChapterService chapterService, @Lazy FavoriteServiceStory favoriteService,
+                        @Lazy FollowingServiceStory followingService, @Lazy ReadServiceStory readService, EmailService emailService) {
         this.storyRepository = storyRepository;
         this.authorService = authorService;
         this.chapterService = chapterService;
         this.favoriteService = favoriteService;
         this.followingService = followingService;
         this.readService = readService;
+        this.emailService = emailService;
     }
 
     public List<StoryDAO> getAll() {
@@ -236,7 +237,7 @@ public class StoryService {
                 story.setFandoms(fandomsJson);
             } else story.setFandoms("[\"\"]");
         } catch (Exception e) {
-            logger.warn(e.getMessage());
+            log.warn(e.getMessage());
             throw new RuntimeException("Error serializing to JSON", e);
         }
     }

@@ -7,7 +7,7 @@
   <div>
     <div class="row justify-center q-pa-lg">
   <div class="col-md-2">
-    <random-read v-if="readsAvailable"/>
+    <random-read v-if="readsAvailable > 0"/>
   </div>
   <div class="col-md-8 flex justify-center">
     <sort-and-filter @criteria-changed="filterBy" @sort-changed="sortBy"/>
@@ -90,10 +90,13 @@ onMounted(() => {
     storiesAmount.value = response;
   })
 
+  if (isLoggedIn.value) {
   countReads()
   .then((response) =>{
     readsAvailable.value = response
   })
+  }
+
 
   fetchStories(1, storiesPerPage, criteria, sortCriteria.value)
     .then((response) => {

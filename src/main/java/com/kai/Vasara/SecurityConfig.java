@@ -23,6 +23,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
                             .requestMatchers("/api/chapters/**").permitAll()
                             .requestMatchers("/api/stories/**").permitAll()
                             .requestMatchers("/api/authors/**").permitAll()
+                            .requestMatchers("/api/authorsfollows/**").permitAll()
                             .requestMatchers("/api/favorites/**").permitAll()
                             .requestMatchers("/api/follows/**").permitAll()
                             .requestMatchers("/api/reads/**").permitAll()

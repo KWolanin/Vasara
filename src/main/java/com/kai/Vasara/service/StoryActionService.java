@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 
 @Component
-public interface ActionService<T> {
+public interface StoryActionService<T> {
 
     boolean add(long authorId, long storyId);
 

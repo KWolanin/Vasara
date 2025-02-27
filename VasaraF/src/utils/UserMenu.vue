@@ -34,7 +34,11 @@ const userStore = useUserStore();
 
 const logout = () => {
   userStore.logout();
-  router.push("/readAll");
+    if (router.currentRoute.value.path === "/readAll") {
+    window.location.reload()
+  } else {
+    router.push("/readAll")
+  }
 };
 
 const props = defineProps<{
