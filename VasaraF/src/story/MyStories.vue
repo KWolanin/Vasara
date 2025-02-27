@@ -1,8 +1,8 @@
 <template>
   <main-menu />
   <div class="row justify-center q-ml-md q-mb-sm">
-    <div class="col-10">
-      <q-btn class="q-ma-sm btn"flat icon="add_circle_outline"
+    <div class="col-8 flex justify-center">
+      <q-btn class="q-ma-sm q-mt-xl btn q-pa-md btn" unelevated  color="pink" icon="add_circle_outline"
     @click="addNew"> ADD </q-btn>
     </div>
   </div>
@@ -40,7 +40,6 @@
       :max="maxPages"
       color="black"
       rounded
-      glossy
       active-color="gold"
       direction-links
       boundary-links

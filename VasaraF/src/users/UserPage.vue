@@ -74,7 +74,7 @@ const follow = () :void => {
     .catch((err) => {
       console.error("Follow error:", err);
       Notify.create({
-        message: "Error occurred while adding or removing follow",
+        message: `Error occurred while adding or removing follow: ${err.response.data.message}`,
         position: "bottom-right",
         type: "negative",
       });

@@ -75,7 +75,6 @@
       <q-space />
       <slot name="tools"></slot>
       <slot name="following"></slot>
-      <slot name="removeFollowing"></slot>
     </div>
   </q-card>
 </template>

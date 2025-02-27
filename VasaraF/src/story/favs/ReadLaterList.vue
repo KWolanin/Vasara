@@ -12,8 +12,11 @@
     class="row justify-center q-pa-lg"
   >
     <story-card :story bordered>
-      <template v-slot:removeFollowing>
-        <!-- todo-->
+      <template v-slot:following>
+        <fav-and-follow v-if="isLoggedIn"
+           :show-fav="false"
+           :show-follow="false"
+            :story-id="story.id"/>
       </template>
     </story-card>
   </div>
@@ -22,12 +25,11 @@
 
   <div class="row justify-center q-py-lg" v-if="!loading && myReads.length">
     <q-pagination
-    v-if="storiesPerPage <= myReads.length"
+    v-if="myReads.length"
       :model-value="currentPage"
       :max="maxPages"
       color="black"
       rounded
-      glossy
       active-color="gold"
       direction-links
       boundary-links
@@ -46,11 +48,12 @@ import { Story } from "src/types/Story";
 import { computed, onMounted, ref } from "vue";
 import { useUserStore } from "src/stores/user";
 import StoryCard from "../StoryCard.vue";
+import FavAndFollow from "src/utils/FavAndFollow.vue";
+
 
 const store = useUserStore();
-
+;const isLoggedIn = computed(() => !!store.id);
 const loading = ref<boolean>(true);
-
 const storiesAmount = ref<number>(0);
 const storiesPerPage: number = 5;
 const currentPage = ref<number>(1);
@@ -75,7 +78,7 @@ return Math.ceil(storiesAmount.value / storiesPerPage);
 
 const setPage = (newPage: number) => {
 loading.value = true
-findMyReads(currentPage.value, storiesPerPage, store.id)
+findMyReads(newPage, storiesPerPage, store.id)
   .then((response) => {
     myReads.value = response.content;
     currentPage.value = newPage;

@@ -15,6 +15,12 @@
           </q-item-section>
         </q-item>
 
+        <q-item clickable v-close-popup @click="profile">
+          <q-item-section>
+            <q-item-label>My profile</q-item-label>
+          </q-item-section>
+        </q-item>
+
         <q-item clickable v-close-popup @click="logout">
           <q-item-section>
             <q-item-label>Logout</q-item-label>
@@ -59,6 +65,10 @@ const toFollows = (): void => {
 
 const totoRead = (): void => {
   router.push("/toread");
+};
+
+const profile = (): void => {
+  router.push(`/user?authorId=${userStore.id}`);
 };
 
 </script>

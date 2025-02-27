@@ -35,7 +35,6 @@
       :max="maxPages"
       color="black"
       rounded
-      glossy
       active-color="gold"
       direction-links
       boundary-links

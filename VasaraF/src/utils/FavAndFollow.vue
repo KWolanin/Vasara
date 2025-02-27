@@ -1,13 +1,13 @@
 <template>
   <span>
-    <q-btn push :color="favColor" flat round icon="favorite"
+    <q-btn v-if="showFav" push :color="favColor" flat round icon="favorite"
      class="q-pa-xs" @click="favorite">
      <q-tooltip> Add to favorites </q-tooltip>
     </q-btn>
-    <q-btn push :color="followColor" flat round icon="email" class="q-pa-xs" @click="follow">
+    <q-btn v-if="showFollow" push :color="followColor" flat round icon="email" class="q-pa-xs" @click="follow">
       <q-tooltip> Follow story and get an e-mail when updated </q-tooltip>
     </q-btn>
-    <q-btn push :color="readColor" flat round icon="list_alt"
+    <q-btn v-if="showRead" push :color="readColor" flat round icon="list_alt"
      class="q-pa-xs" @click="readLater">
      <q-tooltip> Add to read later </q-tooltip>
     </q-btn>
@@ -26,9 +26,17 @@ import { onMounted, ref, computed } from "vue";
 
 const userStore = useUserStore();
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   storyId: number;
-}>();
+  showFav?: boolean;
+  showRead?: boolean;
+  showFollow?: boolean;
+}>(), {
+  showFav: true,
+  showRead: true,
+  showFollow: true,
+})
+
 
 // favourite
 const isFavourite = ref<Boolean>(false)

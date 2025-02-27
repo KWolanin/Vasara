@@ -64,7 +64,6 @@ const registerUser = () => {
       });
       router.push("/login");
   }).catch((error) => {
-    console.log(error)
     msg.value = `Error during registration: ${error.response.data.message}`.toUpperCase();
   });
 };

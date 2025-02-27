@@ -1,34 +1,27 @@
 <template>
-  <div class="text-h6">Favorite stories</div>
-  Here is a list of your favorite stories, have fun with them!
+  <div class="text-h6">Following authors</div>
+  Here is a list of authors you follows. You will be receive an email everytime
+  one of them publish a new story.
   <q-inner-loading :showing="loading">
     Loading...
     <q-spinner-hearts size="50px" color="gold" />
   </q-inner-loading>
   <div
     v-if="!loading"
-    v-for="story in myFavs"
-    :key="story.id"
-    class="row justify-center q-pa-lg"
+    v-for="author in myFollows"
+    :key="author.authorId"
+    class="row justify-center q-mt-md"
   >
-    <story-card :story bordered>
-      <template v-slot:following>
-        <fav-and-follow
-          v-if="isLoggedIn"
-          :show-read="false"
-          :show-follow="false"
-          :story-id="story.id"
-        />
-      </template>
-    </story-card>
+    <author-card :username="author.authorUsername" :id="author.authorId">
+    </author-card>
   </div>
 
-  <div v-if="!loading && !myFavs.length" class="not-found">
-    No favorites yet!
+  <div v-if="!loading && !myFollows.length" class="not-found">
+    No follows yet!
   </div>
-  <div class="row justify-center q-py-lg" v-if="!loading && myFavs.length">
+  <div class="row justify-center q-py-lg" v-if="!loading && myFollows.length">
     <q-pagination
-      v-if="myFavs.length"
+      v-if="myFollows.length"
       :model-value="currentPage"
       :max="maxPages"
       color="black"
@@ -46,37 +39,37 @@
 </template>
 
 <script setup lang="ts">
-import { findMyFavs } from "src/services/favoriteservice";
-import { Story } from "src/types/Story";
+import {
+  countFollowedAuthors,
+  findMyFollowedAuthors,
+} from "src/services/followauthorservice";
 import { computed, onMounted, ref } from "vue";
 import { useUserStore } from "src/stores/user";
-import StoryCard from "../StoryCard.vue";
-import { countFavs } from "src/services/favoriteservice";
-import FavAndFollow from "src/utils/FavAndFollow.vue";
+import { AuthorInfo } from "src/types/AuthorInfo";
+import AuthorCard from "src/users/AuthorCard.vue";
 
 const store = useUserStore();
-
-const isLoggedIn = computed(() => !!store.id);
-
 const loading = ref<boolean>(true);
 
 const storiesAmount = ref<number>(0);
 const storiesPerPage: number = 5;
 const currentPage = ref<number>(1);
 
-const myFavs = ref<Story[]>([]);
+const myFollows = ref<AuthorInfo[]>([]);
 
 onMounted(() => {
   loading.value = true;
 
-  countFavs().then((response) => {
+  countFollowedAuthors().then((response) => {
     storiesAmount.value = response;
   });
 
-  findMyFavs(currentPage.value, storiesPerPage, store.id).then((response) => {
-    myFavs.value = response.content;
-    loading.value = false;
-  });
+  findMyFollowedAuthors(currentPage.value, storiesPerPage, store.id).then(
+    (response) => {
+      myFollows.value = response.content;
+      loading.value = false;
+    }
+  );
 });
 
 const maxPages = computed<number>(() => {
@@ -85,9 +78,9 @@ const maxPages = computed<number>(() => {
 
 const setPage = (newPage: number) => {
   loading.value = true;
-  findMyFavs(newPage, storiesPerPage, store.id)
+  findMyFollowedAuthors(newPage, storiesPerPage, store.id)
     .then((response) => {
-      myFavs.value = response.content;
+      myFollows.value = response.content;
       currentPage.value = newPage;
       loading.value = false;
     })

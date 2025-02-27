@@ -1,13 +1,13 @@
 package com.kai.Vasara.controller;
 
+import com.kai.Vasara.model.AuthorDAO;
+import com.kai.Vasara.model.StoryDAO;
 import com.kai.Vasara.service.FollowingAuthorService;
 import lombok.Data;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/authorsfollows")
@@ -28,6 +28,17 @@ public class FollowingAuthorController {
     @PostMapping("/is")
     public ResponseEntity<Boolean> isFollowedAuthor(@RequestBody FollowingAuthorController.FollowAuthorRequest foll) {
         return new ResponseEntity<>(service.is(foll.getFollowing(), foll.getFollowed()), HttpStatus.OK);
+    }
+
+    @GetMapping("/my/{id}")
+    public ResponseEntity<Page<FollowingAuthorService.AuthorInfo>> myFollowedAuthors(@RequestParam(defaultValue = "1") int page,
+                                                             @RequestParam(defaultValue = "5") int size, @PathVariable long id) {
+        return new ResponseEntity<>(service.get(page, size, id), HttpStatus.OK);
+    }
+
+    @GetMapping("/count/{id}")
+    public ResponseEntity<Integer> countMine(@PathVariable Long id) {
+        return new ResponseEntity<>(service.count(id), HttpStatus.OK);
     }
 
     @Data
