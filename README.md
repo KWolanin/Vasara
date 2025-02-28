@@ -22,11 +22,10 @@ User currently can:
 - add story to favorite/read later list
 - set rating to its work (r.g. for kids, teen, adults)
 -  add author to following authors and get email when they publish something new
+-  manage favourites list, follows & "read later" list
 
 
 In the future user will be able to:
--  manage favourites list, follows & "read later" list
-- change to dark theme
 - add/receive coments for works (with possibility to delete and/or mark as spam)
 
 
