@@ -1,7 +1,5 @@
 package com.kai.Vasara.controller;
 
-import com.kai.Vasara.model.AuthorDAO;
-import com.kai.Vasara.model.StoryDAO;
 import com.kai.Vasara.service.FollowingAuthorService;
 import lombok.Data;
 import org.springframework.data.domain.Page;

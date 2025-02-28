@@ -21,12 +21,12 @@ public class ReadController {
     }
     private final ReadServiceStory readService;
 
-    @PostMapping("/addRead")
+    @PostMapping("/add")
     public ResponseEntity<Boolean> addReadLater(@RequestBody ReadController.ReadRequest fav) {
         return new ResponseEntity<>(readService.add(fav.getUser(), fav.getStory()), HttpStatus.OK);
     }
 
-    @PostMapping("/isRead")
+    @PostMapping("/is")
     public ResponseEntity<Boolean> isReadLater(@RequestBody ReadController.ReadRequest fav) {
         return new ResponseEntity<>(readService.is(fav.getUser(), fav.getStory()), HttpStatus.OK);
     }

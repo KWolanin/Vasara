@@ -6,7 +6,7 @@ import { useUserStore } from "../stores/user";
 
 export const addToReads = async (user: number, story: number) : Promise<boolean> => {
   try {
-    const response = await api.post(`/reads/addRead`, { user: user, story: story });
+    const response = await api.post(`/reads/add`, { user: user, story: story });
     return response.data;
   } catch (error) {
     console.error("Error during adding/removing to read later list:", error);
@@ -17,7 +17,7 @@ export const addToReads = async (user: number, story: number) : Promise<boolean>
 
 export const isReads = async (user: number, story: number) : Promise<Boolean> => {
   try {
-    const response = await api.post(`/reads/isRead`, { user: user, story: story });
+    const response = await api.post(`/reads/is`, { user: user, story: story });
     return response.data;
   } catch (error) {
     console.error("Error checking read later stories:", error);

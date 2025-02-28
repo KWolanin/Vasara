@@ -41,7 +41,7 @@ export const isNextOrPrevious = async (
 ): Promise<boolean> => {
   try {
     const response = await api.get(
-      `/chapters/isNextOrPrevious/${storyId}/${chapterNo}`
+      `/chapters/navigable/${storyId}/${chapterNo}`
     );
     return response.data;
   } catch (error) {
@@ -55,7 +55,7 @@ export const isNextOrPrevious = async (
 
 export const updateChaptersOrder = async (chapters : Chapter[]) => {
   try {
-    const response = await api.patch('/chapters/editOrder', chapters)
+    const response = await api.patch('/chapters/order', chapters)
     return response.data;
   } catch (error) {
     console.error("Error updating chapters order:", error);

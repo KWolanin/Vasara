@@ -45,7 +45,7 @@ public class AuthorController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<Author> register(@RequestBody @Valid Author author) {
+    public ResponseEntity<?> register(@RequestBody @Valid Author author) {
         authorService.register(author);
         return ResponseEntity.ok().build();
     }

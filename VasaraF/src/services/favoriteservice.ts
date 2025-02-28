@@ -6,7 +6,7 @@ import { useUserStore } from "../stores/user";
 
 export const addToFavorite = async (user: number, story: number) : Promise<Boolean> => {
   try {
-    const response = await api.post(`/favorites/addfavorite`, { user: user, story: story });
+    const response = await api.post(`/favorites/add`, { user: user, story: story });
     return response.data;
   } catch (error) {
     console.error("Error during adding/removing to favorites:", error);
@@ -17,7 +17,7 @@ export const addToFavorite = async (user: number, story: number) : Promise<Boole
 
 export const isFav = async (user: number, story: number) : Promise<Boolean> => {
   try {
-    const response = await api.post(`/favorites/isFav`, { user: user, story: story });
+    const response = await api.post(`/favorites/is`, { user: user, story: story });
     return response.data;
   } catch (error) {
     console.error("Error checking favorites:", error);

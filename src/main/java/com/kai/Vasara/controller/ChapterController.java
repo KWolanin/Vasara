@@ -20,11 +20,6 @@ public class ChapterController {
         this.chapterService = chapterService;
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ChapterDAO> getChapter(@PathVariable Long id) {
-        return new ResponseEntity<>(chapterService.getChapter(id), HttpStatus.OK);
-    }
-
     @GetMapping("/read/{storyId}/{chapterNo}")
     public ResponseEntity<ChapterDAO> getChapterByStoryAndNumber(@PathVariable Long storyId, @PathVariable Long chapterNo) {
         return new ResponseEntity<>(chapterService.getChapterByStoryIdAndNumber(storyId, chapterNo), HttpStatus.OK);
@@ -36,19 +31,19 @@ public class ChapterController {
         return ResponseEntity.ok().build();
     }
 
-    @PatchMapping("/editOrder")
+    @PatchMapping("/order")
     public ResponseEntity<?> editChaptersOrder(@RequestBody List<ChapterDAO> chapters) {
         chapterService.editChaptersOrder(chapters);
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/isNextOrPrevious/{storyId}/{chapterNo}")
+    @GetMapping("/navigable/{storyId}/{chapterNo}")
     public ResponseEntity<Boolean> CheckIsByStoryAndNumber(@PathVariable Long storyId, @PathVariable Long chapterNo) {
         return new ResponseEntity<>(chapterService.checkIsNextOrPrevious(storyId, chapterNo), HttpStatus.OK);
     }
 
     @GetMapping("/all/{storyId}")
-    public ResponseEntity<List<ChapterDAO>> getChapters(@PathVariable Long storyId) {
+    public ResponseEntity<List<ChapterDAO>> getChaptersForStory(@PathVariable Long storyId) {
         return new ResponseEntity<>(chapterService.getChapters(storyId), HttpStatus.OK);
     }
 

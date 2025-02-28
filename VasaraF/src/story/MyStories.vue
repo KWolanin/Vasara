@@ -2,7 +2,7 @@
   <main-menu />
   <div class="row justify-center q-ml-md q-mb-sm">
     <div class="col-8 flex justify-center">
-      <q-btn class="q-ma-sm q-mt-xl btn q-pa-md btn" unelevated  color="pink" icon="add_circle_outline"
+      <q-btn class="q-ma-sm q-mt-xl btn q-pa-md btn" unelevated  color="white" icon="add_circle_outline"
     @click="addNew"> ADD </q-btn>
     </div>
   </div>

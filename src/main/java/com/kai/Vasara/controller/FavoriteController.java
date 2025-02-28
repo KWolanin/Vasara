@@ -19,12 +19,12 @@ public class FavoriteController {
     }
    private final FavoriteServiceStory favouriteService;
 
-    @PostMapping("/addfavorite")
+    @PostMapping("/add")
     public ResponseEntity<Boolean> addFavorite(@RequestBody FavRequest fav) {
         return new ResponseEntity<>(favouriteService.add(fav.getUser(), fav.getStory()), HttpStatus.OK);
     }
 
-    @PostMapping("/isFav")
+    @PostMapping("/is")
     public ResponseEntity<Boolean> isFav(@RequestBody FavRequest fav) {
         return new ResponseEntity<>(favouriteService.is(fav.getUser(), fav.getStory()), HttpStatus.OK);
     }

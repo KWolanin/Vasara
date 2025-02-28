@@ -19,12 +19,12 @@ public class FollowingController {
     }
     private final FollowingServiceStory followingService;
 
-    @PostMapping("/addFollow")
+    @PostMapping("/add")
     public ResponseEntity<Boolean> addFollowing(@RequestBody FollowingController.FollowRequest fav) {
         return new ResponseEntity<>(followingService.add(fav.getUser(), fav.getStory()), HttpStatus.OK);
     }
 
-    @PostMapping("/isFollowed")
+    @PostMapping("/is")
     public ResponseEntity<Boolean> isFollowed(@RequestBody FollowingController.FollowRequest fav) {
         return new ResponseEntity<>(followingService.is(fav.getUser(), fav.getStory()), HttpStatus.OK);
     }
