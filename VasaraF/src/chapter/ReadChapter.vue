@@ -78,7 +78,7 @@
   </div>
   <div class="row justify-center q-ma-md">
     <div class="col-5 column justify-center q-mb-lg" v-if="showCommentSection">
-      <comment-list :chapterId="data.id" :trigger="trigger" />
+      <comment-list :chapterId="data.id" :trigger="trigger" @comment-deleted="triggerCommentDownload" :deletable="isOwner" />
       <comment-editor
         :storyId="sId"
         :chapterId="data.id"
@@ -89,13 +89,16 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, watch } from "vue";
+import { onMounted, ref, watch, computed } from "vue";
 import { fetchChapter, isNextOrPrevious } from "../services/chapterservice";
 import MainMenu from "../utils/MainMenu.vue";
 import { useRoute } from "vue-router";
 import { Chapter } from "../types/Chapter";
 import CommentEditor from "src/comment/CommentEditor.vue";
 import CommentList from "src/comment/CommentList.vue";
+import { useUserStore } from "src/stores/user";
+
+const store = useUserStore();
 
 const route = useRoute();
 
@@ -161,6 +164,11 @@ const trigger = ref<boolean>(false);
 const triggerCommentDownload = () => {
   trigger.value = !trigger.value;
 };
+
+const isOwner = computed(() => {
+  return data.value.storyDTO.authorId == store.id
+})
+
 </script>
 
 <style scoped>

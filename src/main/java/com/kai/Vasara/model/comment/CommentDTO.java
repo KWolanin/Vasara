@@ -12,6 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 public class CommentDTO {
 
+    private Long id;
     private Long storyId;
     private Long chapterId;
     private String content;

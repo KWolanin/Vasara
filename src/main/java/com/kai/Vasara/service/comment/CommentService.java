@@ -77,6 +77,7 @@ public class CommentService {
         String email = comment.getAuthor() != null ? comment.getAuthor().getEmail() : comment.getGuestEmail();
 
         CommentDTO commentDTO = new CommentDTO();
+        commentDTO.setId(comment.getId());
         commentDTO.setContent(comment.getContent());
         commentDTO.setStoryId(comment.getStory().getId());
         commentDTO.setChapterId(comment.getChapter().getId());
@@ -100,6 +101,10 @@ public class CommentService {
             commentPermission.setGuestCommentAllowed(chapter.get().getStory().isAllowGuestComments());
         }
         return commentPermission;
+    }
+
+    public void delete(long commentId) {
+        commentRepository.deleteById(commentId);
     }
 
     @Data

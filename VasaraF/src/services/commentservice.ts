@@ -30,3 +30,13 @@ export const checkPermissions = async (chapterId: number): Promise<ChapterPermis
     throw error;
   }
 }
+
+export const deleteCommentFromDb = async (chapterId: number): Promise<void> => {
+  try {
+    const response = await api.delete(`/comments/${chapterId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error deletting comment:", error);
+    throw error;
+  }
+}

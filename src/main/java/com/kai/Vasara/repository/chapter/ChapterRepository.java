@@ -14,11 +14,9 @@ public interface ChapterRepository extends JpaRepository<Chapter, Long> {
 
     int countByStoryId(Long storyId);
 
-//    @Query("SELECT c FROM Chapter c WHERE c.story.id = :storyId and chapterNo = :chapterNo")
     Optional<Chapter> findByStoryIdAndChapterNo(Long storyId, Long chapterNo);
 
     @Modifying
-//    @Query("DELETE FROM Chapter c where c.story.id = :storyId")
     void deleteAllByStoryId(Long storyId);
 
 

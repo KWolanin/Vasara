@@ -86,6 +86,7 @@ const saveChapter = (): void => {
       chapterNo: props.chapters + 1,
       published: date,
       updated: date,
+      storyDTO: null
     };
   } else {
     c = {

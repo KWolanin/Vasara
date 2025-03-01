@@ -1,3 +1,5 @@
+import { Story } from "./Story";
+
 export interface Chapter {
   chapterTitle: string;
   content: string;
@@ -7,4 +9,5 @@ export interface Chapter {
   id: number;
   published: string | number;
   updated: string | number;
+  storyDTO: Story
 }

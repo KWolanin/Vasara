@@ -93,6 +93,8 @@ public class ChapterService {
             StoryDTO storyDTO = new StoryDTO();
             storyDTO.setId(chapter.getStory().getId());
             storyDTO.setTitle(chapter.getStory().getTitle());
+            storyDTO.setAuthorName(chapter.getStory().getAuthor().getLogin());
+            storyDTO.setAuthorId(chapter.getStory().getAuthor().getId());
             chapterDTO.setStoryDTO(storyDTO);
             chapterDTO.setStoryId(storyDTO.getId());
         }
