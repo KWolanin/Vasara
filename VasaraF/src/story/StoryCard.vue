@@ -8,24 +8,34 @@
       <q-chip
         v-for="(fandom, index) in story.fandoms"
         :key="index"
-        class=" bg-accent-purple text-caption"
+        class="bg-accent-purple text-caption"
         >{{ fandom }}</q-chip
       >
       <q-space />
-      <q-chip v-if="!story.finished" color="pink" icon="hourglass_bottom" class="text-caption"
-        > {{'in progress'.toUpperCase()}} </q-chip
+      <q-chip
+        v-if="!story.finished"
+        color="pink"
+        icon="hourglass_bottom"
+        class="text-caption"
       >
-      <q-chip v-else color="gold" icon="assignment_turned_in" class="text-caption"
-        >{{ 'completed'.toUpperCase() }}</q-chip
+        {{ "in progress".toUpperCase() }}
+      </q-chip>
+      <q-chip
+        v-else
+        color="gold"
+        icon="assignment_turned_in"
+        class="text-caption"
+        >{{ "completed".toUpperCase() }}</q-chip
       >
-      <q-chip v-if="story.rating" color="purple" class="text-caption"
-        >{{story.rating}}</q-chip>
+      <q-chip v-if="story.rating" color="purple" class="text-caption">{{
+        story.rating
+      }}</q-chip>
     </div>
     <div>
       <q-chip
         v-for="(tag, index) in story.tags"
         :key="index"
-        class=" bg-accent-pink text-caption"
+        class="bg-accent-pink text-caption"
         >{{ tag }}</q-chip
       >
     </div>

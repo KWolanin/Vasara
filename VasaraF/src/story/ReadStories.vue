@@ -6,43 +6,44 @@
   </q-inner-loading>
   <div>
     <div class="row justify-center q-pa-lg">
-  <div class="col-md-2">
-    <random-read v-if="readsAvailable > 0"/>
-  </div>
-  <div class="col-md-8 flex justify-center">
-    <sort-and-filter @criteria-changed="filterBy" @sort-changed="sortBy"/>
-  </div>
-  <div class="col-md-2">
+      <div class="col-md-2">
+        <random-read v-if="readsAvailable > 0" />
+      </div>
+      <div class="col-md-8 flex justify-center">
+        <sort-and-filter @criteria-changed="filterBy" @sort-changed="sortBy" />
+      </div>
+      <div class="col-md-2"></div>
+    </div>
 
-  </div>
-</div>
-
-    <div v-if="!loading"
+    <div
+      v-if="!loading"
       v-for="story in stories"
       :key="story.id"
       class="row justify-center q-pa-lg"
     >
       <story-card :story>
         <template v-slot:following>
-          <fav-and-follow v-if="isLoggedIn" :story-id="story.id"/>
+          <fav-and-follow v-if="isLoggedIn" :story-id="story.id" />
         </template>
       </story-card>
     </div>
-    <div v-if="!loading && !stories.length" class="not-found">No stories found. Change a criteria and try again</div>
+    <div v-if="!loading && !stories.length" class="not-found">
+      No stories found. Change a criteria and try again
+    </div>
     <div class="row justify-center q-py-lg" v-if="!loading && stories.length">
       <q-pagination
-      :model-value=currentPage
-      :max="maxPages"
-      color="black"
-      rounded
-      active-color="gold"
-      direction-links
-      boundary-links
-      icon-first="skip_previous"
-      icon-last="skip_next"
-      icon-prev="fast_rewind"
-      icon-next="fast_forward"
-      @update:model-value="setPage"
+        :model-value="currentPage"
+        :max="maxPages"
+        color="black"
+        rounded
+        active-color="gold"
+        direction-links
+        boundary-links
+        icon-first="skip_previous"
+        icon-last="skip_next"
+        icon-prev="fast_rewind"
+        icon-next="fast_forward"
+        @update:model-value="setPage"
       />
     </div>
   </div>
@@ -66,12 +67,12 @@ const isLoggedIn = computed(() => !!userStore.id);
 
 const stories = ref<Story[]>([]);
 const loading = ref<boolean>(true);
-const storiesAmount = ref<number>(0)
-const storiesPerPage : number = 5
-const currentPage = ref<number>(1)
-const sortCriteria = ref<string>("updateDt")
+const storiesAmount = ref<number>(0);
+const storiesPerPage: number = 5;
+const currentPage = ref<number>(1);
+const sortCriteria = ref<string>("updateDt");
 
-const readsAvailable = ref<number>(0)
+const readsAvailable = ref<number>(0);
 
 let criteria: Criteria = {
   title: "",
@@ -79,29 +80,25 @@ let criteria: Criteria = {
   fandoms: [],
   tags: [],
   description: "",
-  rating: ""
-}
+  rating: "",
+};
 
 onMounted(() => {
-
-  count()
-  .then((response) => {
+  count().then((response) => {
     storiesAmount.value = response;
-  })
+  });
 
   if (isLoggedIn.value) {
-  countReads()
-  .then((response) =>{
-    readsAvailable.value = response
-  })
+    countReads().then((response) => {
+      readsAvailable.value = response;
+    });
   }
-
 
   fetchStories(1, storiesPerPage, criteria, sortCriteria.value)
     .then((response) => {
       stories.value = response.content;
       loading.value = false;
-      storiesAmount.value = response.totalElements
+      storiesAmount.value = response.totalElements;
     })
     .catch((error) => {
       console.error(error);
@@ -109,83 +106,79 @@ onMounted(() => {
 });
 
 const maxPages = computed<number>(() => {
-  return Math.ceil(storiesAmount.value / storiesPerPage)
-})
+  return Math.ceil(storiesAmount.value / storiesPerPage);
+});
 
 const setPage = (newPage: number) => {
-  loading.value = true
+  loading.value = true;
   fetchStories(newPage, storiesPerPage, criteria, sortCriteria.value)
     .then((response) => {
       stories.value = response.content;
       currentPage.value = newPage;
-      storiesAmount.value = response.totalElements
+      storiesAmount.value = response.totalElements;
       loading.value = false;
     })
     .catch((error) => {
       console.error(error);
     });
-}
+};
 
 const filterBy = (crit: Criteria) => {
-  loading.value = true
-  criteria = crit
+  loading.value = true;
+  criteria = crit;
   fetchStories(1, storiesPerPage, criteria, sortCriteria.value)
     .then((response) => {
       stories.value = response.content;
       currentPage.value = 1;
-      storiesAmount.value = response.totalElements
+      storiesAmount.value = response.totalElements;
       loading.value = false;
     })
     .catch((error) => {
       console.error(error);
     });
- }
+};
 
-const sortBy = ((type: string) => {
+const sortBy = (type: string) => {
   switch (type) {
-  case "Update date (newest)":
-    sortCriteria.value = "updateDt";
-    break;
-  case "Update date (oldest)":
-    sortCriteria.value = "updateDt asc";
-    break;
-  case "Author (A-Z)":
-    sortCriteria.value = "author";
-    break;
-  case "Author (Z-A)":
-    sortCriteria.value = "author desc";
-    break;
-  case "Story title (A-Z)":
-    sortCriteria.value = "title";
-    break;
+    case "Update date (newest)":
+      sortCriteria.value = "updateDt";
+      break;
+    case "Update date (oldest)":
+      sortCriteria.value = "updateDt asc";
+      break;
+    case "Author (A-Z)":
+      sortCriteria.value = "author";
+      break;
+    case "Author (Z-A)":
+      sortCriteria.value = "author desc";
+      break;
+    case "Story title (A-Z)":
+      sortCriteria.value = "title";
+      break;
     case "Story title (Z-A)":
-    sortCriteria.value = "title desc";
-    break;
-  default:
-    sortCriteria.value = "updateDt";
-    break;
-}
+      sortCriteria.value = "title desc";
+      break;
+    default:
+      sortCriteria.value = "updateDt";
+      break;
+  }
   fetchStories(1, storiesPerPage, criteria, sortCriteria.value)
     .then((response) => {
       stories.value = response.content;
       currentPage.value = 1;
-      storiesAmount.value = response.totalElements
+      storiesAmount.value = response.totalElements;
       loading.value = false;
     })
     .catch((error) => {
       console.error(error);
     });
-})
-
-
+};
 </script>
 
 <style scoped>
-
 .not-found {
   text-align: center;
   color: gray;
   margin-top: 100px;
 }
-
 </style>

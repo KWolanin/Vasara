@@ -10,7 +10,7 @@
             query: { storyId: sId, chapterNo: cNo - 1 },
           }"
         >
-          <q-btn class="q-ml-md btn" label="Previous" flat />
+          <q-btn class="q-ml-md btn" label="Previous" icon="arrow_back" flat />
         </router-link>
         <q-space />
         <div class="row justify-center">
@@ -25,7 +25,7 @@
             query: { storyId: sId, chapterNo: cNo + 1 },
           }"
         >
-          <q-btn class="q-mr-md btn" label="Next" flat />
+          <q-btn class="q-mr-md btn" icon="arrow_forward" label="Next" flat />
         </router-link>
       </div>
     </div>
@@ -50,30 +50,42 @@
     <div class="col-10 row justify-end q-mb-lg">
       <q-btn
         unelevated
-        color="pink"
+        color="purple"
         text-color="black"
         class="q-mr-md"
+        round
+        v-if="data"
+        :icon="showCommentSection ? 'comment' : 'comments_disabled'"
         @click="showCommentSection = !showCommentSection"
-        >{{ showCommentSection ? 'Hide comments' : 'Show comments'}}</q-btn
       >
+        <q-tooltip>
+          {{ showCommentSection ? "Hide comments" : "Show comments" }}
+        </q-tooltip>
+      </q-btn>
       <q-btn
         unelevated
         color="pink"
+        v-if="data"
         round
         text-color="black"
         icon="arrow_circle_up"
         class="q-mr-md"
         @click="toTop"
-      ></q-btn>
+      >
+        <q-tooltip> To top </q-tooltip>
+      </q-btn>
     </div>
   </div>
   <div class="row justify-center q-ma-md">
-  <div class="col-4 column justify-center q-mb-lg" v-if="showCommentSection">
-    <comment-list :chapterId="data.id" :trigger="trigger"/>
-    <comment-editor :storyId="sId" :chapterId="data.id" @comment-added="triggerCommentDownload"/>
+    <div class="col-5 column justify-center q-mb-lg" v-if="showCommentSection">
+      <comment-list :chapterId="data.id" :trigger="trigger" />
+      <comment-editor
+        :storyId="sId"
+        :chapterId="data.id"
+        @comment-added="triggerCommentDownload"
+      />
+    </div>
   </div>
-</div>
-
 </template>
 
 <script setup lang="ts">
@@ -143,7 +155,6 @@ const toTop = () => {
 };
 
 const showCommentSection = ref<boolean>(false);
-
 
 const trigger = ref<boolean>(false);
 

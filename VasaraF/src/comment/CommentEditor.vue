@@ -3,13 +3,16 @@
     <q-card class="card q-pa-md" flat>
       <div class="header">What do you think?</div>
       <q-form @submit="send">
-        <q-input
-          class="input"
-          v-model="NewComment"
-          filled
-          type="textarea"
-          :rules="[(val) => !!val || 'Field is required']"
-        />
+        <div class="flex justify-center">
+          <q-input
+            class="input"
+            v-model="NewComment"
+            filled
+            type="textarea"
+            :rules="[(val) => !!val || 'Field is required']"
+          />
+        </div>
+
         <q-input
           v-model="username"
           :disable="isLoggedIn"
@@ -24,7 +27,7 @@
           :rules="[(val) => !!val || 'Field is required']"
         />
         <q-btn
-          class="btn q-mt-md"
+          class="btn q-mt-md full-width"
           color="gold"
           text-color="black"
           unelevated
@@ -42,9 +45,9 @@ import { useUserStore } from "src/stores/user";
 import { createComment, checkPermissions } from "src/services/commentservice";
 import { Notify } from "quasar";
 
-import { defineEmits } from 'vue'
+import { defineEmits } from "vue";
 
-const emit = defineEmits(['comment-added'])
+const emit = defineEmits(["comment-added"]);
 
 const store = useUserStore();
 
@@ -69,18 +72,21 @@ watch(
     clearForm();
   }
 );
-const allowComment = computed(() => isLoggedIn.value ? commentAllowed.value : guestCommentAllowed.value)
+const allowComment = computed(() =>
+  isLoggedIn.value ? commentAllowed.value : guestCommentAllowed.value
+);
 
 onMounted(() => {
-  checkPermissions(props.chapterId).then((data) => {
-    commentAllowed.value = data.commentAllowed;
-    guestCommentAllowed.value = data.guestCommentAllowed;
-  })
-  .catch(() => {
-    commentAllowed.value = false;
-    guestCommentAllowed.value = false;
-  })})
-
+  checkPermissions(props.chapterId)
+    .then((data) => {
+      commentAllowed.value = data.commentAllowed;
+      guestCommentAllowed.value = data.guestCommentAllowed;
+    })
+    .catch(() => {
+      commentAllowed.value = false;
+      guestCommentAllowed.value = false;
+    });
+});
 
 const send = () => {
   const comment = {
@@ -90,24 +96,25 @@ const send = () => {
     storyId: props.storyId,
     chapterId: props.chapterId,
     email: email.value,
-    createdAt: new Date()
+    createdAt: new Date(),
   };
-  createComment(comment).then(() => {
-    Notify.create({
-      message: "Comment published!",
-      position: "bottom-right",
-      type: "positive"
+  createComment(comment)
+    .then(() => {
+      Notify.create({
+        message: "Comment published!",
+        position: "bottom-right",
+        type: "positive",
+      });
+      clearForm();
+      emit("comment-added");
+    })
+    .catch(() => {
+      Notify.create({
+        message: "Something goes wrong!",
+        position: "bottom-right",
+        type: "negative",
+      });
     });
-    clearForm();
-    emit('comment-added')
-    // emit
-  }).catch(() => {
-    Notify.create({
-      message: "Something goes wrong!",
-      position: "bottom-right",
-      type: "negative"
-    });
-  });
 };
 
 const clearForm = () => {

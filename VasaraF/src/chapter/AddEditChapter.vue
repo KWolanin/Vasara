@@ -3,25 +3,25 @@
   <div class="row justify-center">
     <q-card class="col-10 q-pa-md q-mb-md">
       <form @submit.prevent.stop="saveChapter" class="q-gutter-md">
-      <q-btn  class="bg-accent-gold btn" flat type="submit">
-        {{ route.name === "add" ? "Publish" : "Update" }}
-      </q-btn>
-      <q-input
-        filled
-        ref="titleRef"
-        v-model="chapterTitle"
-        :label="chapterNumber"
-        :rules="[val => !!val || 'Title is required']"
-        class="q-py-md"
-      />
-      <q-editor
-        height="70vh"
-        v-model="content"
-        :dense="$q.screen.lt.md"
-        :toolbar="editorToolbar"
-        :fonts="editorFonts"
-      />
-    </form>
+        <q-btn class="bg-accent-gold btn" flat type="submit">
+          {{ route.name === "add" ? "Publish" : "Update" }}
+        </q-btn>
+        <q-input
+          filled
+          ref="titleRef"
+          v-model="chapterTitle"
+          :label="chapterNumber"
+          :rules="[(val) => !!val || 'Title is required']"
+          class="q-py-md"
+        />
+        <q-editor
+          height="70vh"
+          v-model="content"
+          :dense="$q.screen.lt.md"
+          :toolbar="editorToolbar"
+          :fonts="editorFonts"
+        />
+      </form>
     </q-card>
   </div>
 </template>
@@ -42,7 +42,7 @@ const $q = useQuasar();
 const chapterTitle = ref<string>("");
 const content = ref<string>("");
 
-const titleRef = ref(null)
+const titleRef = ref(null);
 
 const props = defineProps<{
   authorId: number;
@@ -56,14 +56,13 @@ const chapterNumber = computed<string>(() => {
 });
 
 function isHtmlContentEmpty(html) {
-    const div = document.createElement("div")
-    div.innerHTML = html
-    return div.innerText.trim().length === 0
+  const div = document.createElement("div");
+  div.innerHTML = html;
+  return div.innerText.trim().length === 0;
 }
 
 const saveChapter = (): void => {
-
-  titleRef.value.validate()
+  titleRef.value.validate();
   if (titleRef.value.hasError) {
     return;
   }
@@ -72,9 +71,9 @@ const saveChapter = (): void => {
     Notify.create({
       message: "Chapter must have a content!",
       position: "bottom-right",
-      type: "warning"
+      type: "warning",
     });
-    return
+    return;
   }
   let c: Chapter | Omit<Chapter, "id">;
   const date = new Date().toISOString();
@@ -86,25 +85,26 @@ const saveChapter = (): void => {
       storyId: props.storyId,
       chapterNo: props.chapters + 1,
       published: date,
-      updated: date
+      updated: date,
     };
   } else {
     c = {
       ...existingChapter.value,
       chapterTitle: chapterTitle.value,
       content: content.value,
-      updated: date
+      updated: date,
     };
   }
   createChapter(c)
     .then(() => {
-    route.name === "add" ?
-     router.push("/mines") : router.push({ path: '/manage', query: { storyId: c.storyId } })
+      route.name === "add"
+        ? router.push("/mines")
+        : router.push({ path: "/manage", query: { storyId: c.storyId } });
       const msg = route.name === "edit" ? "updated" : "published";
       Notify.create({
         message: `Chapter ${msg} successfully!`,
         position: "bottom-right",
-        type: "positive"
+        type: "positive",
       });
     })
     .catch((error: unknown) => {
@@ -112,7 +112,7 @@ const saveChapter = (): void => {
       Notify.create({
         message: `Error occurred!`,
         position: "bottom-right",
-        type: "negative"
+        type: "negative",
       });
     });
 };

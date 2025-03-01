@@ -34,11 +34,11 @@ export const useUserStore = defineStore("user", {
     },
     updateEmail(email) {
       this.email = email;
-      localStorage.setItem("user", JSON.stringify(this.$state)); // Używamy this.$state, by zapisać całą strukturę stanu
+      localStorage.setItem("user", JSON.stringify(this.$state));
     },
     updateUsername(username) {
       this.username = username;
-      localStorage.setItem("user", JSON.stringify(this.$state)); // Używamy this.$state, by zapisać całą strukturę stanu
+      localStorage.setItem("user", JSON.stringify(this.$state));
     }
   },
 });

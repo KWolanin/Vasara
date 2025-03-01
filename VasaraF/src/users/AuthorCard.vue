@@ -4,25 +4,21 @@
     flat
     :bordered="true"
   >
-  <router-link
-        :to="{
-          path: 'user',
-          query: { authorId: id },
-        }"
-        >{{ username }}</router-link
-      >
+    <router-link
+      :to="{
+        path: 'user',
+        query: { authorId: id },
+      }"
+      >{{ username }}</router-link
+    >
   </q-card>
 </template>
 
 <script setup lang="ts">
-
 defineProps<{
   username: String;
   id: number;
 }>();
-
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

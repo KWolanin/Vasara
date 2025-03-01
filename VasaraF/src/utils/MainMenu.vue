@@ -16,9 +16,8 @@
       <RouterLink to="login">Login</RouterLink>
     </q-btn>
     <p v-if="isLoggedIn" class="welcome">
-    <user-menu :username />
+      <user-menu :username />
     </p>
-
   </div>
 </template>
 
@@ -30,7 +29,6 @@ import { useUserStore } from "src/stores/user";
 const userStore = useUserStore();
 const isLoggedIn = computed(() => !!userStore.id);
 const username = computed(() => userStore.username);
-
 </script>
 
 <style scoped>

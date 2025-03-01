@@ -35,7 +35,6 @@ import { register } from "src/services/userservice";
 import { useRouter } from "vue-router";
 import { Notify } from "quasar";
 
-
 const router = useRouter();
 
 const login = ref("");
@@ -54,8 +53,9 @@ const registerUser = () => {
     username: username.value,
     login: login.value,
     password: password.value,
-    email: email.value
-  }).then(() => {
+    email: email.value,
+  })
+    .then(() => {
       msg.value = "";
       Notify.create({
         message: "Account created successfully",
@@ -63,9 +63,11 @@ const registerUser = () => {
         type: "positive",
       });
       router.push("/login");
-  }).catch((error) => {
-    msg.value = `Error during registration: ${error.response.data.message}`.toUpperCase();
-  });
+    })
+    .catch((error) => {
+      msg.value =
+        `Error during registration: ${error.response.data.message}`.toUpperCase();
+    });
 };
 </script>
 

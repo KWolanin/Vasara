@@ -52,13 +52,15 @@ const loginUser = () => {
     msg.value = "Please fill login and password".toUpperCase();
     return;
   }
-  login({ login: log.value, password: password.value }).then((response) => {
+  login({ login: log.value, password: password.value })
+    .then((response) => {
       msg.value = "";
       router.push("/mines");
-  })
-  .catch((error) => {
-    msg.value = `Error during login: ${error.response.data.message}`.toUpperCase();
-  })  ;
+    })
+    .catch((error) => {
+      msg.value =
+        `Error during login: ${error.response.data.message}`.toUpperCase();
+    });
 };
 </script>
 

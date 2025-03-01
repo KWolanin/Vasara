@@ -31,16 +31,16 @@
       <q-separator />
       <q-tab-panels v-model="tab" animated>
         <q-tab-panel name="fav">
-          <fav-list/>
+          <fav-list />
         </q-tab-panel>
         <q-tab-panel name="mail">
-          <follow-list/>
+          <follow-list />
         </q-tab-panel>
         <q-tab-panel name="read">
-          <read-later-list/>
+          <read-later-list />
         </q-tab-panel>
         <q-tab-panel name="authors">
-          <follow-author-list/>
+          <follow-author-list />
         </q-tab-panel>
       </q-tab-panels>
     </q-card>
@@ -56,8 +56,6 @@ import ReadLaterList from "./favs/ReadLaterList.vue";
 import FollowAuthorList from "./favs/FollowAuthorList.vue";
 
 const tab = ref<string>("fav");
-
-
 </script>
 
 <style scoped>

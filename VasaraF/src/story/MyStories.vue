@@ -1,9 +1,15 @@
 <template>
   <main-menu />
   <div class="row justify-center q-ml-md q-mb-sm">
-    <div class="col-8 flex justify-center">
-      <q-btn class="q-ma-sm q-mt-xl btn q-pa-md btn" unelevated  color="white" icon="add_circle_outline"
-    @click="addNew"> ADD </q-btn>
+    <div class="col-8 flex justify-start">
+      <q-btn
+        class="q-ma-sm q-mt-xl btn q-pa-md btn"
+        unelevated
+        icon="add_circle_outline"
+        @click="addNew"
+        label="ADD"
+      >
+      </q-btn>
     </div>
   </div>
 
@@ -25,29 +31,25 @@
     </div>
     <div class="row justify-center" v-if="!stories.length">
       <q-card class="q-pa-md card content card" flat>
-        <p>
-          No Stories Found
-        </p>
-        <p>
-          Maybe you should add a new story?
-        </p>
+        <p>No Stories Found</p>
+        <p>Maybe you should add a new story?</p>
       </q-card>
     </div>
     <div class="row justify-center q-py-lg">
       <q-pagination
-      v-if="stories.length"
-      :model-value=currentPage
-      :max="maxPages"
-      color="black"
-      rounded
-      active-color="gold"
-      direction-links
-      boundary-links
-      icon-first="skip_previous"
-      icon-last="skip_next"
-      icon-prev="fast_rewind"
-      icon-next="fast_forward"
-      @update:model-value="setPage"
+        v-if="stories.length"
+        :model-value="currentPage"
+        :max="maxPages"
+        color="black"
+        rounded
+        active-color="gold"
+        direction-links
+        boundary-links
+        icon-first="skip_previous"
+        icon-last="skip_next"
+        icon-prev="fast_rewind"
+        icon-next="fast_forward"
+        @update:model-value="setPage"
       />
     </div>
   </div>
@@ -63,21 +65,18 @@ import { Notify } from "quasar";
 import { Story } from "src/types/Story";
 import { useRouter } from "vue-router";
 
-
 const router = useRouter();
 const stories = ref<Story[]>([]);
 const loading = ref<boolean>(true);
 
-const storiesAmount = ref<number>(0)
-const storiesPerPage : number = 5
-const currentPage = ref<number>(1)
+const storiesAmount = ref<number>(0);
+const storiesPerPage: number = 5;
+const currentPage = ref<number>(1);
 
 onMounted(() => {
-
-  countMines()
-  .then((response) =>{
-    storiesAmount.value = response
-  })
+  countMines().then((response) => {
+    storiesAmount.value = response;
+  });
 
   fetchMyStories(currentPage.value, storiesPerPage)
     .then((response) => {
@@ -104,15 +103,14 @@ const reloadStories = async () => {
   Notify.create({
     message: "Story was deleted!",
     position: "bottom-right",
-    type: "positive"
+    type: "positive",
   });
   await fetchStories();
 };
 
-
 const maxPages = computed<number>(() => {
-  return Math.ceil(storiesAmount.value / storiesPerPage)
-})
+  return Math.ceil(storiesAmount.value / storiesPerPage);
+});
 
 const setPage = (newPage: number) => {
   fetchMyStories(newPage, storiesPerPage)
@@ -124,18 +122,15 @@ const setPage = (newPage: number) => {
     .catch((error) => {
       console.error(error);
     });
-}
+};
 
 const addNew = () => {
   router.push({ name: "create" });
 };
-
-
 </script>
 
 <style scoped>
 .content {
   width: 80%;
 }
-
 </style>

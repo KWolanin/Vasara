@@ -79,19 +79,19 @@ onMounted(() => {
   });
 });
 
-const changeOrder = () : void => {
+const changeOrder = (): void => {
   currentChapters.value.forEach((chapter, index) => {
     chapter.chapterNo = index + 1;
   });
 };
 
-const saveChanges = () : void => {
+const saveChanges = (): void => {
   updateChaptersOrder(currentChapters.value)
     .then(() => {
       Notify.create({
         message: "Chapters order was changed!",
         position: "bottom-right",
-        type: "positive"
+        type: "positive",
       });
     })
     .catch((err) => {
@@ -99,39 +99,39 @@ const saveChanges = () : void => {
       Notify.create({
         message: "Something went wrong!",
         position: "bottom-right",
-        type: "negative"
+        type: "negative",
       });
     });
 };
 
-const openDeleteDialog = (id: number) : void => {
+const openDeleteDialog = (id: number): void => {
   deleteDialogVisible.value = true;
   chapterToDelete.value = id;
 };
 
-const deleteChapter = () : void => {
+const deleteChapter = (): void => {
   if (chapterToDelete.value > 0) {
     const id = chapterToDelete.value;
     deleteChapterFromDb(id)
       .then(() => {
-          currentChapters.value = currentChapters.value.filter(
-            (c) => c.id !== id
-          );
-          currentChapters.value.forEach((chapter, idx) => {
-            chapter.chapterNo = idx + 1;
-          });
-          Notify.create({
-            message: "Chapter has been deleted!",
-            position: "bottom-right",
-            type: "positive"
-          });
+        currentChapters.value = currentChapters.value.filter(
+          (c) => c.id !== id
+        );
+        currentChapters.value.forEach((chapter, idx) => {
+          chapter.chapterNo = idx + 1;
+        });
+        Notify.create({
+          message: "Chapter has been deleted!",
+          position: "bottom-right",
+          type: "positive",
+        });
       })
       .catch((err) => {
         console.error(err);
         Notify.create({
           message: "Something went wrong!",
           position: "bottom-right",
-          type: "negative"
+          type: "negative",
         });
       });
   }

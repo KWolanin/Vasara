@@ -19,21 +19,20 @@
       <div>Is it time to read it?</div>
     </q-card-section>
     <q-card-actions class="justify-around">
-
-        <router-link
-            :to="{
-              path: 'read',
-              query: { storyId: storyId, chapterNo: 1 },
-            }"
-            >
-            <q-btn flat round color="black" icon="local_library"/>
-            <q-tooltip> Read now </q-tooltip>
-          </router-link>
+      <router-link
+        :to="{
+          path: 'read',
+          query: { storyId: storyId, chapterNo: 1 },
+        }"
+      >
+        <q-btn flat round color="black" icon="local_library" />
+        <q-tooltip> Read now </q-tooltip>
+      </router-link>
       <q-btn flat round color="pink" icon="list_alt" @click="removeFromRead">
-            <q-tooltip> Remove from read later </q-tooltip>
+        <q-tooltip> Remove from read later </q-tooltip>
       </q-btn>
       <q-btn flat round color="purple" icon="refresh" @click="random">
-            <q-tooltip> Random story </q-tooltip>
+        <q-tooltip> Random story </q-tooltip>
       </q-btn>
     </q-card-actions>
   </q-card>
@@ -53,10 +52,10 @@ const storyId = ref<number>(0);
 const visible = ref<boolean>(true);
 
 onMounted(() => {
-  random()
+  random();
 });
 
-const removeFromRead = ():void => {
+const removeFromRead = (): void => {
   addToReads(userStore.id, storyId.value)
     .then(() => {
       const msg = "Story removed from Read later";
@@ -86,10 +85,7 @@ const random = (): void => {
     .catch(() => {
       visible.value = false;
     });
-}
-
-
-
+};
 </script>
 
 <style scoped>

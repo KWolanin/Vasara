@@ -8,7 +8,8 @@ export const login = async (loginData: Author): Promise<void> => {
   try {
     const response = await api.post("/authors/login", loginData);
     const userStore = useUserStore();
-    const { id, username, login, email } = response.data;
+    console.log(response.data)
+    const { id, login, username, email } = response.data;
     userStore.saveUser(id, username, login, email);
     return response.data;
   } catch (error) {

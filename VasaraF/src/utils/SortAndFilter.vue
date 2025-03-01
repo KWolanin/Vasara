@@ -1,6 +1,8 @@
 <template>
   <q-card class="col-7 q-pa-lg card" flat>
-    <div class="q-ma-sm ask flex justify-center">What do you want to read today?</div>
+    <div class="q-ma-sm ask flex justify-center">
+      What do you want to read today?
+    </div>
     <div class="search flex justify-center col-6">
       <q-input outlined v-model="criteria.title" label="Title" />
       <q-input outlined v-model="criteria.author" label="Author" />
@@ -18,52 +20,51 @@
         stack-label
       />
       <q-btn-dropdown
-      color="gold"
-      label="Sort by"
-      size="xs"
-      text-color="black"
-      class="q-ml-md q-mb-md card"
-      unelevated
-    >
-      <q-list>
-        <q-item clickable v-close-popup @click="sort">
-          <q-item-section>
-            <q-item-label>Update date (newest)</q-item-label>
-          </q-item-section>
-        </q-item>
+        color="gold"
+        label="Sort by"
+        size="xs"
+        text-color="black"
+        class="q-ml-md q-mb-md card"
+        unelevated
+      >
+        <q-list>
+          <q-item clickable v-close-popup @click="sort">
+            <q-item-section>
+              <q-item-label>Update date (newest)</q-item-label>
+            </q-item-section>
+          </q-item>
 
-        <q-item clickable v-close-popup @click="sort">
-          <q-item-section>
-            <q-item-label>Update date (oldest)</q-item-label>
-          </q-item-section>
-        </q-item>
+          <q-item clickable v-close-popup @click="sort">
+            <q-item-section>
+              <q-item-label>Update date (oldest)</q-item-label>
+            </q-item-section>
+          </q-item>
 
-        <q-item clickable v-close-popup @click="sort">
-          <q-item-section>
-            <q-item-label>Author (A-Z)</q-item-label>
-          </q-item-section>
-        </q-item>
+          <q-item clickable v-close-popup @click="sort">
+            <q-item-section>
+              <q-item-label>Author (A-Z)</q-item-label>
+            </q-item-section>
+          </q-item>
 
-        <q-item clickable v-close-popup @click="sort">
-          <q-item-section>
-            <q-item-label>Author (Z-A)</q-item-label>
-          </q-item-section>
-        </q-item>
+          <q-item clickable v-close-popup @click="sort">
+            <q-item-section>
+              <q-item-label>Author (Z-A)</q-item-label>
+            </q-item-section>
+          </q-item>
 
-        <q-item clickable v-close-popup @click="sort">
-          <q-item-section>
-            <q-item-label>Story title (A-Z)</q-item-label>
-          </q-item-section>
-        </q-item>
-        <q-item clickable v-close-popup @click="sort">
-          <q-item-section>
-            <q-item-label>Story title (Z-A)</q-item-label>
-          </q-item-section>
-        </q-item>
-      </q-list>
-    </q-btn-dropdown>
+          <q-item clickable v-close-popup @click="sort">
+            <q-item-section>
+              <q-item-label>Story title (A-Z)</q-item-label>
+            </q-item-section>
+          </q-item>
+          <q-item clickable v-close-popup @click="sort">
+            <q-item-section>
+              <q-item-label>Story title (Z-A)</q-item-label>
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </q-btn-dropdown>
     </div>
-
   </q-card>
 </template>
 

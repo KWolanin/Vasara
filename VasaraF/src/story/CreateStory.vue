@@ -16,12 +16,13 @@
         @reset="clearForm"
         autofocus
       >
-        <q-input filled
-        v-model="title"
-         label="Title"
-         ref="titleRef"
-         :rules="[val => !!val || 'Title is required']"
-         />
+        <q-input
+          filled
+          v-model="title"
+          label="Title"
+          ref="titleRef"
+          :rules="[(val) => !!val || 'Title is required']"
+        />
         <q-input
           ref="descRef"
           filled
@@ -30,14 +31,25 @@
           counter
           label="Description"
           type="textarea"
-          :rules="[val => !!val || 'Description is required']"
+          :rules="[(val) => !!val || 'Description is required']"
         />
         <tag-input v-model="tags" label="Tag(s)" />
         <tag-input v-model="fandoms" label="Fandom(s)" />
-        <q-select v-model="rating" :options="ratingOptions" label="Rating" outlined />
+        <q-select
+          v-model="rating"
+          :options="ratingOptions"
+          label="Rating"
+          outlined
+        />
         <q-checkbox v-model="finished" label="Mark as completed work" />
-        <q-checkbox v-model="comment" label="Allow comments (registered users)" />
-        <q-checkbox v-model="guestComment" label="Allow comments (guest users)" />
+        <q-checkbox
+          v-model="comment"
+          label="Allow comments (registered users)"
+        />
+        <q-checkbox
+          v-model="guestComment"
+          label="Allow comments (guest users)"
+        />
 
         <div>
           <q-btn
@@ -69,26 +81,23 @@ import { useRouter } from "vue-router";
 import { useUserStore } from "../stores/user";
 import { Story } from "src/types/Story";
 
-
 const userStore = useUserStore();
 
 const title = ref<string>("");
 const description = ref<string>("");
 const fandoms = ref<string[]>([]);
 const tags = ref<string[]>([]);
-const finished = ref<boolean>(false)
-const rating = ref<string>('KIDS');
+const finished = ref<boolean>(false);
+const rating = ref<string>("KIDS");
 const comment = ref<boolean>(true);
 const guestComment = ref<boolean>(true);
 
 const isEditing = ref<boolean>(false);
 const existingStory = ref<Story>(null);
 
-
 const router = useRouter();
 
-const createNewStory = () : void => {
-
+const createNewStory = (): void => {
   const id = userStore.id;
   let story: Story | Omit<Story, "id">;
   if (!isEditing.value) {
@@ -105,7 +114,7 @@ const createNewStory = () : void => {
       updateDt: new Date(),
       rating: rating.value,
       comment: comment.value,
-      guestComment: guestComment.value
+      guestComment: guestComment.value,
     };
     createStory(story)
       .then(() => {
@@ -143,7 +152,7 @@ const createNewStory = () : void => {
   }
 };
 
-function clearForm() : void {
+function clearForm(): void {
   title.value = "";
   description.value = "";
   fandoms.value = [];
@@ -169,7 +178,5 @@ onMounted(() => {
   }
 });
 
-const ratingOptions = ["KIDS", "TEEN", "ADULT", "MATURE"]
-
+const ratingOptions = ["KIDS", "TEEN", "ADULT", "MATURE"];
 </script>
-

@@ -16,7 +16,10 @@
         </q-btn>
       </div>
       <div class="row q-ml-md col-4">
-        <q-input v-model="userData.username" :disable="!editing.username"></q-input>
+        <q-input
+          v-model="userData.username"
+          :disable="!editing.username"
+        ></q-input>
         <q-btn class="q-ml-md" flat @click="updateUserData('username')">
           {{ editing.username ? "Save 🔧" : "Change username 🔧" }}
           <q-tooltip>
@@ -94,12 +97,15 @@ onMounted(() => {
   });
 });
 
-const updateUserData = async (field: keyof UpdateAuthorRequest): Promise<void> => {
+const updateUserData = async (
+  field: keyof UpdateAuthorRequest
+): Promise<void> => {
   msg.value = "";
   msgSuccess.value = "";
   if (editing.value[field]) {
     const updatedValue = userData.value[field as keyof typeof userData.value];
-    const oldValue = userData.value[`old${capitalize(field)}` as keyof typeof userData.value];
+    const oldValue =
+      userData.value[`old${capitalize(field)}` as keyof typeof userData.value];
 
     if (field !== "password" && updatedValue === oldValue) {
       editing.value[field] = false;
@@ -118,14 +124,19 @@ const updateUserData = async (field: keyof UpdateAuthorRequest): Promise<void> =
 
     try {
       await change(updatePayload);
-      msgSuccess.value = `${capitalize(field)} updated successfully`.toUpperCase();
+      msgSuccess.value = `${capitalize(
+        field
+      )} updated successfully`.toUpperCase();
 
       if (field === "email") userStore.updateEmail(updatedValue as string);
-      if (field === "username") userStore.updateUsername(updatedValue as string);
+      if (field === "username")
+        userStore.updateUsername(updatedValue as string);
 
-      userData.value[`old${capitalize(field)}` as keyof typeof userData.value] = updatedValue;
-    } catch(error) {
-      msg.value = `Failed to update ${field}: ${error.response.data.message}`.toUpperCase();
+      userData.value[`old${capitalize(field)}` as keyof typeof userData.value] =
+        updatedValue;
+    } catch (error) {
+      msg.value =
+        `Failed to update ${field}: ${error.response.data.message}`.toUpperCase();
     }
   }
   editing.value[field] = !editing.value[field];
