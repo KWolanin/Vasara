@@ -38,7 +38,7 @@ public class Comment {
     private String guestName;
     private String guestEmail;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 500)
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)

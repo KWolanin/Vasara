@@ -1,6 +1,12 @@
 <template>
   <div v-for="comment in comments" key="comment.id">
-    <comment-item :comment="comment" :deletable="deletable" @comment-deleted="sendTrigger"/>
+    <comment-item
+      :comment="comment"
+      @comment-deleted="sendTrigger"
+      @reply-to="handleReply"
+      :storyAuthorId="storyAuthorId"
+      :depth='0'
+    />
   </div>
 </template>
 
@@ -12,13 +18,12 @@ import CommentItem from "./CommentItem.vue";
 
 const comments = ref<ChapterComment[]>([]);
 
-const emit = defineEmits(["comment-deleted"]);
-
+const emit = defineEmits(["comment-deleted", "reply"]);
 
 const props = defineProps<{
   chapterId: number;
   trigger: boolean;
-  deletable: boolean;
+  storyAuthorId: number;
 }>();
 
 watch(
@@ -32,13 +37,16 @@ watch(
 
 onMounted(() => {
   getComments(props.chapterId).then((data) => {
-    console.log(data);
     comments.value = data;
   });
 });
 
 const sendTrigger = () => {
   emit("comment-deleted");
+};
+
+const handleReply = (id: number) => {
+  emit('reply', id)
 }
 
 </script>

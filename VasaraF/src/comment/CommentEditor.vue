@@ -2,6 +2,7 @@
   <div class="q-pa-md" v-if="allowComment">
     <q-card class="card q-pa-md" flat>
       <div class="header">What do you think?</div>
+      <div class="header" v-if="props.parentId > 0">Send reply to the comment</div>
       <q-form @submit="send">
         <div class="flex justify-center">
           <q-input
@@ -9,6 +10,8 @@
             v-model="NewComment"
             filled
             type="textarea"
+            counter
+            maxlength="500"
             :rules="[(val) => !!val || 'Field is required']"
           />
         </div>
@@ -47,7 +50,7 @@ import { Notify } from "quasar";
 
 import { defineEmits } from "vue";
 
-const emit = defineEmits(["comment-added"]);
+const emit = defineEmits(["comment-added", "comment-sent"]);
 
 const store = useUserStore();
 
@@ -56,7 +59,6 @@ const isLoggedIn = computed(() => !!store.id);
 const NewComment = ref<string>("");
 const username = ref<string>(isLoggedIn.value ? store.username : "");
 const email = ref<string>(isLoggedIn.value ? store.email : "");
-const parentId = ref<number>(0);
 
 const commentAllowed = ref<boolean>(false);
 const guestCommentAllowed = ref<boolean>(false);
@@ -64,6 +66,7 @@ const guestCommentAllowed = ref<boolean>(false);
 const props = defineProps<{
   storyId: number;
   chapterId: number;
+  parentId: number;
 }>();
 
 watch(
@@ -92,11 +95,12 @@ const send = () => {
   const comment = {
     content: NewComment.value,
     name: username.value,
-    parentId: parentId.value,
+    parentId: props.parentId,
     storyId: props.storyId,
     chapterId: props.chapterId,
     email: email.value,
     createdAt: new Date(),
+    replies: []
   };
   createComment(comment)
     .then(() => {
@@ -107,6 +111,7 @@ const send = () => {
       });
       clearForm();
       emit("comment-added");
+      emit('comment-sent');
     })
     .catch(() => {
       Notify.create({
@@ -121,7 +126,7 @@ const clearForm = () => {
   NewComment.value = "";
   isLoggedIn ? null : (email.value = "");
   isLoggedIn ? null : (username.value = "");
-  parentId.value = 0;
+ // parent.value = 0;
 };
 </script>
 

@@ -43,7 +43,7 @@ public class CommentService {
 
         Comment comment = new Comment();
         Comment parentComment;
-        if (request.getParentId() > 0) {
+        if (request.getParentId() != null && request.getParentId() > 0) {
             parentComment = commentRepository.findById(request.getParentId())
                     .orElseThrow(() -> new CommentException(CommentError.PARENT_NOT_FOUND));
             comment.setParent(parentComment);
@@ -64,7 +64,7 @@ public class CommentService {
     }
 
     public List<CommentDTO> getCommentsForChapter(Long chapterId) {
-        List<Comment> comments = commentRepository.findByChapterIdAndParentIsNull(chapterId);
+       List<Comment> comments = commentRepository.findByChapterIdAndParentIsNull(chapterId);
         return comments.stream().map(this::toDto).collect(Collectors.toList());
     }
 

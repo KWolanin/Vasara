@@ -1,3 +1,4 @@
+
 export interface ChapterComment {
   id: number;
   content: string;
@@ -7,6 +8,7 @@ export interface ChapterComment {
   chapterId?: number;
   email: string;
   createdAt: string | Date;
+  replies: ChapterComment[];
 }
 
 export interface ChapterPermission {

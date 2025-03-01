@@ -78,11 +78,19 @@
   </div>
   <div class="row justify-center q-ma-md">
     <div class="col-5 column justify-center q-mb-lg" v-if="showCommentSection">
-      <comment-list :chapterId="data.id" :trigger="trigger" @comment-deleted="triggerCommentDownload" :deletable="isOwner" />
+      <comment-list
+        :chapterId="data.id"
+        :trigger="trigger"
+        @comment-deleted="triggerCommentDownload"
+        :storyAuthorId="data.storyDTO.authorId"
+        @reply="handleReply"
+      />
       <comment-editor
         :storyId="sId"
         :chapterId="data.id"
+        :parentId="replyToId"
         @comment-added="triggerCommentDownload"
+        @comment-sent="clearReply"
       />
     </div>
   </div>
@@ -165,9 +173,16 @@ const triggerCommentDownload = () => {
   trigger.value = !trigger.value;
 };
 
-const isOwner = computed(() => {
-  return data.value.storyDTO.authorId == store.id
-})
+
+const replyToId = ref<number | null>(null);
+
+const handleReply = (id: number) => {
+  replyToId.value = id;
+};
+
+const clearReply = () => {
+  replyToId.value = null;
+};
 
 </script>
 
