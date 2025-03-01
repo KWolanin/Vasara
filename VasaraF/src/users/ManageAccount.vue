@@ -110,6 +110,7 @@ const updateUserData = async (field: keyof UpdateAuthorRequest): Promise<void> =
       id: userStore.id,
       email: null,
       username: null,
+      login: null,
       password: null,
       description: null,
       [field]: updatedValue,

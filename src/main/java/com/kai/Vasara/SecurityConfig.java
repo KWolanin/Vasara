@@ -28,6 +28,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
                             .requestMatchers("/api/follows/**").permitAll()
                             .requestMatchers("/api/reads/**").permitAll()
                             .requestMatchers("/actuator/**").permitAll()
+                            .requestMatchers("/api/comments/**").permitAll()
                             .requestMatchers("/h2-console/**").permitAll() // temporary config for h2db
                             .anyRequest().authenticated())
 

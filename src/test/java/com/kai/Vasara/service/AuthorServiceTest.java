@@ -1,9 +1,10 @@
 package com.kai.Vasara.service;
 
-import com.kai.Vasara.entity.Author;
-import com.kai.Vasara.exception.AuthorException;
-import com.kai.Vasara.model.AuthorDAO;
-import com.kai.Vasara.repository.AuthorRepository;
+import com.kai.Vasara.entity.author.Author;
+import com.kai.Vasara.exception.author.AuthorException;
+import com.kai.Vasara.model.author.AuthorDTO;
+import com.kai.Vasara.repository.author.AuthorRepository;
+import com.kai.Vasara.service.author.AuthorService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -39,7 +40,7 @@ class AuthorServiceTest {
                 Author.builder().id(2L).username("Jane Smith").stories(Collections.emptyList()).build()
         );
         when(authorRepository.findAll()).thenReturn(authors);
-        List<AuthorDAO> result = authorService.getAll();
+        List<AuthorDTO> result = authorService.getAll();
         assertEquals(2, result.size());
         assertEquals("John Doe", result.get(0).getUsername());
         assertEquals("Jane Smith", result.get(1).getUsername());
@@ -49,7 +50,7 @@ class AuthorServiceTest {
     @Test
     void getAll_return_empty_list() {
         when(authorRepository.findAll()).thenReturn(Collections.emptyList());
-        List<AuthorDAO> result = authorService.getAll();
+        List<AuthorDTO> result = authorService.getAll();
         assertTrue(result.isEmpty());
         verify(authorRepository).findAll();
     }
@@ -58,7 +59,7 @@ class AuthorServiceTest {
     void getAuthor_exists() {
         Author author = Author.builder().id(1L).login("login").username("John Doe").stories(Collections.emptyList()).build();
         when(authorRepository.findById(1L)).thenReturn(Optional.of(author));
-        AuthorDAO result = authorService.getAuthor(1L);
+        AuthorDTO result = authorService.getAuthor(1L);
         assertNotNull(result);
         assertEquals("John Doe", result.getUsername());
     }
@@ -86,7 +87,7 @@ class AuthorServiceTest {
     @Test
     void from_authorToAuthorDAO_returnsCorrectAuthorDAO() {
         Author author = Author.builder().id(1L).login("login").stories(Collections.emptyList()).username("username").build();
-        AuthorDAO result = authorService.from(author);
+        AuthorDTO result = authorService.from(author);
         assertNotNull(result);
         assertEquals(author.getId(), result.getId());
         assertEquals(author.getUsername(), result.getUsername());
@@ -95,12 +96,12 @@ class AuthorServiceTest {
 
     @Test
     void from_authorDAOToAuthor_returnsCorrectAuthor() {
-        AuthorDAO authorDAO = AuthorDAO.builder().id(1L).username("username").email("e@e.com").stories(Collections.emptyList()).build();
-        Author result = authorService.from(authorDAO);
+        AuthorDTO authorDTO = AuthorDTO.builder().id(1L).username("username").email("e@e.com").stories(Collections.emptyList()).build();
+        Author result = authorService.from(authorDTO);
         assertNotNull(result);
-        assertEquals(authorDAO.getId(), result.getId());
-        assertEquals(authorDAO.getUsername(), result.getUsername());
-        assertEquals(authorDAO.getEmail(), result.getEmail());
+        assertEquals(authorDTO.getId(), result.getId());
+        assertEquals(authorDTO.getUsername(), result.getUsername());
+        assertEquals(authorDTO.getEmail(), result.getEmail());
     }
 
     @Test

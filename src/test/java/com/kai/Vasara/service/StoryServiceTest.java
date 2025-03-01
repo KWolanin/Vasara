@@ -1,12 +1,17 @@
 package com.kai.Vasara.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kai.Vasara.entity.Author;
-import com.kai.Vasara.entity.Story;
-import com.kai.Vasara.model.Criteria;
-import com.kai.Vasara.model.StoryDAO;
-import com.kai.Vasara.repository.ChapterRepository;
-import com.kai.Vasara.repository.StoryRepository;
+import com.kai.Vasara.entity.author.Author;
+import com.kai.Vasara.entity.story.Story;
+import com.kai.Vasara.model.SearchCriteria;
+import com.kai.Vasara.model.story.StoryDTO;
+import com.kai.Vasara.repository.chapter.ChapterRepository;
+import com.kai.Vasara.repository.story.StoryRepository;
+import com.kai.Vasara.service.chapter.ChapterService;
+import com.kai.Vasara.service.story.FavoriteServiceStory;
+import com.kai.Vasara.service.story.FollowServiceStory;
+import com.kai.Vasara.service.story.ReadLaterService;
+import com.kai.Vasara.service.story.StoryService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -37,7 +42,8 @@ public class StoryServiceTest {
     @Mock
     ChapterRepository chapterRepository;
 
-    @Mock ChapterService chapterService;
+    @Mock
+    ChapterService chapterService;
 
     @Mock
     ObjectMapper objectMapper;
@@ -46,20 +52,20 @@ public class StoryServiceTest {
     FavoriteServiceStory favoriteService;
 
     @Mock
-    FollowingServiceStory followingService;
+    FollowServiceStory followingService;
 
     @Mock
-    ReadServiceStory readService;
+    ReadLaterService readService;
 
 
     @Test
     void updateStoryTagsAndFandoms_test() {
         Story story = new Story();
-        StoryDAO storyDAO = new StoryDAO();
-        storyDAO.setTags(Arrays.asList("A", "B", "C"));
-        storyDAO.setFandoms(Arrays.asList("X", "Y", "Z"));
+        StoryDTO storyDTO = new StoryDTO();
+        storyDTO.setTags(Arrays.asList("A", "B", "C"));
+        storyDTO.setFandoms(Arrays.asList("X", "Y", "Z"));
 
-        storyService.updateStoryTagsAndFandoms(story, storyDAO);
+        storyService.updateStoryTagsAndFandoms(story, storyDTO);
 
         assertEquals("[\"A\",\"B\",\"C\"]", story.getTags());
         assertEquals("[\"X\",\"Y\",\"Z\"]", story.getFandoms());
@@ -68,11 +74,11 @@ public class StoryServiceTest {
     @Test
     void updateStoryTagsAndFandoms_test_no_tags() {
         Story story = new Story();
-        StoryDAO storyDAO = new StoryDAO();
-        storyDAO.setTags(List.of(""));
-        storyDAO.setFandoms(null);
+        StoryDTO storyDTO = new StoryDTO();
+        storyDTO.setTags(List.of(""));
+        storyDTO.setFandoms(null);
 
-        storyService.updateStoryTagsAndFandoms(story, storyDAO);
+        storyService.updateStoryTagsAndFandoms(story, storyDTO);
 
         assertEquals("[\"\"]", story.getTags());
         assertEquals("[\"\"]", story.getFandoms());
@@ -137,7 +143,7 @@ public class StoryServiceTest {
 
         when(storyRepository.findAll()).thenReturn(List.of(story1, story2));
 
-        List<StoryDAO> result = storyService.getAll();
+        List<StoryDTO> result = storyService.getAll();
 
         assertNotNull(result);
         assertEquals(2, result.size());
@@ -149,9 +155,9 @@ public class StoryServiceTest {
 
     @Test
     void getPage_withCriteria_returnsPageOfStoryDAO() {
-        Criteria criteria = new Criteria();
-        criteria.setTitle("Story");
-        criteria.setAuthor("Author");
+        SearchCriteria searchCriteria = new SearchCriteria();
+        searchCriteria.setTitle("Story");
+        searchCriteria.setAuthor("Author");
 
         Story story1 = new Story();
         story1.setId(1L);
@@ -162,7 +168,7 @@ public class StoryServiceTest {
         Page<Story> page = new PageImpl<>(List.of(story1), PageRequest.of(0, 1), 1);
         when(storyRepository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(page);
 
-        Page<StoryDAO> result = storyService.getPage(1, 1, criteria, "title");
+        Page<StoryDTO> result = storyService.getPage(1, 1, searchCriteria, "title");
 
         assertNotNull(result);
         assertEquals(1, result.getTotalElements());
@@ -173,7 +179,7 @@ public class StoryServiceTest {
 
     @Test
     void getPage_withoutCriteria_returnsPageOfStoryDAO() {
-        Criteria criteria = new Criteria();
+        SearchCriteria searchCriteria = new SearchCriteria();
         Story story1 = new Story();
         story1.setId(1L);
         story1.setTitle("Story 1");
@@ -183,7 +189,7 @@ public class StoryServiceTest {
         Page<Story> page = new PageImpl<>(List.of(story1), PageRequest.of(0, 1), 1);
         when(storyRepository.findAllWithChapters(any(Pageable.class))).thenReturn(page);
 
-        Page<StoryDAO> result = storyService.getPage(1, 1, criteria, "title");
+        Page<StoryDTO> result = storyService.getPage(1, 1, searchCriteria, "title");
 
         assertNotNull(result);
         assertEquals(1, result.getTotalElements());
@@ -205,7 +211,7 @@ public class StoryServiceTest {
         Page<Story> page = new PageImpl<>(List.of(story1), PageRequest.of(0, 1, sort), 1);
         when(storyRepository.findAllByAuthorId(eq(1L), any(Pageable.class))).thenReturn(page);
 
-        Page<StoryDAO> result = storyService.getMyStories(1L, 1, 1);
+        Page<StoryDTO> result = storyService.getMyStories(1L, 1, 1);
 
         assertNotNull(result);
         assertEquals(1, result.getTotalElements());
@@ -224,7 +230,7 @@ public class StoryServiceTest {
 
         when(storyRepository.findById(1L)).thenReturn(Optional.of(story));
 
-        StoryDAO result = storyService.getStory(1L);
+        StoryDTO result = storyService.getStory(1L);
 
         assertNotNull(result);
         assertEquals("Story 1", result.getTitle());
@@ -235,12 +241,12 @@ public class StoryServiceTest {
 
     @Test
     void saveStory_validStory_returnsTrue() {
-        StoryDAO storyDAO = new StoryDAO();
-        storyDAO.setTitle("New Story");
+        StoryDTO storyDTO = new StoryDTO();
+        storyDTO.setTitle("New Story");
 
         when(storyRepository.save(any(Story.class))).thenReturn(new Story());
 
-    storyService.saveStory(storyDAO);
+    storyService.saveStory(storyDTO);
 
         verify(storyRepository).save(any(Story.class));
         verifyNoMoreInteractions(storyRepository);
@@ -269,9 +275,9 @@ public class StoryServiceTest {
 
     @Test
     void editStory_storyExists_returnsTrue() {
-        StoryDAO storyDAO = new StoryDAO();
-        storyDAO.setId(1L);
-        storyDAO.setTitle("Updated Story");
+        StoryDTO storyDTO = new StoryDTO();
+        storyDTO.setId(1L);
+        storyDTO.setTitle("Updated Story");
 
         Story existingStory = new Story();
         existingStory.setId(1L);
@@ -280,7 +286,7 @@ public class StoryServiceTest {
         when(storyRepository.findById(1L)).thenReturn(Optional.of(existingStory));
         when(storyRepository.save(existingStory)).thenReturn(existingStory);
 
-        storyService.editStory(storyDAO);
+        storyService.editStory(storyDTO);
 
         assertEquals("Updated Story", existingStory.getTitle());
         verify(storyRepository).findById(1L);
@@ -290,13 +296,13 @@ public class StoryServiceTest {
 
     @Test
     void editStory_storyDoesNotExist_returnsFalse() {
-        StoryDAO storyDAO = new StoryDAO();
-        storyDAO.setId(1L);
-        storyDAO.setTitle("Updated Story");
+        StoryDTO storyDTO = new StoryDTO();
+        storyDTO.setId(1L);
+        storyDTO.setTitle("Updated Story");
 
         when(storyRepository.findById(1L)).thenReturn(Optional.empty());
 
-        storyService.editStory(storyDAO);
+        storyService.editStory(storyDTO);
 
         verify(storyRepository).findById(1L);
         verifyNoMoreInteractions(storyRepository);

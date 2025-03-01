@@ -11,4 +11,6 @@ export interface Story {
   updateDt: string | Date;
   chaptersNumber: number;
   rating: string;
+  comment: boolean;
+  guestComment: boolean;
 }

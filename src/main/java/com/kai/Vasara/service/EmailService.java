@@ -1,11 +1,11 @@
 package com.kai.Vasara.service;
 
-import com.kai.Vasara.entity.Chapter;
-import com.kai.Vasara.entity.FollowingAuthors;
-import com.kai.Vasara.entity.FollowingStories;
-import com.kai.Vasara.entity.Story;
-import com.kai.Vasara.repository.FollowingAuthorRepository;
-import com.kai.Vasara.repository.FollowingRepository;
+import com.kai.Vasara.entity.chapter.Chapter;
+import com.kai.Vasara.entity.author.FollowAuthor;
+import com.kai.Vasara.entity.story.FollowStory;
+import com.kai.Vasara.entity.story.Story;
+import com.kai.Vasara.repository.author.FollowAuthorRepository;
+import com.kai.Vasara.repository.story.FollowStoryRepository;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.Getter;
@@ -32,18 +32,18 @@ import java.util.List;
 public class EmailService {
 
     private final JavaMailSender emailSender;
-    private final FollowingRepository followingRepository;
+    private final FollowStoryRepository followStoryRepository;
     private final RabbitTemplate rabbitTemplate;
-    private final FollowingAuthorRepository followingAuthorRepository;
+    private final FollowAuthorRepository followAuthorRepository;
     private final EnvironmentService environmentService;
 
 
     @Autowired
-    public EmailService(JavaMailSender emailSender, FollowingRepository followingRepository, RabbitTemplate rabbitTemplate, FollowingAuthorRepository followingAuthorRepository, EnvironmentService environmentService) {
+    public EmailService(JavaMailSender emailSender, FollowStoryRepository followStoryRepository, RabbitTemplate rabbitTemplate, FollowAuthorRepository followAuthorRepository, EnvironmentService environmentService) {
         this.emailSender = emailSender;
-        this.followingRepository = followingRepository;
+        this.followStoryRepository = followStoryRepository;
         this.rabbitTemplate = rabbitTemplate;
-        this.followingAuthorRepository = followingAuthorRepository;
+        this.followAuthorRepository = followAuthorRepository;
         this.environmentService = environmentService;
     }
 
@@ -103,7 +103,7 @@ public class EmailService {
     }
 
     private void sendMailsToAuthorFollowers(StoryEmailStructure message) {
-        List<FollowingAuthors> authors = followingAuthorRepository.findAllByFollowedAuthor_Id(message.getAuthorId());
+        List<FollowAuthor> authors = followAuthorRepository.findAllByFollowedAuthor_Id(message.getAuthorId());
         authors.forEach(author -> {
             String email = author.getFollowingAuthor().getEmail();
             String subject = formatTitleForNewStoryEmail(author.getFollowedAuthor().getUsername());
@@ -128,7 +128,7 @@ public class EmailService {
     }
 
     private void sendMailsToStoryFollowers(ChapterEmailStructure message) {
-        List<FollowingStories> stories = followingRepository.findByStoryId(Long.parseLong(message.getStoryId()));
+        List<FollowStory> stories = followStoryRepository.findByStoryId(Long.parseLong(message.getStoryId()));
         stories.forEach(story -> {
             String email = story.getAuthor().getEmail();
             String subject = formatTitleForNewChapterEmail(message.getStoryTitle(), message.getUsername());

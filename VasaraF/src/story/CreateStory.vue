@@ -36,6 +36,9 @@
         <tag-input v-model="fandoms" label="Fandom(s)" />
         <q-select v-model="rating" :options="ratingOptions" label="Rating" outlined />
         <q-checkbox v-model="finished" label="Mark as completed work" />
+        <q-checkbox v-model="comment" label="Allow comments (registered users)" />
+        <q-checkbox v-model="guestComment" label="Allow comments (guest users)" />
+
         <div>
           <q-btn
             :label="isEditing ? 'Update' : 'Create'"
@@ -75,6 +78,8 @@ const fandoms = ref<string[]>([]);
 const tags = ref<string[]>([]);
 const finished = ref<boolean>(false)
 const rating = ref<string>('KIDS');
+const comment = ref<boolean>(true);
+const guestComment = ref<boolean>(true);
 
 const isEditing = ref<boolean>(false);
 const existingStory = ref<Story>(null);
@@ -98,7 +103,9 @@ const createNewStory = () : void => {
       finished: finished.value,
       publishDt: new Date(),
       updateDt: new Date(),
-      rating: rating.value
+      rating: rating.value,
+      comment: comment.value,
+      guestComment: guestComment.value
     };
     createStory(story)
       .then(() => {
@@ -121,7 +128,9 @@ const createNewStory = () : void => {
       finished: finished.value,
       publishDt: existingStory.value.publishDt,
       updateDt: existingStory.value.updateDt,
-      rating: rating.value
+      rating: rating.value,
+      comment: comment.value,
+      guestComment: guestComment.value,
     };
     updateStory(story)
       .then(() => {
@@ -154,6 +163,8 @@ onMounted(() => {
     isEditing.value = true;
     existingStory.value = story;
     rating.value = story.rating;
+    comment.value = story.comment;
+    guestComment.value = story.guestComment;
     localStorage.removeItem("currentStory");
   }
 });

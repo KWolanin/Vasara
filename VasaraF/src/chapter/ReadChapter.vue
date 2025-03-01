@@ -12,12 +12,12 @@
         >
           <q-btn class="q-ml-md btn" label="Previous" flat />
         </router-link>
-        <q-space/>
+        <q-space />
         <div class="row justify-center">
           <q-btn @click="decreaseFont" label="A-" class="q-mr-sm btn" flat />
           <q-btn @click="increaseFont" label="A+" class="btn" flat />
         </div>
-        <q-space/>
+        <q-space />
         <router-link
           v-show="isNextChapter"
           :to="{
@@ -33,7 +33,11 @@
     <div class="q-mb-md chapter">
       <h4>{{ data.chapterTitle }}</h4>
       <q-card class="q-pa-md q-mb-lg content" flat>
-        <div class="q-ma-md" :style="{ fontSize: fontSize + 'px' }" v-html="data.content" />
+        <div
+          class="q-ma-md"
+          :style="{ fontSize: fontSize + 'px' }"
+          v-html="data.content"
+        />
       </q-card>
     </div>
   </div>
@@ -41,6 +45,35 @@
     Loading...
     <q-spinner-hearts size="50px" color="gold" />
   </q-inner-loading>
+
+  <div class="row justify-center q-ma-md">
+    <div class="col-10 row justify-end q-mb-lg">
+      <q-btn
+        unelevated
+        color="pink"
+        text-color="black"
+        class="q-mr-md"
+        @click="showCommentSection = !showCommentSection"
+        >{{ showCommentSection ? 'Hide comments' : 'Show comments'}}</q-btn
+      >
+      <q-btn
+        unelevated
+        color="pink"
+        round
+        text-color="black"
+        icon="arrow_circle_up"
+        class="q-mr-md"
+        @click="toTop"
+      ></q-btn>
+    </div>
+  </div>
+  <div class="row justify-center q-ma-md">
+  <div class="col-4 column justify-center q-mb-lg" v-if="showCommentSection">
+    <comment-list :chapterId="data.id" :trigger="trigger"/>
+    <comment-editor :storyId="sId" :chapterId="data.id" @comment-added="triggerCommentDownload"/>
+  </div>
+</div>
+
 </template>
 
 <script setup lang="ts">
@@ -49,6 +82,8 @@ import { fetchChapter, isNextOrPrevious } from "../services/chapterservice";
 import MainMenu from "../utils/MainMenu.vue";
 import { useRoute } from "vue-router";
 import { Chapter } from "../types/Chapter";
+import CommentEditor from "src/comment/CommentEditor.vue";
+import CommentList from "src/comment/CommentList.vue";
 
 const route = useRoute();
 
@@ -61,11 +96,11 @@ const isPreviousChapter = ref<boolean>(false);
 const sId = ref<number>(0);
 const cNo = ref<number>(0);
 
-const increaseFont = () : void => {
+const increaseFont = (): void => {
   fontSize.value += 2;
 };
 
-const decreaseFont = () : void => {
+const decreaseFont = (): void => {
   if (fontSize.value > 8) fontSize.value -= 2;
 };
 
@@ -80,7 +115,7 @@ watch(
   }
 );
 
-const loadChapter = () : void => {
+const loadChapter = (): void => {
   sId.value = Number(route.query.storyId);
   cNo.value = Number(route.query.chapterNo);
 
@@ -99,10 +134,25 @@ const loadChapter = () : void => {
     isPreviousChapter.value = response;
   });
 };
+
+const toTop = () => {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth",
+  });
+};
+
+const showCommentSection = ref<boolean>(false);
+
+
+const trigger = ref<boolean>(false);
+
+const triggerCommentDownload = () => {
+  trigger.value = !trigger.value;
+};
 </script>
 
 <style scoped>
-
 .chapter {
   display: flex;
   flex-direction: column;

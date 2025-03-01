@@ -1,13 +1,14 @@
 package com.kai.Vasara.service;
 
-import com.kai.Vasara.entity.Author;
-import com.kai.Vasara.entity.FollowingStories;
-import com.kai.Vasara.entity.Story;
-import com.kai.Vasara.exception.AuthorException;
-import com.kai.Vasara.exception.StoryException;
-import com.kai.Vasara.repository.AuthorRepository;
-import com.kai.Vasara.repository.FollowingRepository;
-import com.kai.Vasara.repository.StoryRepository;
+import com.kai.Vasara.entity.author.Author;
+import com.kai.Vasara.entity.story.FollowStory;
+import com.kai.Vasara.entity.story.Story;
+import com.kai.Vasara.exception.author.AuthorException;
+import com.kai.Vasara.exception.story.StoryException;
+import com.kai.Vasara.repository.author.AuthorRepository;
+import com.kai.Vasara.repository.story.FollowStoryRepository;
+import com.kai.Vasara.repository.story.StoryRepository;
+import com.kai.Vasara.service.story.FollowServiceStory;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -25,10 +26,10 @@ import static org.mockito.Mockito.atMostOnce;
 class FollowingServiceTest {
 
     @InjectMocks
-    FollowingServiceStory followingService;
+    FollowServiceStory followingService;
 
     @Mock
-    FollowingRepository followingRepository;
+    FollowStoryRepository followStoryRepository;
 
     @Mock
     AuthorRepository authorRepository;
@@ -42,14 +43,14 @@ class FollowingServiceTest {
         long authorId = 1L;
         long storyId = 1L;
 
-        FollowingStories existingOne = new FollowingStories();
+        FollowStory existingOne = new FollowStory();
         existingOne.setId(2L);
         when(followingService.check(authorId, storyId)).thenReturn(Optional.of(existingOne));
 
         followingService.add(authorId, storyId);
 
-        verify(followingRepository, atMostOnce()).delete(existingOne);
-        verify(followingRepository, never()).save(any());
+        verify(followStoryRepository, atMostOnce()).delete(existingOne);
+        verify(followStoryRepository, never()).save(any());
     }
 
     @Test
@@ -64,7 +65,7 @@ class FollowingServiceTest {
             followingService.add(authorId, storyId);
         });
         assertEquals("User not found", exception.getAuthorError().getMessage());
-        verifyNoMoreInteractions(followingRepository);
+        verifyNoMoreInteractions(followStoryRepository);
     }
 
     @Test
@@ -82,7 +83,7 @@ class FollowingServiceTest {
         });
 
         assertEquals("Story was not found", exception.getStoryError().getMessage());
-        verifyNoMoreInteractions(followingRepository);
+        verifyNoMoreInteractions(followStoryRepository);
     }
 
     @Test
@@ -98,6 +99,6 @@ class FollowingServiceTest {
         doReturn(Optional.of(story)).when(storyRepository).findById(1L);
 
         followingService.add(authorId, storyId);
-        verify(followingRepository, atMostOnce()).save(any());
+        verify(followStoryRepository, atMostOnce()).save(any());
     }
 }

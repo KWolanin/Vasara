@@ -1,13 +1,14 @@
 package com.kai.Vasara.service;
 
-import com.kai.Vasara.entity.Author;
-import com.kai.Vasara.entity.ReadStories;
-import com.kai.Vasara.entity.Story;
-import com.kai.Vasara.exception.AuthorException;
-import com.kai.Vasara.exception.StoryException;
-import com.kai.Vasara.repository.AuthorRepository;
-import com.kai.Vasara.repository.ReadRepository;
-import com.kai.Vasara.repository.StoryRepository;
+import com.kai.Vasara.entity.author.Author;
+import com.kai.Vasara.entity.story.ReadLaterStory;
+import com.kai.Vasara.entity.story.Story;
+import com.kai.Vasara.exception.author.AuthorException;
+import com.kai.Vasara.exception.story.StoryException;
+import com.kai.Vasara.repository.author.AuthorRepository;
+import com.kai.Vasara.repository.story.ReadLaterRepository;
+import com.kai.Vasara.repository.story.StoryRepository;
+import com.kai.Vasara.service.story.ReadLaterService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -23,10 +24,10 @@ import static org.mockito.Mockito.*;
 class ReadServiceTest {
 
     @InjectMocks
-    ReadServiceStory readService;
+    ReadLaterService readService;
 
     @Mock
-    ReadRepository readRepository;
+    ReadLaterRepository readLaterRepository;
 
     @Mock
     AuthorRepository authorRepository;
@@ -40,14 +41,14 @@ class ReadServiceTest {
         long authorId = 1L;
         long storyId = 1L;
 
-        ReadStories existingOne = new ReadStories();
+        ReadLaterStory existingOne = new ReadLaterStory();
         existingOne.setId(2L);
         when(readService.check(authorId, storyId)).thenReturn(Optional.of(existingOne));
 
         readService.add(authorId, storyId);
 
-        verify(readRepository, atMostOnce()).delete(existingOne);
-        verify(readRepository, never()).save(any());
+        verify(readLaterRepository, atMostOnce()).delete(existingOne);
+        verify(readLaterRepository, never()).save(any());
     }
 
     @Test
@@ -62,7 +63,7 @@ class ReadServiceTest {
             readService.add(authorId, storyId);
         });
         assertEquals("User not found", exception.getAuthorError().getMessage());
-        verifyNoMoreInteractions(readRepository);
+        verifyNoMoreInteractions(readLaterRepository);
     }
 
     @Test
@@ -80,7 +81,7 @@ class ReadServiceTest {
         });
 
         assertEquals("Story was not found", exception.getStoryError().getMessage());
-        verifyNoMoreInteractions(readRepository);
+        verifyNoMoreInteractions(readLaterRepository);
     }
 
     @Test
@@ -96,6 +97,6 @@ class ReadServiceTest {
         doReturn(Optional.of(story)).when(storyRepository).findById(1L);
 
         readService.add(authorId, storyId);
-        verify(readRepository, atMostOnce()).save(any());
+        verify(readLaterRepository, atMostOnce()).save(any());
     }
 }

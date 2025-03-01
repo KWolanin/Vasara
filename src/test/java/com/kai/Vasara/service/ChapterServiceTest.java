@@ -1,10 +1,11 @@
 package com.kai.Vasara.service;
 
 
-import com.kai.Vasara.entity.Chapter;
-import com.kai.Vasara.model.ChapterDAO;
-import com.kai.Vasara.repository.ChapterRepository;
+import com.kai.Vasara.entity.chapter.Chapter;
+import com.kai.Vasara.model.chapter.ChapterDTO;
+import com.kai.Vasara.repository.chapter.ChapterRepository;
 
+import com.kai.Vasara.service.chapter.ChapterService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -29,11 +30,11 @@ class ChapterServiceTest {
 
     @Test
     void editChaptersOrder() {
-        ChapterDAO shouldBeFirst = ChapterDAO.builder()
+        ChapterDTO shouldBeFirst = ChapterDTO.builder()
                 .id(2)
                 .chapterNo(1)
                 .chapterTitle("Published as 2nd, should be 1st").build();
-        ChapterDAO shouldBeSecond = ChapterDAO.builder()
+        ChapterDTO shouldBeSecond = ChapterDTO.builder()
                 .id(1)
                 .chapterNo(2)
                 .chapterTitle("Published as 1st, should be 2nd").build();

@@ -4,4 +4,5 @@ export interface UpdateAuthorRequest {
   username: string;
   password: string;
   description: string;
+  login: string;
 }

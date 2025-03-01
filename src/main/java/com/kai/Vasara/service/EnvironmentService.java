@@ -3,9 +3,7 @@ package com.kai.Vasara.service;
 import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import java.net.InetAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 @Service
 @Slf4j
@@ -27,6 +25,7 @@ public class EnvironmentService {
 }
 
     public boolean isPostgreSQL() {
-        return entityManager.createNativeQuery("SELECT version()").getSingleResult().toString().toLowerCase().contains("postgresql");
+        return entityManager.createNativeQuery("SELECT version()")
+                .getSingleResult().toString().toLowerCase().contains("postgresql");
     }
 }
