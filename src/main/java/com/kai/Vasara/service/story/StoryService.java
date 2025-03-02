@@ -11,6 +11,7 @@ import com.kai.Vasara.model.story.StoryDTO;
 import com.kai.Vasara.repository.story.StoryRepository;
 import com.kai.Vasara.service.author.AuthorService;
 import com.kai.Vasara.service.chapter.ChapterService;
+import com.kai.Vasara.service.comment.CommentService;
 import jakarta.persistence.criteria.Predicate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,17 +42,19 @@ public class StoryService {
     private final FavoriteServiceStory favoriteService;
     private final FollowServiceStory followingService;
     private final ReadLaterService readService;
+    private final CommentService commentService;
 
     @Autowired
     public StoryService(StoryRepository storyRepository, AuthorService authorService,
                         ChapterService chapterService, @Lazy FavoriteServiceStory favoriteService,
-                        @Lazy FollowServiceStory followingService, @Lazy ReadLaterService readService) {
+                        @Lazy FollowServiceStory followingService, @Lazy ReadLaterService readService, CommentService commentService) {
         this.storyRepository = storyRepository;
         this.authorService = authorService;
         this.chapterService = chapterService;
         this.favoriteService = favoriteService;
         this.followingService = followingService;
         this.readService = readService;
+        this.commentService = commentService;
     }
 
     public List<StoryDTO> getAll() {
@@ -279,6 +282,7 @@ public class StoryService {
     @Transactional
     @CacheEvict(value = { "userStoriesCache", "storiesCache" }, allEntries = true)
     public void deleteStory(Long id) {
+        commentService.deleteByStoryId(id);
         chapterService.deleteChaptersForStory(id);
         favoriteService.delete(id);
         followingService.delete(id);

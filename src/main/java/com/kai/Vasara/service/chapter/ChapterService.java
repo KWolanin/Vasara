@@ -9,6 +9,7 @@ import com.kai.Vasara.model.story.StoryDTO;
 import com.kai.Vasara.repository.chapter.ChapterRepository;
 import com.kai.Vasara.repository.story.StoryRepository;
 import com.kai.Vasara.service.EmailService;
+import com.kai.Vasara.service.comment.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Component;
@@ -26,12 +27,14 @@ public class ChapterService {
     private final ChapterRepository chapterRepository;
     private final StoryRepository storyRepository;
     private final EmailService emailService;
+    private final CommentService commentService;
 
     @Autowired
-    public ChapterService(ChapterRepository chapterRepository, StoryRepository storyRepository, EmailService emailService) {
+    public ChapterService(ChapterRepository chapterRepository, StoryRepository storyRepository, EmailService emailService, CommentService commentService) {
         this.chapterRepository = chapterRepository;
         this.storyRepository = storyRepository;
         this.emailService = emailService;
+        this.commentService = commentService;
     }
 
     public ChapterDTO getChapter(Long id) {
@@ -138,6 +141,7 @@ public class ChapterService {
 
     @CacheEvict(value = { "userStoriesCache", "storiesCache" }, allEntries = true)
     public void deleteChapter(Long id) {
+        commentService.deleteByChapterId(id);
         chapterRepository.deleteById(id);
     }
 }

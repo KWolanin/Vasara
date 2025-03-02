@@ -19,6 +19,7 @@ import com.kai.Vasara.repository.story.StoryRepository;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
@@ -106,6 +107,15 @@ public class CommentService {
 
     public void delete(long commentId) {
         commentRepository.deleteById(commentId);
+    }
+
+    public void deleteByStoryId(long storyId) {
+        commentRepository.deleteAllByStoryId(storyId);
+    }
+
+    @Transactional
+    public void deleteByChapterId(Long chapterId) {
+        commentRepository.deleteAllByChapterId(chapterId);
     }
 
     @Data

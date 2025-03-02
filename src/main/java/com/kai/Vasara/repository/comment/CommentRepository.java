@@ -11,4 +11,8 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     List<Comment> findByChapterIdAndParentIsNull(Long chapterId);
 
     List<Comment> findByChapterId(Long chapterId);
+
+    void deleteAllByStoryId(long storyId);
+
+    void deleteAllByChapterId(Long chapterId);
 }
