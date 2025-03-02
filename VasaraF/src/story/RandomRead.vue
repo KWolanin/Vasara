@@ -39,11 +39,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted } from "vue";
 import { getRandom } from "src/services/readservice";
 import { addToReads } from "src/services/readservice";
-import { Notify } from "quasar";
 import { useUserStore } from "../stores/user";
+import { showNotification } from "src/utilsTS/notify";
 
 const userStore = useUserStore();
 
@@ -58,21 +58,12 @@ onMounted(() => {
 const removeFromRead = (): void => {
   addToReads(userStore.id, storyId.value)
     .then(() => {
-      const msg = "Story removed from Read later";
-      Notify.create({
-        message: msg,
-        position: "bottom-right",
-        type: "negative",
-      });
+      showNotification("Story removed from Read later", "negative")
       random();
     })
     .catch((err) => {
       console.error("Read later error:", err);
-      Notify.create({
-        message: "Error occurred while adding or removing read later",
-        position: "bottom-right",
-        type: "negative",
-      });
+      showNotification("Error occurred while adding or removing read later", "negative")
     });
 };
 

@@ -37,7 +37,3 @@
 
   <template />
 </template>
-
-<script setup>
-import MainMenu from "./utils/MainMenu.vue";
-</script>

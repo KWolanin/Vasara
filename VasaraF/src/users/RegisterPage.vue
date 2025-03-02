@@ -33,7 +33,7 @@
 import { ref } from "vue";
 import { register } from "src/services/userservice";
 import { useRouter } from "vue-router";
-import { Notify } from "quasar";
+import { showNotification } from "src/utilsTS/notify";
 
 const router = useRouter();
 
@@ -57,11 +57,7 @@ const registerUser = () => {
   })
     .then(() => {
       msg.value = "";
-      Notify.create({
-        message: "Account created successfully",
-        position: "bottom-right",
-        type: "positive",
-      });
+      showNotification("Account created successfully", "positive")
       router.push("/login");
     })
     .catch((error) => {

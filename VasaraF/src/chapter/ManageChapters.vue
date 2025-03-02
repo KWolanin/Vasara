@@ -51,7 +51,6 @@
 </template>
 
 <script setup lang="ts">
-import MainMenu from "../utils/MainMenu.vue";
 import { useRoute } from "vue-router";
 import { onMounted, ref } from "vue";
 import {
@@ -62,7 +61,8 @@ import {
 import { VueDraggable } from "vue-draggable-plus";
 import ChapterCard from "./ChapterCard.vue";
 import { Chapter } from "../types/Chapter";
-import { Notify } from "quasar";
+import { showNotification } from "src/utilsTS/notify";
+
 
 const route = useRoute();
 
@@ -88,19 +88,11 @@ const changeOrder = (): void => {
 const saveChanges = (): void => {
   updateChaptersOrder(currentChapters.value)
     .then(() => {
-      Notify.create({
-        message: "Chapters order was changed!",
-        position: "bottom-right",
-        type: "positive",
-      });
+      showNotification("Chapters order changed!", "positive")
     })
     .catch((err) => {
       console.error(err);
-      Notify.create({
-        message: "Something went wrong!",
-        position: "bottom-right",
-        type: "negative",
-      });
+      showNotification("Something went wrong!", "negative")
     });
 };
 
@@ -120,19 +112,12 @@ const deleteChapter = (): void => {
         currentChapters.value.forEach((chapter, idx) => {
           chapter.chapterNo = idx + 1;
         });
-        Notify.create({
-          message: "Chapter has been deleted!",
-          position: "bottom-right",
-          type: "positive",
-        });
+        showNotification("Chapter deleted!", "positive")
+
       })
       .catch((err) => {
         console.error(err);
-        Notify.create({
-          message: "Something went wrong!",
-          position: "bottom-right",
-          type: "negative",
-        });
+        showNotification("Something went wrong!", "negative")
       });
   }
 };

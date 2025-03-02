@@ -99,7 +99,6 @@
 <script setup lang="ts">
 import { onMounted, ref, watch, computed } from "vue";
 import { fetchChapter, isNextOrPrevious } from "../services/chapterservice";
-import MainMenu from "../utils/MainMenu.vue";
 import { useRoute } from "vue-router";
 import { Chapter } from "../types/Chapter";
 import CommentEditor from "src/comment/CommentEditor.vue";

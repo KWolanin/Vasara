@@ -38,7 +38,6 @@
 </template>
 
 <script setup lang="ts">
-import MainMenu from "../utils/MainMenu.vue";
 import { ref, onMounted, computed } from "vue";
 import { useRoute } from "vue-router";
 import { getAuthor } from "src/services/authorservice";
@@ -47,7 +46,7 @@ import StoryCard from "src/story/StoryCard.vue";
 import { useUserStore } from "src/stores/user";
 import FavAndFollow from "../utils/FavAndFollow.vue";
 import { addToFollows, isFollow } from "src/services/followauthorservice";
-import { Notify } from "quasar";
+import { showNotification } from "src/utilsTS/notify";
 
 const userStore = useUserStore();
 const isLoggedIn = computed(() => !!userStore.id);
@@ -80,19 +79,11 @@ const follow = (): void => {
     .then((data) => {
       const msg = data ? "Author followed" : "Author unfollowed";
       isFollowed.value = data;
-      Notify.create({
-        message: msg,
-        position: "bottom-right",
-        type: data ? "positive" : "negative",
-      });
+      showNotification(msg, data ? "positive" : "negative")
     })
     .catch((err) => {
       console.error("Follow error:", err);
-      Notify.create({
-        message: `Error occurred while adding or removing follow: ${err.response.data.message}`,
-        position: "bottom-right",
-        type: "negative",
-      });
+      showNotification(`Error occurred while adding or removing follow: ${err.response.data.message}`, "negative")
     });
 };
 </script>

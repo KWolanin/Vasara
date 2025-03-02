@@ -43,7 +43,7 @@
 import { addToFavorite, isFav } from "src/services/favoriteservice";
 import { addToFollows, isFollow } from "src/services/followservice";
 import { addToReads, isReads } from "src/services/readservice";
-import { Notify } from "quasar";
+import { showNotification } from "src/utilsTS/notify";
 import { useUserStore } from "../stores/user";
 import { onMounted, ref, computed } from "vue";
 
@@ -77,19 +77,11 @@ const favorite = (): void => {
         ? "Story added to favorites"
         : "Story removed from favorites";
       isFavourite.value = data;
-      Notify.create({
-        message: msg,
-        position: "bottom-right",
-        type: data ? "positive" : "negative",
-      });
+      showNotification(msg, data ? "positive" : "negative")
     })
     .catch((err) => {
       console.error("Favorite error:", err);
-      Notify.create({
-        message: "Error occurred while adding or removing favorite",
-        position: "bottom-right",
-        type: "negative",
-      });
+      showNotification("Error occurred while adding or removing favorite", "negative")
     });
 };
 
@@ -105,19 +97,11 @@ const follow = (): void => {
     .then((data) => {
       const msg = data ? "Story followed" : "Story unfollowed";
       isFollowed.value = data;
-      Notify.create({
-        message: msg,
-        position: "bottom-right",
-        type: data ? "positive" : "negative",
-      });
+      showNotification(msg, data ? "positive" : "negative")
     })
     .catch((err) => {
       console.error("Follow error:", err);
-      Notify.create({
-        message: "Error occurred while adding or removing follow",
-        position: "bottom-right",
-        type: "negative",
-      });
+      showNotification("Error occurred while adding or removing follow", "negative")
     });
 };
 
@@ -136,24 +120,15 @@ const readLater = (): void => {
         ? "Story added to Read later"
         : "Story removed from Read later";
       isRead.value = data;
-      Notify.create({
-        message: msg,
-        position: "bottom-right",
-        type: data ? "positive" : "negative",
-      });
+      showNotification(msg, data ? "positive" : "negative")
     })
     .catch((err) => {
       console.error("Read later error:", err);
-      Notify.create({
-        message: "Error occurred while adding or removing read later",
-        position: "bottom-right",
-        type: "negative",
-      });
+      showNotification("Error occurred while adding or removing read later", "negative")
     });
 };
 
 onMounted(() => {
-  // todo check favourite, follow and to read
   isFav(userStore.id, props.storyId).then((data) => {
     isFavourite.value = data;
   });

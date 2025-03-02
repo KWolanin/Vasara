@@ -48,7 +48,6 @@
 </template>
 
 <script setup lang="ts">
-import MainMenu from "../utils/MainMenu.vue";
 import { ref } from "vue";
 import FavList from "./favs/FavList.vue";
 import FollowList from "./favs/FollowList.vue";

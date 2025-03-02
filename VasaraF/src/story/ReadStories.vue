@@ -53,7 +53,6 @@
 import { fetchStories, count } from "../services/storyservice";
 import { onMounted, ref, computed } from "vue";
 import StoryCard from "../story/StoryCard.vue";
-import MainMenu from "../utils/MainMenu.vue";
 import SortAndFilter from "src/utils/SortAndFilter.vue";
 import { Story } from "src/types/Story";
 import { Criteria } from "../types/Criteria";

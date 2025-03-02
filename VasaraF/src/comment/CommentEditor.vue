@@ -46,8 +46,7 @@
 import { ref, computed, watch, onMounted } from "vue";
 import { useUserStore } from "src/stores/user";
 import { createComment, checkPermissions } from "src/services/commentservice";
-import { Notify } from "quasar";
-
+import { showNotification } from "src/utilsTS/notify";
 import { defineEmits } from "vue";
 
 const emit = defineEmits(["comment-added", "comment-sent"]);
@@ -104,21 +103,13 @@ const send = () => {
   };
   createComment(comment)
     .then(() => {
-      Notify.create({
-        message: "Comment published!",
-        position: "bottom-right",
-        type: "positive",
-      });
+      showNotification("Comment published!", "positive");
       clearForm();
       emit("comment-added");
       emit('comment-sent');
     })
     .catch(() => {
-      Notify.create({
-        message: "Something goes wrong!",
-        position: "bottom-right",
-        type: "negative",
-      });
+      showNotification("Something goes wrong!", "negative")
     });
 };
 
@@ -126,8 +117,8 @@ const clearForm = () => {
   NewComment.value = "";
   isLoggedIn ? null : (email.value = "");
   isLoggedIn ? null : (username.value = "");
- // parent.value = 0;
 };
+
 </script>
 
 <style scoped>

@@ -76,9 +76,9 @@
 import { format } from "date-fns";
 import { ChapterComment } from "src/types/ChapterComment";
 import { ref, computed } from "vue";
-import { Notify } from "quasar";
 import { deleteCommentFromDb } from "src/services/commentservice";
 import { useUserStore } from "src/stores/user";
+import { showNotification } from "src/utilsTS/notify";
 
 const store = useUserStore();
 
@@ -106,20 +106,12 @@ const deleteComment = () => {
     const id = commentToDelete.value;
     deleteCommentFromDb(id)
       .then(() => {
-        Notify.create({
-          message: "Comment has been deleted!",
-          position: "bottom-right",
-          type: "positive",
-        });
+        showNotification("Comment deleted!", "positive");
         emit("comment-deleted");
       })
       .catch((err) => {
         console.error(err);
-        Notify.create({
-          message: "Something went wrong!",
-          position: "bottom-right",
-          type: "negative",
-        });
+        showNotification("Something went wrong!", "negative")
       });
   }
 };

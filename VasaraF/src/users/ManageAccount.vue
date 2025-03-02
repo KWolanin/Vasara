@@ -56,7 +56,6 @@
 </template>
 
 <script setup lang="ts">
-import MainMenu from "../utils/MainMenu.vue";
 import { useUserStore } from "src/stores/user";
 import { ref, onMounted } from "vue";
 import { change } from "src/services/userservice";

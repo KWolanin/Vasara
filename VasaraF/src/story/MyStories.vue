@@ -59,11 +59,10 @@
 import { fetchMyStories, countMines } from "../services/storyservice";
 import { onMounted, ref, computed } from "vue";
 import StoryCard from "../story/StoryCard.vue";
-import MainMenu from "../utils/MainMenu.vue";
 import EditStoryMenu from "../story/EditStoryMenu.vue";
-import { Notify } from "quasar";
 import { Story } from "src/types/Story";
 import { useRouter } from "vue-router";
+import { showNotification } from "src/utilsTS/notify";
 
 const router = useRouter();
 const stories = ref<Story[]>([]);
@@ -100,11 +99,7 @@ const fetchStories = async () => {
 };
 
 const reloadStories = async () => {
-  Notify.create({
-    message: "Story was deleted!",
-    position: "bottom-right",
-    type: "positive",
-  });
+  showNotification("Story deleted!", "positive")
   await fetchStories();
 };
 

@@ -76,7 +76,6 @@
 import { ref, onMounted } from "vue";
 import { createStory, updateStory } from "../services/storyservice";
 import TagInput from "../utils/TagInput.vue";
-import MainMenu from "../utils/MainMenu.vue";
 import { useRouter } from "vue-router";
 import { useUserStore } from "../stores/user";
 import { Story } from "src/types/Story";
