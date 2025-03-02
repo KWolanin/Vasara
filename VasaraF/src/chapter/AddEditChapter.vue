@@ -40,7 +40,7 @@ const toolbar = useToolbar();
 const router = useRouter();
 const route = useRoute();
 
-const chapterTitle = ref<string>("");
+const chapterTitle = ref<string | number>("");
 const content = ref<string>("");
 
 const titleRef = ref(null);
@@ -69,7 +69,7 @@ const saveChapter = (): void => {
 
   let chapterO: Chapter | Omit<Chapter, "id">;
 
-  chapterO = createChapterObject(chapterO);
+  chapterO = createChapterObject();
   createChapter(chapterO)
     .then(() => {
 
@@ -105,32 +105,32 @@ onMounted(() => {
   }
 });
 
-function createChapterObject(
-  c: Chapter | Omit<Chapter, "id">
-): Omit<Chapter, "id"> {
+function createChapterObject(): Omit<Chapter, "id"> {
+  const date = new Date().toISOString();
 
-  const date = new Date().toISOString()
+  const baseChapterData = {
+    chapterTitle: chapterTitle.value,
+    content: content.value,
+    updated: date
+  };
+
   if (route.name === "add") {
-    c = {
-      chapterTitle: chapterTitle.value,
-      content: content.value,
+    return {
+      ...baseChapterData,
       authorId: props.authorId,
       storyId: props.storyId,
       chapterNo: props.chapters + 1,
       published: date,
-      updated: date,
       storyDTO: null,
     };
   } else {
-    c = {
-      ...existingChapter.value,
-      chapterTitle: chapterTitle.value,
-      content: content.value,
-      updated: date,
+    return {
+      ...baseChapterData,
+      ...existingChapter.value
     };
   }
-  return c;
 }
+
 
 /* prevents saving a chapter when it has only html tags, no real text */
 function isHtmlContentEmpty(html: string) {

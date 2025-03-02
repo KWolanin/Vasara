@@ -3,8 +3,7 @@ import { Chapter } from "../types/Chapter";
 
 export const createChapter = async (chapterData: Chapter | Omit<Chapter, 'id'>): Promise<void> => {
   try {
-    const response = await api.post("/chapters/add", chapterData);
-    return response.data;
+    await api.post("/chapters/add", chapterData);
   } catch (error) {
     console.error("Error creating chapter:", error);
     throw error;
@@ -65,8 +64,7 @@ export const updateChaptersOrder = async (chapters : Chapter[]) => {
 
 export const deleteChapterFromDb = async (id: number): Promise<void> => {
   try {
-    const response = await api.delete(`/chapters/delete/${id}`);
-    return response.data;
+    await api.delete(`/chapters/delete/${id}`);
   } catch (error) {
     console.error("Error deleting chapter:", error);
     throw error;

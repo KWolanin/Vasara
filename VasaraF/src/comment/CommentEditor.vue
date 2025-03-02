@@ -43,7 +43,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, onMounted } from "vue";
+import { ref, computed, watch, onMounted, Ref } from "vue";
 import { useUserStore } from "src/stores/user";
 import { createComment, checkPermissions } from "src/services/commentservice";
 import { showNotification } from "src/utilsTS/notify";
@@ -55,9 +55,12 @@ const store = useUserStore();
 
 const isLoggedIn = computed(() => !!store.id);
 
-const NewComment = ref<string>("");
-const username = ref<string>(isLoggedIn.value ? store.username : "");
-const email = ref<string>(isLoggedIn.value ? store.email : "");
+// all refs should be string - because of quasar components
+//  behavior returning string or number no matter what type a v-model is,
+//  I made it string | number to avoid multiple typescript missmatch errors
+const NewComment = ref<string | number>("");
+const username = ref<string | number>(isLoggedIn.value ? store.username : "");
+const email = ref<string | number>(isLoggedIn.value ? store.email : "");
 
 const commentAllowed = ref<boolean>(false);
 const guestCommentAllowed = ref<boolean>(false);
@@ -65,7 +68,7 @@ const guestCommentAllowed = ref<boolean>(false);
 const props = defineProps<{
   storyId: number;
   chapterId: number;
-  parentId: number;
+  parentId: number | null;
 }>();
 
 watch(
@@ -90,7 +93,7 @@ onMounted(() => {
     });
 });
 
-const send = () => {
+const send = () : void => {
   const comment = {
     content: NewComment.value,
     name: username.value,

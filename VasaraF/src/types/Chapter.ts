@@ -1,7 +1,7 @@
 import { Story } from "./Story";
 
 export interface Chapter {
-  chapterTitle: string;
+  chapterTitle: string | number;
   content: string;
   authorId: number;
   storyId: number;

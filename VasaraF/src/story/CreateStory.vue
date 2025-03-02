@@ -82,8 +82,8 @@ import { Story } from "src/types/Story";
 
 const userStore = useUserStore();
 
-const title = ref<string>("");
-const description = ref<string>("");
+const title = ref<string | number>("");
+const description = ref<string | number>("");
 const fandoms = ref<string[]>([]);
 const tags = ref<string[]>([]);
 const finished = ref<boolean>(false);

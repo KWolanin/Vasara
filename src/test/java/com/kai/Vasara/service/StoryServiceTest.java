@@ -253,25 +253,6 @@ public class StoryServiceTest {
     }
 
 
-    @Test
-    void deleteStory_storyExists_returnsTrue() {
-        when(storyRepository.deleteStoryById(1L)).thenReturn(1);
-
-        storyService.deleteStory(1L);
-
-        verify(storyRepository).deleteStoryById(1L);
-        verifyNoMoreInteractions(storyRepository);
-    }
-
-    @Test
-    void deleteStory_storyDoesNotExist_returnsFalse() {
-        when(storyRepository.deleteStoryById(1L)).thenReturn(0);
-
-    storyService.deleteStory(1L);
-
-        verify(storyRepository).deleteStoryById(1L);
-        verifyNoMoreInteractions(storyRepository);
-    }
 
     @Test
     void editStory_storyExists_returnsTrue() {

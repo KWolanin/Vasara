@@ -61,10 +61,11 @@ import { ref, onMounted } from "vue";
 import { change } from "src/services/userservice";
 import { getAuthorDescriptionById } from "src/services/authorservice";
 import { UpdateAuthorRequest } from "src/types/UpdateAuthorRequest";
+import UserData from "src/types/UserData";
 
 const userStore = useUserStore();
 
-const userData = ref({
+const userData = ref<UserData>({
   email: "",
   oldEmail: "",
   username: "",
@@ -96,52 +97,49 @@ onMounted(() => {
   });
 });
 
-const updateUserData = async (
-  field: keyof UpdateAuthorRequest
-): Promise<void> => {
+const updateUserData = async (field: keyof UpdateAuthorRequest): Promise<void> => {
   msg.value = "";
   msgSuccess.value = "";
+
   if (editing.value[field]) {
     const updatedValue = userData.value[field as keyof typeof userData.value];
-    const oldValue =
-      userData.value[`old${capitalize(field)}` as keyof typeof userData.value];
+    const oldValue = userData.value[`old${capitalize(field)}` as keyof typeof userData.value];
 
     if (field !== "password" && updatedValue === oldValue) {
       editing.value[field] = false;
       return;
     }
 
-    const updatePayload: UpdateAuthorRequest = {
-      id: userStore.id,
-      email: null,
-      username: null,
-      login: null,
-      password: null,
-      description: null,
-      [field]: updatedValue,
-    };
-
-    try {
-      await change(updatePayload);
-      msgSuccess.value = `${capitalize(
-        field
-      )} updated successfully`.toUpperCase();
-
-      if (field === "email") userStore.updateEmail(updatedValue as string);
-      if (field === "username")
-        userStore.updateUsername(updatedValue as string);
-
-      userData.value[`old${capitalize(field)}` as keyof typeof userData.value] =
-        updatedValue;
-    } catch (error) {
-      msg.value =
-        `Failed to update ${field}: ${error.response.data.message}`.toUpperCase();
-    }
+    await updateField(field, updatedValue);
   }
   editing.value[field] = !editing.value[field];
 };
 
+const updateField = async (field: keyof UpdateAuthorRequest, updatedValue: any): Promise<void> => {
+  const updatePayload: UpdateAuthorRequest = {
+    id: userStore.id,
+    email: null,
+    username: null,
+    login: null,
+    password: null,
+    description: null,
+    [field]: updatedValue,
+  };
+
+  await change(updatePayload)
+    .then(() => {
+      msgSuccess.value = `${capitalize(field)} updated successfully`.toUpperCase();
+      if (field === "email") userStore.updateEmail(updatedValue as string);
+      if (field === "username") userStore.updateUsername(updatedValue as string);
+      userData.value[`old${capitalize(field)}` as keyof typeof userData.value] = updatedValue.toString();
+    })
+    .catch((error) => {
+      msg.value = `Failed to update ${field}: ${error.response.data.message}`.toUpperCase();
+    });
+};
+
 const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
+
 </script>
 
 <style scoped>

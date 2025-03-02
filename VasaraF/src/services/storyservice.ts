@@ -48,10 +48,9 @@ export const updateStory = async (storyData: Story | Omit<Story, "id">): Promise
   }
 };
 
-export const deleteStory = async (id: number): Promise<boolean> => {
+export const deleteStory = async (id: number): Promise<void> => {
   try {
-    const response = await api.delete(`/stories/delete/${id}`);
-    return response.data;
+    await api.delete(`/stories/delete/${id}`);
   } catch (error) {
     console.error("Error deleting story:", error);
     throw error;

@@ -2,8 +2,8 @@ export interface Story {
   id: number;
   authorName: string;
   authorId: number;
-  description: string;
-  title: string;
+  description: string | number;
+  title: string | number;
   tags: string[];
   fandoms: string[];
   finished: boolean;

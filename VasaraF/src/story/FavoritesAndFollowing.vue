@@ -54,7 +54,7 @@ import FollowList from "./favs/FollowList.vue";
 import ReadLaterList from "./favs/ReadLaterList.vue";
 import FollowAuthorList from "./favs/FollowAuthorList.vue";
 
-const tab = ref<string>("fav");
+const tab = ref<string | number>("fav");
 </script>
 
 <style scoped>

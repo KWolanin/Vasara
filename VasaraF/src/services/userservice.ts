@@ -10,7 +10,6 @@ export const login = async (loginData: Author): Promise<void> => {
     const userStore = useUserStore();
     const { id, login, username, email } = response.data;
     userStore.saveUser(id, username, login, email);
-    return response.data;
   } catch (error) {
     console.error("Error logging in:", error);
     throw error;
@@ -21,8 +20,7 @@ export const register = async (
   registerData: RegisterRequest
 ): Promise<void> => {
   try {
-    const response = await api.post("/authors/register", registerData);
-    return response.data;
+    await api.post("/authors/register", registerData);
   } catch (error) {
     console.error("Error registering:", error);
     throw error;
@@ -31,8 +29,7 @@ export const register = async (
 
 export const change = async (updateAuthorRequest : UpdateAuthorRequest) : Promise<void> => {
   try {
-    const response = await api.patch(`/authors`, updateAuthorRequest);
-    return response.data;
+    await api.patch(`/authors`, updateAuthorRequest);
   } catch (error) {
     console.error("Error changing user details:", error);
     throw error;

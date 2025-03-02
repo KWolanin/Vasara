@@ -7,7 +7,7 @@
       <div>{{ chapter.chapterTitle }}</div>
     </p>
     <q-space />
-    <div style="display: flex; justify-content: flex-end">
+    <div class="button-container">
       <router-link
         :to="{
           name: 'edit',
@@ -39,3 +39,16 @@ const deleteChapter = () : void => {
   emit("delete-chapter", props.chapter.id);
 };
 </script>
+
+<style scoped>
+.button-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.button-container > * {
+  margin: 0.5rem;
+}
+
+</style>

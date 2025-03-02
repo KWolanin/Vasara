@@ -1,12 +1,12 @@
 
 export interface ChapterComment {
   id: number;
-  content: string;
-  name: string;
+  content: string | number;
+  name: string | number;
   parentId: number;
   storyId: number;
   chapterId?: number;
-  email: string;
+  email: string | number;
   createdAt: string | Date;
   replies: ChapterComment[];
 }

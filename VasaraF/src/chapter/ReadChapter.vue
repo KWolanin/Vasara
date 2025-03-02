@@ -97,15 +97,13 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, watch, computed } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { fetchChapter, isNextOrPrevious } from "../services/chapterservice";
 import { useRoute } from "vue-router";
 import { Chapter } from "../types/Chapter";
 import CommentEditor from "src/comment/CommentEditor.vue";
 import CommentList from "src/comment/CommentList.vue";
-import { useUserStore } from "src/stores/user";
 
-const store = useUserStore();
 
 const route = useRoute();
 

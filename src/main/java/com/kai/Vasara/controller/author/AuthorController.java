@@ -24,19 +24,9 @@ public class AuthorController {
         this.authorService = authorService;
     }
 
-    @GetMapping()
-    public ResponseEntity<List<AuthorDTO>> getAuthors() {
-        return new ResponseEntity<>(authorService.getAll(), HttpStatus.OK);
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<AuthorDTO> getAuthor(@PathVariable Long id) {
         return new ResponseEntity<>(authorService.getAuthor(id), HttpStatus.OK);
-    }
-
-    @GetMapping("/{id}/name")
-    public ResponseEntity<String> getAuthorName(@PathVariable Long id) {
-        return new ResponseEntity<>(authorService.getAuthorName(id), HttpStatus.OK);
     }
 
     @GetMapping("/{id}/desc")
