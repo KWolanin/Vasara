@@ -1,8 +1,8 @@
 export interface Criteria {
-  title: string
-  author: string
+  title: string | number
+  author: string | number
   fandoms: string[]
   tags: string[]
-  description: string
+  description: string | number
   rating: string
 }
