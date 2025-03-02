@@ -40,7 +40,6 @@ public class CommentService {
 
         Chapter chapter = chapterRepository.findById(request.getChapterId())
                 .orElseThrow(() -> new ChapterException(ChapterError.CHAPTER_NOT_FOUND));
-
         Comment comment = new Comment();
         Comment parentComment;
         if (request.getParentId() != null && request.getParentId() > 0) {
@@ -55,7 +54,6 @@ public class CommentService {
         Optional<Author> author = authorRepository.findAuthorByUsername(request.getName());
         if (author.isPresent()) {
             comment.setAuthor(author.get());
-
         } else {
             comment.setGuestName(request.getName());
             comment.setGuestEmail(request.getEmail());
@@ -64,18 +62,14 @@ public class CommentService {
     }
 
     public List<CommentDTO> getCommentsForChapter(Long chapterId) {
-       List<Comment> comments = commentRepository.findByChapterIdAndParentIsNull(chapterId);
-        return comments.stream().map(this::toDto).collect(Collectors.toList());
+        return commentRepository.findByChapterIdAndParentIsNull(chapterId)
+                .stream().map(this::from).collect(Collectors.toList());
     }
 
 
-    private CommentDTO toDto(Comment comment) {
-        List<CommentDTO> replies = comment.getReplies().stream()
-                .map(this::toDto)
-                .toList();
+    private CommentDTO from(Comment comment) {
         String authorName = comment.getAuthor() != null ? comment.getAuthor().getUsername() : comment.getGuestName();
         String email = comment.getAuthor() != null ? comment.getAuthor().getEmail() : comment.getGuestEmail();
-
         CommentDTO commentDTO = new CommentDTO();
         commentDTO.setId(comment.getId());
         commentDTO.setContent(comment.getContent());
@@ -87,10 +81,17 @@ public class CommentService {
         if (Objects.nonNull(comment.getParent())) {
             commentDTO.setParentId(comment.getParent().getId());
         }
+        List<CommentDTO> replies = getReplies(comment);
         if (!replies.isEmpty()) {
             commentDTO.setReplies(replies);
         }
         return commentDTO;
+    }
+
+    private List<CommentDTO> getReplies(Comment comment) {
+        return comment.getReplies().stream()
+                .map(this::from)
+                .toList();
     }
 
     public CommentPermission getPermissions(long chapterId) {

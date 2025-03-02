@@ -20,4 +20,5 @@ public class AuthorDTO {
     private List<StoryDTO> stories;
     private String email;
     private String description;
+    private String login;
 }

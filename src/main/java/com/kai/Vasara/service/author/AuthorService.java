@@ -65,6 +65,7 @@ public class AuthorService {
     public AuthorDTO from(Author author) {
         AuthorDTO authorDTO = new AuthorDTO();
         authorDTO.setId(author.getId());
+        authorDTO.setLogin(author.getLogin());
         authorDTO.setUsername(author.getUsername());
         authorDTO.setEmail(author.getEmail());
         authorDTO.setDescription(author.getDescription());
@@ -111,14 +112,16 @@ public class AuthorService {
     }
 
 
-    public Author authenticate(String login, String rawPassword) {
+    public AuthorDTO authenticate(String login, String rawPassword) {
         Author author = authorRepository.findByLogin(login)
                 .orElseThrow(() -> new AuthorException(AuthorError.AUTHOR_NOT_FOUND));
         if (!passwordEncoder.matches(rawPassword, author.getPassword())) {
             throw new AuthorException(AuthorError.AUTHOR_INVALID_CREDENTIALS);
         }
-        return author;
+        return from(author);
     }
+
+
 
 
     public Optional<Author> find(long authorId) {

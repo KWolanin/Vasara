@@ -58,7 +58,7 @@ public class AuthorController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
-            Author author = authorService.authenticate(request.getLogin(), request.getPassword());
+            AuthorDTO author = authorService.authenticate(request.getLogin(), request.getPassword());
             return ResponseEntity.ok(new LoggedUser(author.getId(), author.getLogin(), author.getUsername(), author.getEmail()));
     }
 
