@@ -13,6 +13,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -269,13 +270,15 @@ class AuthorServiceTest {
         String rawPassword = "correctpassword";
         String storedPassword = "encodedpassword";
         Author author = new Author();
+        author.setStories(new ArrayList<>());
         author.setLogin(login);
+        author.setId(1L);
         author.setPassword(storedPassword);
 
         when(authorRepository.findByLogin(login)).thenReturn(Optional.of(author));
         when(passwordEncoder.matches(rawPassword, storedPassword)).thenReturn(true);
 
-        Author result = authorService.authenticate(login, rawPassword);
+        AuthorDTO result = authorService.authenticate(login, rawPassword);
 
         assertNotNull(result);
         assertEquals(login, result.getLogin());
