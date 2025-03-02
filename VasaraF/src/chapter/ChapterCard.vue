@@ -1,5 +1,5 @@
 <template>
-  <q-card class="q-pa-md" dense>
+  <q-card class="q-pa-md" dense flat bordered>
     <p class="text-h6">
       <q-chip size="xs" flat square>
         {{ chapter.chapterNo }}
@@ -18,9 +18,20 @@
           },
         }"
       >
-        <q-btn class="q-mr-sm btn" flat>Edit</q-btn>
+        <q-btn
+        class="q-mr-sm btn"
+        flat
+        icon="edit">
+          <q-tooltip>Edit chapter title and content</q-tooltip>
+        </q-btn>
       </router-link>
-      <q-btn flat class="del" @click="deleteChapter">Delete</q-btn>
+      <q-btn
+      flat
+      icon="delete_forever"
+      color="burgund"
+      @click="deleteChapter">
+      <q-tooltip>Delete forever</q-tooltip>
+    </q-btn>
     </div>
   </q-card>
 </template>

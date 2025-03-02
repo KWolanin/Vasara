@@ -105,30 +105,29 @@ onMounted(() => {
   }
 });
 
-function createChapterObject(): Omit<Chapter, "id"> {
-  const date = new Date().toISOString();
-
-  const baseChapterData = {
-    chapterTitle: chapterTitle.value,
-    content: content.value,
-    updated: date
-  };
-
+function createChapterObject() : Omit<Chapter, "id"> {
+  let c = null
+  const date = new Date().toISOString()
   if (route.name === "add") {
-    return {
-      ...baseChapterData,
+    c = {
+      chapterTitle: chapterTitle.value,
+      content: content.value,
       authorId: props.authorId,
       storyId: props.storyId,
       chapterNo: props.chapters + 1,
       published: date,
+      updated: date,
       storyDTO: null,
     };
   } else {
-    return {
-      ...baseChapterData,
-      ...existingChapter.value
+    c = {
+      ...existingChapter.value,
+      chapterTitle: chapterTitle.value,
+      content: content.value,
+      updated: date,
     };
   }
+  return c;
 }
 
 

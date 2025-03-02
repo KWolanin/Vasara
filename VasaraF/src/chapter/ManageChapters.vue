@@ -17,7 +17,7 @@
         </div>
       </VueDraggable>
       <q-space />
-      <q-btn class="q-mt-md save" @click="saveChanges" flat>Save order</q-btn>
+      <q-btn class="q-mt-md save" @click="saveChanges" icon="sync" flat>Save order</q-btn>
     </q-card>
   </div>
 
