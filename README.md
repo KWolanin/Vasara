@@ -23,15 +23,18 @@ User currently can:
 - set rating to its work (r.g. for kids, teen, adults)
 -  add author to following authors and get email when they publish something new
 -  manage favourites list, follows & "read later" list
-
-
-In the future user will be able to:
-- add/receive coments for works (with possibility to delete and/or mark as spam)
-
+-  add/receive coments for works (with possibility to delete)
 
 
 # Tech stack
-Vue.js, Quasar, Pinia, Javascript/Typescript (frontend), Java 8 (backend), String Boot, String Cache, Railway (build and deploy service), RabbitMQ
+- Vue.js
+- Quasar
+- Pinia
+- Javascript/Typescript (frontend)
+- Java 8 (backend)
+- String, Spring Boot, Spring Web & Cache
+-  Railway (build and deploy service)
+-  RabbitMQ
 
 You can use Vasara here:
 [Vasara app](https://vasaraf-production.up.railway.app/#/)
