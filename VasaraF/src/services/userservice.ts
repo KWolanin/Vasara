@@ -9,7 +9,9 @@ export const login = async (loginData: Author): Promise<void> => {
     const response = await api.post("/authors/login", loginData);
     const userStore = useUserStore();
     const { id, login, username, email } = response.data;
+    const token = response.data.token;
     userStore.saveUser(id, username, login, email);
+    localStorage.setItem("token", token);
   } catch (error) {
     console.error("Error logging in:", error);
     throw error;
@@ -29,7 +31,7 @@ export const register = async (
 
 export const change = async (updateAuthorRequest : UpdateAuthorRequest) : Promise<void> => {
   try {
-    await api.patch(`/authors`, updateAuthorRequest);
+    await api.patch(`/authors/update`, updateAuthorRequest);
   } catch (error) {
     console.error("Error changing user details:", error);
     throw error;

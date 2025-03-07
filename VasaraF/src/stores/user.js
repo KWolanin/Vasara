@@ -31,6 +31,7 @@ export const useUserStore = defineStore("user", {
       this.login = null;
       this.email = null;
       localStorage.removeItem("user");
+      localStorage.removeItem("token");
     },
     updateEmail(email) {
       this.email = email;
