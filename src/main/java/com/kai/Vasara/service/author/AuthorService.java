@@ -159,9 +159,6 @@ public class AuthorService {
             authorInDb.setPassword(passwordEncoder.encode(author.getPassword()));
         }
         if (author.getDescription() != null) {
-            if (!StringUtils.hasText(author.getDescription())) {
-                throw new AuthorException(AuthorError.AUTHOR_INVALID_DESCRIPTION);
-            }
             authorInDb.setDescription(author.getDescription());
         }
 
