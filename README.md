@@ -36,7 +36,7 @@ User currently can:
 -  Railway (build and deploy service)
 -  RabbitMQ
 
-# try vasara
+# try Vasara
 You can use Vasara here:
 [Vasara app](https://vasaraf-production.up.railway.app/#/) 
 Use guest account (login: guest; password: guest) and feel free to play with Vasara publishing platform!
