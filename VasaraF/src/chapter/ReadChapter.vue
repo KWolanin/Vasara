@@ -36,7 +36,7 @@
         <div
           class="q-ma-md"
           :style="{ fontSize: fontSize + 'px' }"
-          v-html="data.content"
+          v-html="sanitizedHtml"
         />
       </q-card>
     </div>
@@ -97,12 +97,13 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, watch } from "vue";
+import { onMounted, ref, watch, computed } from "vue";
 import { fetchChapter, isNextOrPrevious } from "../services/chapterservice";
 import { useRoute } from "vue-router";
 import { Chapter } from "../types/Chapter";
 import CommentEditor from "src/comment/CommentEditor.vue";
 import CommentList from "src/comment/CommentList.vue";
+import DOMPurify from 'dompurify'
 
 
 const route = useRoute();
@@ -135,6 +136,8 @@ watch(
   }
 );
 
+const sanitizedHtml = ref('')
+
 const loadChapter = (): void => {
   sId.value = Number(route.query.storyId);
   cNo.value = Number(route.query.chapterNo);
@@ -142,6 +145,7 @@ const loadChapter = (): void => {
   fetchChapter(Number(route.query.storyId), Number(route.query.chapterNo))
     .then((response) => {
       data.value = response;
+      sanitizedHtml.value = DOMPurify.sanitize(response.content)
     })
     .catch((error) => {
       console.error(error);

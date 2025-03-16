@@ -18,7 +18,7 @@ public class AuthorExceptionHandler {
             case AUTHOR_EMAIL_INCORRECT, AUTHOR_INVALID_CREDENTIALS,
                  AUTHOR_INVALID_DESCRIPTION, AUTHOR_INVALID_PASSWORD,
                  AUTHOR_INVALID_EMAIL, AUTHOR_INVALID_USERNAME -> httpStatus = HttpStatus.BAD_REQUEST;
-            case AUTHOR_NOT_FOUND -> httpStatus = HttpStatus.NOT_FOUND;
+            case AUTHOR_NOT_FOUND, AUTHOR_DETAILS_NOT_FOUND -> httpStatus = HttpStatus.NOT_FOUND;
         }
         return ResponseEntity.status(httpStatus).body(new ErrorInfo(e.getAuthorError().getMessage()));
     }
