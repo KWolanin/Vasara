@@ -1,0 +1,23 @@
+<template>
+        <q-btn
+        unelevated
+        color="pink"
+        round
+        text-color="black"
+        icon="arrow_circle_up"
+        class="q-mr-md"
+        @click="toTop"
+      >
+        <q-tooltip> To top </q-tooltip>
+      </q-btn>
+</template>
+
+<script setup lang="ts">
+const toTop = ():void => {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth",
+  });
+};
+
+</script>

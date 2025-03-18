@@ -1,7 +1,9 @@
 import { api } from "../boot/axios";
 import { Chapter } from "../types/Chapter";
 
-export const createChapter = async (chapterData: Chapter | Omit<Chapter, 'id'>): Promise<void> => {
+export const createChapter = async (
+  chapterData: Chapter | Omit<Chapter, "id">
+): Promise<void> => {
   try {
     await api.post("/chapters/add", chapterData);
   } catch (error) {
@@ -23,16 +25,29 @@ export const fetchChapter = async (
   }
 };
 
-export const fetchChapterWithParagraphs = async (storyId, chapterNo, offset, limit) => {
-  const response = await api.get(`/chapters/read/paragraphs/${storyId}/${chapterNo}`, {
-    params: { offset, limit }
-  });
-  //console.log(response.data)
-  return response.data;
+export const fetchChapterWithParagraphs = async (
+  storyId: number,
+  chapterNo: number,
+  offset: number,
+  limit: number
+): Promise<Chapter> => {
+  try {
+    const response = await api.get(
+      `/chapters/read/paragraphs/${storyId}/${chapterNo}`,
+      {
+        params: { offset, limit },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching chapter with paragraphs:", error);
+    throw error;
+  }
 };
 
 export const fetchChaptersForStory = async (
-  storyId: number): Promise<Chapter[]> => {
+  storyId: number
+): Promise<Chapter[]> => {
   try {
     const response = await api.get(`/chapters/all/${storyId}`);
     return response.data;
@@ -60,15 +75,14 @@ export const isNextOrPrevious = async (
   }
 };
 
-export const updateChaptersOrder = async (chapters : Chapter[]) => {
+export const updateChaptersOrder = async (chapters: Chapter[]) : Promise<void> => {
   try {
-    const response = await api.patch('/chapters/order', chapters)
-    return response.data;
+    await api.patch("/chapters/order", chapters);
   } catch (error) {
     console.error("Error updating chapters order:", error);
     throw error;
   }
-}
+};
 
 export const deleteChapterFromDb = async (id: number): Promise<void> => {
   try {
@@ -77,4 +91,4 @@ export const deleteChapterFromDb = async (id: number): Promise<void> => {
     console.error("Error deleting chapter:", error);
     throw error;
   }
-}
+};
