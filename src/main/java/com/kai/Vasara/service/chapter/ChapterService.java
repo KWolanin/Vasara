@@ -5,20 +5,28 @@ import com.kai.Vasara.entity.story.Story;
 import com.kai.Vasara.exception.chapter.ChapterError;
 import com.kai.Vasara.exception.chapter.ChapterException;
 import com.kai.Vasara.model.chapter.ChapterDTO;
+import com.kai.Vasara.model.chapter.ChapterWithParagraphsDTO;
+import com.kai.Vasara.model.chapter.ParagraphDTO;
 import com.kai.Vasara.model.story.StoryDTO;
 import com.kai.Vasara.repository.chapter.ChapterRepository;
 import com.kai.Vasara.repository.story.StoryRepository;
 import com.kai.Vasara.service.EmailService;
 import com.kai.Vasara.service.comment.CommentService;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import org.jsoup.*;
+import org.jsoup.nodes.Document;
 
 @Service
 @Component
@@ -68,6 +76,57 @@ public class ChapterService {
                 .map(this::from)
                 .orElseThrow(() -> new ChapterException(ChapterError.CHAPTER_NOT_FOUND));
     }
+    @Transactional
+    public ChapterWithParagraphsDTO getChapterWithParagraphs(Long storyId, Long chapterNo, int offset, int limit) {
+        return chapterRepository.findByStoryIdAndChapterNo(storyId, chapterNo)
+                .map(chapter -> toChapterWithParagraphsDTO(chapter, offset, limit))
+                .orElseThrow(() -> new ChapterException(ChapterError.CHAPTER_NOT_FOUND));
+    }
+
+    private ChapterWithParagraphsDTO toChapterWithParagraphsDTO(Chapter chapter, int offset, int limit) {
+        ChapterWithParagraphsDTO dto = new ChapterWithParagraphsDTO();
+        dto.setId(chapter.getId());
+        dto.setChapterNo(chapter.getChapterNo());
+        dto.setChapterTitle(chapter.getChapterTitle());
+        dto.setStoryId(chapter.getStory().getId());
+        dto.setPublished(chapter.getPublished());
+        dto.setUpdated(chapter.getUpdated());
+//        dto.setParagraphs(splitIntoParagraphs(chapter.getContent()));
+        List<ParagraphDTO> allParagraphs = splitIntoParagraphs(chapter.getContent());
+        List<ParagraphDTO> paginatedParagraphs = allParagraphs.stream()
+                .skip(offset)
+                .limit(limit)
+                .toList();
+
+        dto.setParagraphs(paginatedParagraphs);
+
+        if (chapter.getStory() != null) {
+            StoryDTO storyDTO = new StoryDTO();
+            storyDTO.setId(chapter.getStory().getId());
+            storyDTO.setTitle(chapter.getStory().getTitle());
+            storyDTO.setAuthorName(chapter.getStory().getAuthor().getLogin());
+            storyDTO.setAuthorId(chapter.getStory().getAuthor().getId());
+            dto.setStoryDTO(storyDTO);
+            dto.setStoryId(storyDTO.getId());
+        }
+        return dto;
+    }
+
+    public List<ParagraphDTO> splitIntoParagraphs(String htmlContent) {
+        List<ParagraphDTO> paragraphs = new ArrayList<>();
+        Document doc = Jsoup.parse(htmlContent);
+
+        Elements elements = doc.body().children();
+        int paragraphId = 1;
+
+        for (Element element : elements) {
+            if (!element.text().trim().isEmpty()) {
+                paragraphs.add(new ParagraphDTO(paragraphId++, element.outerHtml()));
+            }
+        }
+        return paragraphs;
+    }
+
 
     public Chapter from(ChapterDTO chapterDTO) {
         Chapter chapter = new Chapter();

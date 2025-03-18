@@ -23,6 +23,14 @@ export const fetchChapter = async (
   }
 };
 
+export const fetchChapterWithParagraphs = async (storyId, chapterNo, offset, limit) => {
+  const response = await api.get(`/chapters/read/paragraphs/${storyId}/${chapterNo}`, {
+    params: { offset, limit }
+  });
+  //console.log(response.data)
+  return response.data;
+};
+
 export const fetchChaptersForStory = async (
   storyId: number): Promise<Chapter[]> => {
   try {

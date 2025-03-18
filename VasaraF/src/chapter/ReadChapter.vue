@@ -32,13 +32,33 @@
 
     <div class="q-mb-md chapter">
       <h4>{{ data.chapterTitle }}</h4>
-      <q-card class="q-pa-md q-mb-lg content" flat>
-        <div
-          class="q-ma-md"
-          :style="{ fontSize: fontSize + 'px' }"
-          v-html="sanitizedHtml"
-        />
-      </q-card>
+      <div class="content-wrapper">
+        <q-card class="q-pa-md q-mb-lg content" flat>
+          <div
+            class="paragraph-container"
+            v-for="paragraph in data.paragraphs"
+            :key="paragraph.id"
+            :style="{ fontSize: fontSize + 'px' }"
+            @mouseover="setHovered(paragraph.id)"
+            @mouseleave="clearHovered"
+            @mouseenter="saveReadingProgress(paragraph.id)"
+            :id="'paragraph-' + paragraph.id"
+          >
+            <!-- <q-btn // DON'T REMOVE: needed to rework the comment system in the future
+              v-if="hoveredParagraph === paragraph.id"
+              icon="add_comment"
+              flat
+              dense
+              size="sm"
+              class="comment-btn"
+              @mouseover="setHovered(paragraph.id)"
+              @mouseleave="clearHovered"
+            /> -->
+            <p class="paragraph" v-html="sanitized(paragraph.content)"></p>
+          </div>
+          <q-spinner-hearts v-if="isLoading" size="50px" color="gold" />
+        </q-card>
+      </div>
     </div>
   </div>
   <q-inner-loading :showing="!data">
@@ -54,7 +74,7 @@
         text-color="black"
         class="q-mr-md"
         round
-        v-if="data"
+        v-if="data && isEndReached"
         :icon="showCommentSection ? 'comment' : 'comments_disabled'"
         @click="showCommentSection = !showCommentSection"
       >
@@ -65,7 +85,7 @@
       <q-btn
         unelevated
         color="pink"
-        v-if="data"
+        v-if="data && isEndReached"
         round
         text-color="black"
         icon="arrow_circle_up"
@@ -97,25 +117,36 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, watch, computed } from "vue";
-import { fetchChapter, isNextOrPrevious } from "../services/chapterservice";
+import {
+  nextTick,
+  onBeforeUnmount,
+  onMounted,
+  ref,
+  watch,
+} from "vue";
+import {
+  fetchChapterWithParagraphs,
+  isNextOrPrevious,
+} from "../services/chapterservice";
 import { useRoute } from "vue-router";
 import { Chapter } from "../types/Chapter";
+import { ReadingProgress } from "src/types/ReadingProgress";
 import CommentEditor from "src/comment/CommentEditor.vue";
 import CommentList from "src/comment/CommentList.vue";
-import DOMPurify from 'dompurify'
+import DOMPurify from "dompurify";
+import { debounce } from "lodash";
 
-
-const route = useRoute();
 
 const data = ref<Chapter>(null);
 
-const fontSize = ref<number>(16);
-const isNextChapter = ref<boolean>(false);
-const isPreviousChapter = ref<boolean>(false);
+
 
 const sId = ref<number>(0);
 const cNo = ref<number>(0);
+
+// font increase and decrease
+const fontSize = ref<number>(16);
+
 
 const increaseFont = (): void => {
   fontSize.value += 2;
@@ -125,9 +156,36 @@ const decreaseFont = (): void => {
   if (fontSize.value > 8) fontSize.value -= 2;
 };
 
+// navigation between chapters
+const route = useRoute();
+
+const isNextChapter = ref<boolean>(false);
+const isPreviousChapter = ref<boolean>(false);
+
+
+
+
+// lazy loading chapters and scrolling
+
+const offset = ref<number>(0);
+const limit : number = 30;
+const isLoading = ref<boolean>(false);
+const isEndReached = ref<boolean>(false);
+
 onMounted(() => {
   loadChapter();
+  window.addEventListener("scroll", onScroll);
 });
+
+onBeforeUnmount(() => {
+  window.removeEventListener("scroll", onScroll);
+});
+
+const onScroll = debounce((): void => {
+  if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
+    loadParagraphs();
+  }
+}, 300);
 
 watch(
   () => route.query,
@@ -136,20 +194,52 @@ watch(
   }
 );
 
-const sanitizedHtml = ref('')
+const sanitized = (html: string): string => DOMPurify.sanitize(html);
 
-const loadChapter = (): void => {
+const loadParagraphs = async () : Promise<void> => {
+  if (isEndReached.value) return;
+  isLoading.value = true;
+  try {
+    const response = await fetchChapterWithParagraphs(
+      sId.value,
+      cNo.value,
+      offset.value,
+      limit
+    );
+    if (response.paragraphs.length < limit) {
+      isEndReached.value = true;
+    }
+    data.value.paragraphs.push(...response.paragraphs);
+    offset.value += limit;
+  } catch (error) {
+    console.error("Paragraphs loading error:", error);
+  }
+  isLoading.value = false;
+};
+
+const loadChapter = async () => {
   sId.value = Number(route.query.storyId);
   cNo.value = Number(route.query.chapterNo);
+  data.value = null;
+  offset.value = 0;
+  isEndReached.value = false;
 
-  fetchChapter(Number(route.query.storyId), Number(route.query.chapterNo))
-    .then((response) => {
-      data.value = response;
-      sanitizedHtml.value = DOMPurify.sanitize(response.content)
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+  isLoading.value = true;
+  try {
+    const response = await fetchChapterWithParagraphs(
+      sId.value,
+      cNo.value,
+      offset.value,
+      limit
+    );
+    data.value = { ...response, paragraphs: response.paragraphs };
+    offset.value += response.paragraphs.length;
+
+    await ensureLastReadParagraphLoaded();
+  } catch (error) {
+    console.error("Chapter loading error:", error);
+  }
+  isLoading.value = false;
 
   isNextOrPrevious(sId.value, cNo.value + 1).then((response) => {
     isNextChapter.value = response;
@@ -159,6 +249,44 @@ const loadChapter = (): void => {
   });
 };
 
+const ensureLastReadParagraphLoaded = async () => {
+  const progress = getReadingProgress();
+
+  if (!progress || progress.storyId !== data.value.storyDTO.id
+  || progress.chapterNo !== data.value.chapterNo) return;
+
+  let attempts = 0;
+  const maxAttempts = 100;
+  let lastParagraphCount = 0;
+
+  while (attempts < maxAttempts) {
+    await nextTick();
+
+    const element = document.getElementById(
+      `paragraph-${progress.paragraphId}`
+    );
+
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
+
+    if (isEndReached.value) {
+      break;
+    }
+
+    if (data.value.paragraphs.length === lastParagraphCount) {
+      break;
+    }
+
+    lastParagraphCount = data.value.paragraphs.length;
+    await loadParagraphs();
+    await new Promise((resolve) => setTimeout(resolve, 40));
+
+    attempts++;
+  }
+};
+
 const toTop = () => {
   window.scrollTo({
     top: 0,
@@ -166,24 +294,59 @@ const toTop = () => {
   });
 };
 
+const saveReadingProgress = (paragraphId: number) => {
+  if (data.value.storyDTO) {
+    localStorage.setItem(
+      "readingProgress",
+      JSON.stringify({
+        storyId: data.value.storyDTO.id,
+        chapterNo: data.value.chapterNo,
+        paragraphId,
+      })
+    );
+  }
+};
+
+const getReadingProgress = (): ReadingProgress => {
+  const progress = localStorage.getItem("readingProgress");
+  return progress ? JSON.parse(progress) : null;
+};
+
+// comment section
 const showCommentSection = ref<boolean>(false);
 
 const trigger = ref<boolean>(false);
 
-const triggerCommentDownload = () => {
+const triggerCommentDownload = () :void => {
   trigger.value = !trigger.value;
 };
 
-
 const replyToId = ref<number | null>(null);
 
-const handleReply = (id: number) => {
+const handleReply = (id: number) :void => {
   replyToId.value = id;
 };
 
-const clearReply = () => {
+const clearReply = () :void => {
   replyToId.value = null;
 };
+
+// paragraph hover - for saving user reading progress and comments section (in the future)
+
+const hoveredParagraph = ref<number>(null);
+let hoverTimeout: NodeJS.Timeout  = null;
+
+const setHovered = (id: number) :void => {
+  clearTimeout(hoverTimeout);
+  hoveredParagraph.value = id;
+};
+
+const clearHovered = () :void => {
+  hoverTimeout = setTimeout(() => {
+    hoveredParagraph.value = null;
+  }, 300);
+};
+
 
 </script>
 
@@ -196,8 +359,33 @@ const clearReply = () => {
   width: 100%;
   padding: 0;
   margin: 0 auto;
+  flex-wrap: wrap;
 }
+
 .content {
   width: 80%;
+  will-change: transform;
+}
+
+.content-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.paragraph-container {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.paragraph {
+  margin: 0 0 1px;
+}
+
+.comment-btn {
+  position: absolute;
+  right: -30px;
+  transition: opacity 0.2s ease-in-out;
 }
 </style>

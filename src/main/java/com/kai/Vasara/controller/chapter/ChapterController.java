@@ -1,6 +1,7 @@
 package com.kai.Vasara.controller.chapter;
 
 import com.kai.Vasara.model.chapter.ChapterDTO;
+import com.kai.Vasara.model.chapter.ChapterWithParagraphsDTO;
 import com.kai.Vasara.service.chapter.ChapterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,17 @@ public class ChapterController {
     public ResponseEntity<ChapterDTO> getChapterByStoryAndNumber(@PathVariable Long storyId, @PathVariable Long chapterNo) {
         return new ResponseEntity<>(chapterService.getChapterByStoryIdAndNumber(storyId, chapterNo), HttpStatus.OK);
     }
+
+    @GetMapping("/read/paragraphs/{storyId}/{chapterNo}")
+    public ResponseEntity<ChapterWithParagraphsDTO> getChapterByStoryAndNumber(
+            @PathVariable Long storyId,
+            @PathVariable Long chapterNo,
+            @RequestParam(defaultValue = "0") int offset,
+            @RequestParam(defaultValue = "15") int limit
+    ) {
+        return ResponseEntity.ok(chapterService.getChapterWithParagraphs(storyId, chapterNo, offset, limit));
+    }
+
 
     @PostMapping("/add")
     public ResponseEntity<?> addChapter(@RequestBody ChapterDTO chapterDTO) {
