@@ -40,7 +40,6 @@ const isNextChapter = ref<boolean>(false);
 const isPreviousChapter = ref<boolean>(false);
 
 onMounted(() => {
-  console.log(props)
   isNextOrPrevious(props.storyId, props.chapterNo + 1).then((response) => {
     isNextChapter.value = response;
   });
