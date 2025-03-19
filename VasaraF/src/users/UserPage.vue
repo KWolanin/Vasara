@@ -63,9 +63,11 @@ onMounted(() => {
     stories.value = author.stories;
     description.value = author.description;
   });
-  isFollow(userStore.id, Number(route.query.authorId)).then((data) => {
+  if (isLoggedIn.value) {
+    isFollow(userStore.id, Number(route.query.authorId)).then((data) => {
     isFollowed.value = data;
   });
+  }
 });
 
 const isFollowed = ref<Boolean>(false);
