@@ -6,10 +6,22 @@
     <q-card class="q-pa-md card content" flat>
       <q-form @submit="registerUser" class="q-gutter-md" autofocus>
         <div v-if="msg" class="msg">{{ msg }}</div>
-        <q-input filled v-model="login" label="Login" />
-        <q-input filled v-model="username" label="Username" />
-        <q-input filled v-model="email" label="Email" type="email" />
-        <q-input filled v-model="password" label="Password" type="password" />
+        <q-input filled v-model="login" label="Login" color="burgund" />
+        <q-input filled v-model="username" label="Username" color="burgund" />
+        <q-input
+          filled
+          v-model="email"
+          label="Email"
+          type="email"
+          color="burgund"
+        />
+        <q-input
+          filled
+          v-model="password"
+          label="Password"
+          type="password"
+          color="burgund"
+        />
         <div>
           <q-btn
             label="Register"
@@ -57,7 +69,7 @@ const registerUser = () => {
   })
     .then(() => {
       msg.value = "";
-      showNotification("Account created successfully", "positive")
+      showNotification("Account created successfully", "positive");
       router.push("/login");
     })
     .catch((error) => {

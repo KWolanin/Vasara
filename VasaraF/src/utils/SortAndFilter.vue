@@ -4,9 +4,24 @@
       What do you want to read today?
     </div>
     <div class="search flex justify-center col-6">
-      <q-input outlined v-model="criteria.title" label="Title" />
-      <q-input outlined v-model="criteria.author" label="Author" />
-      <q-input outlined v-model="criteria.description" label="Desciption" />
+      <q-input
+        outlined
+        v-model="criteria.title"
+        label="Title"
+        color="burgund"
+      />
+      <q-input
+        outlined
+        v-model="criteria.author"
+        label="Author"
+        color="burgund"
+      />
+      <q-input
+        outlined
+        v-model="criteria.description"
+        label="Desciption"
+        color="burgund"
+      />
       <tag-input v-model="criteria.fandoms" label="Fandom(s)" />
       <tag-input v-model="criteria.tags" label="Tag(s)" />
       <q-select
@@ -16,6 +31,7 @@
         label="Rating"
         outlined
         clearable
+        color="burgund"
         placeholder="Rating"
         stack-label
       />

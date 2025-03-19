@@ -6,8 +6,14 @@
     <q-card class="q-pa-md card content" flat>
       <q-form @submit="loginUser" class="q-gutter-md" autofocus>
         <div v-if="msg" class="msg">{{ msg }}</div>
-        <q-input filled v-model="log" label="Login" />
-        <q-input filled v-model="password" label="Password" type="password" />
+        <q-input filled v-model="log" label="Login" color="burgund" />
+        <q-input
+          filled
+          v-model="password"
+          label="Password"
+          type="password"
+          color="burgund"
+        />
         <div>
           <q-btn
             label="Login"

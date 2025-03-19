@@ -9,10 +9,11 @@
             class="input"
             v-model="NewComment"
             filled
+            placeholder="Write your throughs here"
             type="textarea"
             counter
+            color="burgund"
             maxlength="500"
-            :rules="[(val) => !!val || 'Field is required']"
           />
         </div>
 
@@ -20,12 +21,14 @@
           v-model="username"
           :disable="isLoggedIn"
           placeholder="Username"
+          color="burgund"
           :rules="[(val) => !!val || 'Field is required']"
         />
         <q-input
           v-model="email"
           :disable="isLoggedIn"
           placeholder="E-mail"
+          color="burgund"
           type="email"
           :rules="[(val) => !!val || 'Field is required']"
         />
@@ -43,7 +46,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, onMounted, Ref } from "vue";
+import { ref, computed, watch, onMounted, useTemplateRef } from "vue";
 import { useUserStore } from "src/stores/user";
 import { createComment, checkPermissions } from "src/services/commentservice";
 import { showNotification } from "src/utilsTS/notify";
@@ -94,6 +97,10 @@ onMounted(() => {
 });
 
 const send = () : void => {
+  if (!NewComment.value) {
+    showNotification("Comment is empty!", "negative");
+    return;
+  }
   const comment = {
     content: NewComment.value,
     name: username.value,
@@ -116,12 +123,11 @@ const send = () : void => {
     });
 };
 
-const clearForm = () => {
+const clearForm = ():void => {
   NewComment.value = "";
   isLoggedIn ? null : (email.value = "");
   isLoggedIn ? null : (username.value = "");
 };
-
 </script>
 
 <style scoped>
