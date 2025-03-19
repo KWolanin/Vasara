@@ -199,7 +199,7 @@ public class StoryService {
         s.setComment(story.isAllowComments());
         s.setGuestComment(story.isAllowGuestComments());
         s.setChaptersNumber(chapterService.getChapterNumber(story.getId()));
-        s.setStoryRating(story.getRating());
+        s.setRating(story.getRating());
 
         if (story.getAuthor() != null) {
             AuthorDTO authorDTO = new AuthorDTO();
@@ -218,7 +218,7 @@ public class StoryService {
         story.setFinished(storyDTO.isFinished());
         story.setPublishDt(storyDTO.getPublishDt());
         story.setUpdateDt(storyDTO.getUpdateDt());
-        story.setRating(storyDTO.getStoryRating());
+        story.setRating(storyDTO.getRating());
         story.setAllowComments(storyDTO.isComment());
         story.setAllowGuestComments(storyDTO.isGuestComment());
 
@@ -300,7 +300,7 @@ public class StoryService {
             s.setFandoms(joinAndAddQuotes(storyDTO.getFandoms()));
             s.setFinished(storyDTO.isFinished());
             s.setTags(joinAndAddQuotes(storyDTO.getTags()));
-            s.setRating(storyDTO.getStoryRating());
+            s.setRating(storyDTO.getRating());
             s.setAllowGuestComments(storyDTO.isGuestComment());
             s.setAllowComments(storyDTO.isComment());
              storyRepository.save(s);

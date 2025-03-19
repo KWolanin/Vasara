@@ -12,6 +12,12 @@
         >{{ fandom }}</q-chip
       >
       <q-space />
+      <q-chip v-if="story.rating"
+       color="purple"
+       :icon="ratingIcon"
+       class="text-caption">{{
+        story.rating
+      }}</q-chip>
       <q-chip
         v-if="!story.finished"
         color="pink"
@@ -27,9 +33,6 @@
         class="text-caption"
         >{{ "completed".toUpperCase() }}</q-chip
       >
-      <q-chip v-if="story.rating" color="purple" class="text-caption">{{
-        story.rating
-      }}</q-chip>
     </div>
     <div>
       <q-chip
@@ -93,6 +96,8 @@
 import { format } from "date-fns";
 import { Story } from "src/types/Story";
 import { useRouter } from "vue-router";
+import { computed } from "vue";
+
 const router = useRouter();
 
 const props = defineProps<{
@@ -113,6 +118,18 @@ const readChapter = (): void => {
     },
   });
 };
+
+const ratingIcon = computed(() => {
+  if (props.story.rating ==  "KIDS") {
+    return "crib";
+  } else if (props.story.rating == "TEEN") {
+    return "school";
+  } else if (props.story.rating == "MATURE") {
+    return "explicit";
+  } else if (props.story.rating == "ADULT") {
+    return "badge";
+  }
+});
 </script>
 
 <style scoped>

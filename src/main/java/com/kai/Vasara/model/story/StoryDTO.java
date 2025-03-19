@@ -30,7 +30,7 @@ public class StoryDTO {
     private int chaptersNumber;
     private List<ChapterDTO> chapters;
     private AuthorDTO author;
-    private StoryRating storyRating = StoryRating.KIDS;
+    private StoryRating rating = StoryRating.KIDS;
     private boolean comment;
     private boolean guestComment;
 }

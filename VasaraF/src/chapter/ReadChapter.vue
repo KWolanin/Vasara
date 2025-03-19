@@ -202,20 +202,36 @@ const ensureLastReadParagraphLoaded = async () => {
 
 const saveReadingProgress = (paragraphId: number) => {
   if (data.value.storyDTO) {
-    localStorage.setItem(
-      "readingProgress",
-      JSON.stringify({
+    const progressList = JSON.parse(
+      localStorage.getItem("readingProgress") || "[]"
+    )
+    const existingProgressIndex = progressList.findIndex(
+      (progress: ReadingProgress) =>
+        progress.storyId === data.value.storyDTO.id
+    );
+
+    if (existingProgressIndex !== -1) {
+      progressList[existingProgressIndex] = {
         storyId: data.value.storyDTO.id,
         chapterNo: data.value.chapterNo,
         paragraphId,
-      })
-    );
-  }
-};
+      };
+    } else {
+      progressList.push({
+        storyId: data.value.storyDTO.id,
+        chapterNo: data.value.chapterNo,
+        paragraphId,
+      });
+    }
+    localStorage.setItem("readingProgress", JSON.stringify(progressList));
+}};
 
-const getReadingProgress = (): ReadingProgress => {
-  const progress = localStorage.getItem("readingProgress");
-  return progress ? JSON.parse(progress) : null;
+const getReadingProgress = (): ReadingProgress | null => {
+  const progressList = JSON.parse(localStorage.getItem("readingProgress") || "[]");
+  return progressList.find(
+    (progress: ReadingProgress) =>
+      progress.storyId === data.value.storyDTO?.id
+  ) || null;
 };
 
 // comment section
