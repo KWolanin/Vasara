@@ -75,12 +75,21 @@ const sanitized = (html: string): string => DOMPurify.sanitize(html);
 
 .paragraph {
   margin: 0 0 1px;
+  width: 100%;
 }
 
 .comment-btn {
   position: absolute;
   right: -30px;
   transition: opacity 0.2s ease-in-out;
+}
+
+::v-deep(.paragraph hr) {
+  border: none;
+  height: 1px;
+  background: linear-gradient(to right, transparent, #ccc, transparent);
+  margin: 1rem 0;
+  width: 100%;
 }
 
 </style>

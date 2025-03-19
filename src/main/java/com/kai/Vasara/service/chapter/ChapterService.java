@@ -91,7 +91,6 @@ public class ChapterService {
         dto.setStoryId(chapter.getStory().getId());
         dto.setPublished(chapter.getPublished());
         dto.setUpdated(chapter.getUpdated());
-//        dto.setParagraphs(splitIntoParagraphs(chapter.getContent()));
         List<ParagraphDTO> allParagraphs = splitIntoParagraphs(chapter.getContent());
         List<ParagraphDTO> paginatedParagraphs = allParagraphs.stream()
                 .skip(offset)
@@ -120,7 +119,7 @@ public class ChapterService {
         int paragraphId = 1;
 
         for (Element element : elements) {
-            if (!element.text().trim().isEmpty()) {
+            if (!element.text().trim().isEmpty() || "<hr>".equals(element.outerHtml())) {
                 paragraphs.add(new ParagraphDTO(paragraphId++, element.outerHtml()));
             }
         }

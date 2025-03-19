@@ -20,6 +20,7 @@
           filled
           v-model="title"
           label="Title"
+          color="burgund"
           ref="titleRef"
           :rules="[(val) => !!val || 'Title is required']"
         />
@@ -27,6 +28,7 @@
           ref="descRef"
           filled
           v-model="description"
+          color="burgund"
           maxlength="500"
           counter
           label="Description"
@@ -39,15 +41,22 @@
           v-model="rating"
           :options="ratingOptions"
           label="Rating"
+          color="burgund"
           outlined
         />
-        <q-checkbox v-model="finished" label="Mark as completed work" />
+        <q-checkbox
+          v-model="finished"
+          label="Mark as completed work"
+          color="burgund"
+        />
         <q-checkbox
           v-model="comment"
+          color="burgund"
           label="Allow comments (registered users)"
         />
         <q-checkbox
           v-model="guestComment"
+          color="burgund"
           label="Allow comments (guest users)"
         />
 
@@ -60,6 +69,7 @@
             flat
           />
           <q-btn
+            v-if="!isEditing"
             label="Clear"
             type="reset"
             color="primary"

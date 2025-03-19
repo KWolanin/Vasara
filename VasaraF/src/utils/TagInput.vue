@@ -5,6 +5,7 @@
       :label="label"
       @keydown.enter.prevent="addTag"
       outlined
+      color="burgund"
       class="q-mb-md"
     />
     <div>
