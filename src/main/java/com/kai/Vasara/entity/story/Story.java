@@ -13,8 +13,14 @@ import java.util.List;
 
 @Getter
 @Setter
-@Table(name = "story")
-@Entity
+@Table(name = "story", indexes = {
+        @Index(name = "idx_story_title", columnList = "title"),
+        @Index(name = "idx_story_tags", columnList = "tags"),
+        @Index(name = "idx_story_fandoms", columnList = "fandom"),
+        @Index(name = "idx_story_author", columnList = "authorid"),
+        @Index(name = "idx_story_rating", columnList = "rating"),
+        @Index(name = "idx_story_publishdt", columnList = "publishdt")
+})@Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

@@ -8,8 +8,10 @@ import java.time.ZonedDateTime;
 
 @Getter
 @Setter
-@Table(name = "chapter")
-@Entity
+@Table(name = "chapter", indexes = {
+        @Index(name = "idx_chapter_chapterno", columnList = "chapterno"),
+        @Index(name = "idx_chapter_storyid_chapterno", columnList = "storyid, chapterno")
+})@Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
