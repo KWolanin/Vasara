@@ -5,7 +5,7 @@ import com.kai.Vasara.entity.chapter.Chapter;
 import com.kai.Vasara.model.chapter.ChapterDTO;
 import com.kai.Vasara.repository.chapter.ChapterRepository;
 
-import com.kai.Vasara.service.chapter.ChapterService;
+import com.kai.Vasara.service.chapter.EditChapterService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -21,12 +21,12 @@ import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
-class ChapterServiceTest {
+class GetWholeChapterServiceTest {
 
-    @InjectMocks
-    ChapterService chapterService;
     @Mock
     ChapterRepository chapterRepository;
+    @InjectMocks
+    EditChapterService editChapterService;
 
     @Test
     void editChaptersOrder() {
@@ -51,7 +51,7 @@ class ChapterServiceTest {
 
         when(chapterRepository.findAllById(anyList())).thenReturn(Arrays.asList(isFirst, isSecond));
 
-        chapterService.editChaptersOrder(Arrays.asList(shouldBeFirst, shouldBeSecond));
+        editChapterService.editChaptersOrder(Arrays.asList(shouldBeFirst, shouldBeSecond));
 
         assertEquals(1, shouldBeFirst.getChapterNo());
         assertEquals(2, shouldBeSecond.getChapterNo());

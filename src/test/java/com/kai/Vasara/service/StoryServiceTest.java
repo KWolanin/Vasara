@@ -7,7 +7,7 @@ import com.kai.Vasara.model.SearchCriteria;
 import com.kai.Vasara.model.story.StoryDTO;
 import com.kai.Vasara.repository.chapter.ChapterRepository;
 import com.kai.Vasara.repository.story.StoryRepository;
-import com.kai.Vasara.service.chapter.ChapterService;
+import com.kai.Vasara.service.chapter.GetWholeChapterService;
 import com.kai.Vasara.service.story.FavoriteServiceStory;
 import com.kai.Vasara.service.story.FollowServiceStory;
 import com.kai.Vasara.service.story.ReadLaterService;
@@ -43,7 +43,7 @@ public class StoryServiceTest {
     ChapterRepository chapterRepository;
 
     @Mock
-    ChapterService chapterService;
+    GetWholeChapterService getWholeChapterService;
 
     @Mock
     ObjectMapper objectMapper;

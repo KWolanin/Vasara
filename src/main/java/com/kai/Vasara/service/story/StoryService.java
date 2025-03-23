@@ -10,7 +10,8 @@ import com.kai.Vasara.model.SearchCriteria;
 import com.kai.Vasara.model.story.StoryDTO;
 import com.kai.Vasara.repository.story.StoryRepository;
 import com.kai.Vasara.service.author.AuthorService;
-import com.kai.Vasara.service.chapter.ChapterService;
+import com.kai.Vasara.service.chapter.EditChapterService;
+import com.kai.Vasara.service.chapter.GetWholeChapterService;
 import com.kai.Vasara.service.comment.CommentService;
 import jakarta.persistence.criteria.Predicate;
 import lombok.extern.slf4j.Slf4j;
@@ -38,23 +39,25 @@ public class StoryService {
 
     private final StoryRepository storyRepository;
     private final AuthorService authorService;
-    private final ChapterService chapterService;
+    private final GetWholeChapterService getWholeChapterService;
     private final FavoriteServiceStory favoriteService;
     private final FollowServiceStory followingService;
     private final ReadLaterService readService;
     private final CommentService commentService;
+    private final EditChapterService editChapterService;
 
     @Autowired
     public StoryService(StoryRepository storyRepository, AuthorService authorService,
-                        ChapterService chapterService, @Lazy FavoriteServiceStory favoriteService,
-                        @Lazy FollowServiceStory followingService, @Lazy ReadLaterService readService, CommentService commentService) {
+                        GetWholeChapterService getWholeChapterService, @Lazy FavoriteServiceStory favoriteService,
+                        @Lazy FollowServiceStory followingService, @Lazy ReadLaterService readService, CommentService commentService, EditChapterService editChapterService) {
         this.storyRepository = storyRepository;
         this.authorService = authorService;
-        this.chapterService = chapterService;
+        this.getWholeChapterService = getWholeChapterService;
         this.favoriteService = favoriteService;
         this.followingService = followingService;
         this.readService = readService;
         this.commentService = commentService;
+        this.editChapterService = editChapterService;
     }
 
     public List<StoryDTO> getAll() {
@@ -198,7 +201,7 @@ public class StoryService {
         s.setUpdateDt(story.getUpdateDt());
         s.setComment(story.isAllowComments());
         s.setGuestComment(story.isAllowGuestComments());
-        s.setChaptersNumber(chapterService.getChapterNumber(story.getId()));
+        s.setChaptersNumber(getWholeChapterService.getChapterNumber(story.getId()));
         s.setRating(story.getRating());
 
         if (story.getAuthor() != null) {
@@ -283,7 +286,7 @@ public class StoryService {
     @CacheEvict(value = { "userStoriesCache", "storiesCache" }, allEntries = true)
     public void deleteStory(Long id) {
         commentService.deleteByStoryId(id);
-        chapterService.deleteChaptersForStory(id);
+        editChapterService.deleteChaptersForStory(id);
         favoriteService.delete(id);
         followingService.delete(id);
         readService.delete(id);

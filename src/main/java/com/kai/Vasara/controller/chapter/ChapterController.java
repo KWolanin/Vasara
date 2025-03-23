@@ -2,7 +2,9 @@ package com.kai.Vasara.controller.chapter;
 
 import com.kai.Vasara.model.chapter.ChapterDTO;
 import com.kai.Vasara.model.chapter.ChapterWithParagraphsDTO;
-import com.kai.Vasara.service.chapter.ChapterService;
+import com.kai.Vasara.service.chapter.GetWholeChapterService;
+import com.kai.Vasara.service.chapter.GetSplitChapterService;
+import com.kai.Vasara.service.chapter.EditChapterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,54 +16,58 @@ import java.util.List;
 @RequestMapping("/api/chapters")
 public class ChapterController {
 
-    private final ChapterService chapterService;
+    private final GetWholeChapterService getWholeChapterService;
+    private final GetSplitChapterService paragraphsService;
+    private final EditChapterService editChapterService;
 
     @Autowired
-    public ChapterController(ChapterService chapterService) {
-        this.chapterService = chapterService;
+    public ChapterController(GetWholeChapterService getWholeChapterService, GetSplitChapterService paragraphsService, EditChapterService editChapterService) {
+        this.getWholeChapterService = getWholeChapterService;
+        this.paragraphsService = paragraphsService;
+        this.editChapterService = editChapterService;
     }
 
     @GetMapping("/read/{storyId}/{chapterNo}")
-    public ResponseEntity<ChapterDTO> getChapterByStoryAndNumber(@PathVariable Long storyId, @PathVariable Long chapterNo) {
-        return new ResponseEntity<>(chapterService.getChapterByStoryIdAndNumber(storyId, chapterNo), HttpStatus.OK);
+    public ResponseEntity<ChapterDTO> getWholeChapter(@PathVariable Long storyId, @PathVariable Long chapterNo) {
+        return new ResponseEntity<>(getWholeChapterService.getWholeChapter(storyId, chapterNo), HttpStatus.OK);
     }
 
     @GetMapping("/read/paragraphs/{storyId}/{chapterNo}")
-    public ResponseEntity<ChapterWithParagraphsDTO> getChapterByStoryAndNumber(
+    public ResponseEntity<ChapterWithParagraphsDTO> getSplitChapter(
             @PathVariable Long storyId,
             @PathVariable Long chapterNo,
             @RequestParam(defaultValue = "0") int offset,
             @RequestParam(defaultValue = "15") int limit
     ) {
-        return ResponseEntity.ok(chapterService.getChapterWithParagraphs(storyId, chapterNo, offset, limit));
+        return ResponseEntity.ok(paragraphsService.getSplitChapter(storyId, chapterNo, offset, limit));
     }
 
 
     @PostMapping("/add")
     public ResponseEntity<?> addChapter(@RequestBody ChapterDTO chapterDTO) {
-        chapterService.saveChapter(chapterDTO);
+        editChapterService.saveChapter(chapterDTO);
         return ResponseEntity.ok().build();
     }
 
     @PatchMapping("/order")
     public ResponseEntity<?> editChaptersOrder(@RequestBody List<ChapterDTO> chapters) {
-        chapterService.editChaptersOrder(chapters);
+        editChapterService.editChaptersOrder(chapters);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/navigable/{storyId}/{chapterNo}")
     public ResponseEntity<Boolean> CheckIsByStoryAndNumber(@PathVariable Long storyId, @PathVariable Long chapterNo) {
-        return new ResponseEntity<>(chapterService.checkIsNextOrPrevious(storyId, chapterNo), HttpStatus.OK);
+        return new ResponseEntity<>(getWholeChapterService.checkIsNextOrPrevious(storyId, chapterNo), HttpStatus.OK);
     }
 
     @GetMapping("/all/{storyId}")
     public ResponseEntity<List<ChapterDTO>> getChaptersForStory(@PathVariable Long storyId) {
-        return new ResponseEntity<>(chapterService.getChapters(storyId), HttpStatus.OK);
+        return new ResponseEntity<>(getWholeChapterService.getChapters(storyId), HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{chapterId}")
     public ResponseEntity<?> deleteChapter(@PathVariable Long chapterId) {
-        chapterService.deleteChapter(chapterId);
+        editChapterService.deleteChapter(chapterId);
         return ResponseEntity.ok().build();
     }
 }
