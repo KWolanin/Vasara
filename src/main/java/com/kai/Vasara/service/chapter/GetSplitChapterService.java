@@ -41,6 +41,8 @@ public class GetSplitChapterService {
         if (chapter.getStory() != null) {
             setStoryDTO(chapter, dto);
         }
+        dto.setNext(chapter.getStory().getChapters().size() > chapter.getChapterNo());
+        dto.setPrevious(chapter.getChapterNo() > 1);
         return dto;
     }
 

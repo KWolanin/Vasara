@@ -16,8 +16,6 @@ public interface ChapterRepository extends JpaRepository<Chapter, Long> {
 
     Chapter findByStoryIdAndChapterNo(Long storyId, Long chapterNo);
 
-    boolean existsByStoryIdAndChapterNo(Long storyId, Long chapterNo);
-
     @Modifying
     void deleteAllByStoryId(Long storyId);
 

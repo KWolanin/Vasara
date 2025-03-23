@@ -57,24 +57,6 @@ export const fetchChaptersForStory = async (
   }
 };
 
-export const isNextOrPrevious = async (
-  storyId: number,
-  chapterNo: number
-): Promise<boolean> => {
-  try {
-    const response = await api.get(
-      `/chapters/navigable/${storyId}/${chapterNo}`
-    );
-    return response.data;
-  } catch (error) {
-    console.error(
-      "Error checking is next or previous chapter available:",
-      error
-    );
-    throw error;
-  }
-};
-
 export const updateChaptersOrder = async (chapters: Chapter[]) : Promise<void> => {
   try {
     await api.patch("/chapters/order", chapters);

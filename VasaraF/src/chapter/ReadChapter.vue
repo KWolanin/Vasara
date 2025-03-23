@@ -1,7 +1,7 @@
 <template>
   <main-menu />
   <div v-if="data">
-    <navigation-button :storyId="sId" :chapterNo="cNo">
+    <navigation-button :storyId="sId" :chapterNo="cNo" :next="data.next" :previous="data.previous">
       <font-size @decrease="decreaseFont" @increase="increaseFont" />
     </navigation-button>
 

@@ -22,7 +22,8 @@ public class ChapterWithParagraphsDTO {
     private ZonedDateTime published;
     private ZonedDateTime updated;
     private StoryDTO storyDTO;
-
+    private boolean isNext;
+    private boolean isPrevious;
 }
 
 

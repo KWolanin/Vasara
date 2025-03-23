@@ -30,11 +30,6 @@ public class GetWholeChapterService {
     }
 
     @Transactional
-    public Boolean checkIsNextOrPrevious(Long storyId, Long chapterNo) {
-        return chapterRepository.existsByStoryIdAndChapterNo(storyId, chapterNo);
-    }
-
-    @Transactional
     public List<ChapterDTO> getChapters(Long storyId) {
         return chapterRepository.findChaptersDataByStoryId(storyId)
                 .stream()

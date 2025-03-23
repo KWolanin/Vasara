@@ -55,11 +55,6 @@ public class ChapterController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/navigable/{storyId}/{chapterNo}")
-    public ResponseEntity<Boolean> CheckIsByStoryAndNumber(@PathVariable Long storyId, @PathVariable Long chapterNo) {
-        return new ResponseEntity<>(getWholeChapterService.checkIsNextOrPrevious(storyId, chapterNo), HttpStatus.OK);
-    }
-
     @GetMapping("/all/{storyId}")
     public ResponseEntity<List<ChapterDTO>> getChaptersForStory(@PathVariable Long storyId) {
         return new ResponseEntity<>(getWholeChapterService.getChapters(storyId), HttpStatus.OK);

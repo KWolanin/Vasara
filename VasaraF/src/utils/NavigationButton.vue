@@ -2,7 +2,7 @@
   <div class="row justify-center q-ma-md">
     <div class="col-10 row justify-between items-center">
       <router-link
-        v-show="isPreviousChapter"
+        v-show="previous"
         :to="{
           name: 'readChapter',
           query: { storyId: storyId, chapterNo: chapterNo - 1 },
@@ -14,7 +14,7 @@
       <slot />
       <q-space />
       <router-link
-        v-show="isNextChapter"
+        v-show="next"
         :to="{
           name: 'readChapter',
           query: { storyId: storyId, chapterNo: chapterNo + 1 },
@@ -27,24 +27,11 @@
 </template>
 
 <script setup lang="ts">
-import { isNextOrPrevious } from 'src/services/chapterservice';
-import { ref, onMounted } from 'vue'
-
-const props = defineProps({
+defineProps({
   storyId: Number,
   chapterNo: Number,
+  next: Boolean,
+  previous: Boolean
 });
 
-
-const isNextChapter = ref<boolean>(false);
-const isPreviousChapter = ref<boolean>(false);
-
-onMounted(() => {
-  isNextOrPrevious(props.storyId, props.chapterNo + 1).then((response) => {
-    isNextChapter.value = response;
-  });
-  isNextOrPrevious(props.storyId, props.chapterNo - 1).then((response) => {
-    isPreviousChapter.value = response;
-  });
-})
 </script>

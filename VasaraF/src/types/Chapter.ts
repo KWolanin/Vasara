@@ -10,7 +10,9 @@ export interface Chapter {
   id: number;
   published: string | number;
   updated: string | number;
-  storyDTO: Story
+  storyDTO: Story;
+  next: boolean;
+  previous: boolean;
 }
 
 export interface Paragraph {
