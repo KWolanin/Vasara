@@ -12,6 +12,17 @@ export const createChapter = async (
   }
 };
 
+export const editChapter = async (
+  chapterData: Chapter | Omit<Chapter, "id">
+): Promise<void> => {
+  try {
+    await api.patch("/chapters/edit", chapterData);
+  } catch (error) {
+    console.error("Error editing chapter:", error);
+    throw error;
+  }
+};
+
 export const fetchChapter = async (
   storyId: number,
   chapterNo: number

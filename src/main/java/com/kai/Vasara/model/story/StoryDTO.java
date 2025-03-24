@@ -28,7 +28,8 @@ public class StoryDTO {
     private ZonedDateTime publishDt;
     private ZonedDateTime updateDt;
     private int chaptersNumber;
-    private List<ChapterDTO> chapters;
+    private List<ChapterDTO> chapters; // todo: check if can be removed safely
+    private List<String> chaptersTitles;
     private AuthorDTO author;
     private StoryRating rating = StoryRating.KIDS;
     private boolean comment;

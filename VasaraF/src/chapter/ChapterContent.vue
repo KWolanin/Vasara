@@ -1,6 +1,16 @@
 <template>
   <div class="q-mb-md chapter">
-    <h4>{{ data.chapterTitle }}</h4>
+    <h4 class="title">{{ data.chapterTitle }}</h4>
+    <h6 class="description">
+      Chapter {{data.chapterNo}} of <strong>{{ data.storyDTO.title }}</strong>
+      by
+      <router-link
+      :to="{
+        path: 'user',
+        query: { authorId: data.storyDTO.authorId },
+      }"
+    >{{ data.storyDTO.authorName }}</router-link>
+  </h6>
     <div class="content-wrapper">
       <q-card class="q-pa-md q-mb-lg content" flat>
         <div
@@ -13,7 +23,7 @@
           @mouseenter="$emit('save-progress', paragraph.id)"
           :id="'paragraph-' + paragraph.id"
         >
-                <!-- <q-btn // DON'T REMOVE: needed to rework the comment system in the future
+          <!-- <q-btn // DON'T REMOVE: needed to rework the comment system in the future
               v-if="hoveredParagraph === paragraph.id"
               icon="add_comment"
               flat
@@ -44,7 +54,6 @@ const sanitized = (html: string): string => DOMPurify.sanitize(html);
 </script>
 
 <style scoped>
-
 .chapter {
   display: flex;
   flex-direction: column;
@@ -90,6 +99,14 @@ const sanitized = (html: string): string => DOMPurify.sanitize(html);
   background: linear-gradient(to right, transparent, #ccc, transparent);
   margin: 1rem 0;
   width: 100%;
+}
+
+.title {
+  margin-bottom: 5px;
+}
+
+.description {
+  margin-top: 5px;
 }
 
 </style>

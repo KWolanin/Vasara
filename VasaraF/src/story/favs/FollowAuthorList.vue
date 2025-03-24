@@ -26,7 +26,8 @@
       :max="maxPages"
       color="black"
       rounded
-      active-color="gold"
+      active-color="burgund"
+      active-design="unelevated"
       direction-links
       boundary-links
       icon-first="skip_previous"

@@ -16,7 +16,7 @@ export function useToolbar() {
       },
     ],
     ["bold", "italic", "strike", "underline", "subscript", "superscript"],
-    ["token", "hr", "link", "custom_btn"],
+    ["token", "hr", "link"],
     ["fullscreen"],
     [
       {

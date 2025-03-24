@@ -36,13 +36,14 @@
         :max="maxPages"
         color="black"
         rounded
-        active-color="gold"
+        active-color="burgund"
         direction-links
         boundary-links
         icon-first="skip_previous"
         icon-last="skip_next"
         icon-prev="fast_rewind"
         icon-next="fast_forward"
+        active-design="unelevated"
         @update:model-value="setPage"
       />
     </div>

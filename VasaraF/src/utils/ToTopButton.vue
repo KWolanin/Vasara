@@ -1,7 +1,6 @@
 <template>
   <q-btn
     unelevated
-    color="pink"
     round
     text-color="black"
     icon="arrow_circle_up"

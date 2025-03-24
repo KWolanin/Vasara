@@ -59,8 +59,11 @@ public class GetSplitChapterService {
         StoryDTO storyDTO = new StoryDTO();
         storyDTO.setId(chapter.getStory().getId());
         storyDTO.setTitle(chapter.getStory().getTitle());
-        storyDTO.setAuthorName(chapter.getStory().getAuthor().getLogin());
+        storyDTO.setAuthorName(chapter.getStory().getAuthor().getUsername());
         storyDTO.setAuthorId(chapter.getStory().getAuthor().getId());
+        storyDTO.setChaptersTitles(chapter.getStory().getChapters().stream()
+                .map(c -> c.getChapterNo() + ". " + c.getChapterTitle())
+                .toList());
         dto.setStoryDTO(storyDTO);
         dto.setStoryId(storyDTO.getId());
     }

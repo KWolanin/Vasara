@@ -1,7 +1,9 @@
 package com.kai.Vasara.controller.chapter;
 
+import com.kai.Vasara.entity.chapter.Chapter;
 import com.kai.Vasara.model.chapter.ChapterDTO;
 import com.kai.Vasara.model.chapter.ChapterWithParagraphsDTO;
+import com.kai.Vasara.model.story.StoryDTO;
 import com.kai.Vasara.service.chapter.GetWholeChapterService;
 import com.kai.Vasara.service.chapter.GetSplitChapterService;
 import com.kai.Vasara.service.chapter.EditChapterService;
@@ -46,6 +48,12 @@ public class ChapterController {
     @PostMapping("/add")
     public ResponseEntity<?> addChapter(@RequestBody ChapterDTO chapterDTO) {
         editChapterService.saveChapter(chapterDTO);
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/edit")
+    public ResponseEntity<?> editChapter(@RequestBody ChapterDTO chapterDTO) {
+        editChapterService.editChapter(chapterDTO);
         return ResponseEntity.ok().build();
     }
 

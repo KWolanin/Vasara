@@ -15,12 +15,14 @@
           class="q-py-md"
           color="burgund"
         />
+        <q-toggle v-model="darkEditorMode" color="burgund" label="Dark/Light editor mode" />
         <q-editor
           height="70vh"
           v-model="content"
           :dense="$q.screen.lt.md"
           :toolbar="toolbar"
           :fonts="fonts"
+          :dark="darkEditorMode"
         />
       </form>
     </q-card>
@@ -31,7 +33,11 @@
 import { ref, computed, onMounted, Ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { Chapter } from "src/types/Chapter";
-import { createChapter, fetchChapter } from "../services/chapterservice";
+import {
+  createChapter,
+  editChapter,
+  fetchChapter,
+} from "../services/chapterservice";
 import { showNotification } from "src/utilsTS/notify";
 import { useToolbar } from "src/utilsTS/toolbar";
 import { fonts } from "src/utilsTS/fonts";
@@ -42,6 +48,8 @@ const route = useRoute();
 
 const chapterTitle = ref<string | number>("");
 const content = ref<string>("");
+
+const darkEditorMode = ref<boolean>(false)
 
 const titleRef = ref(null);
 
@@ -67,26 +75,45 @@ const saveChapter = (): void => {
     return;
   }
 
+  content.value = wrapFirstTextInParagraph(content.value);
+
+  // convert dumb quotes to smart (typographic) quotes (e.g. 'xx' -> ‘xx’) for English and Polish;
+  // content.value = convertToSmartQuotesPL(content.value);
+
   let chapterO: Chapter | Omit<Chapter, "id">;
 
   chapterO = createChapterObject();
-  createChapter(chapterO)
-    .then(() => {
 
-      route.name === "add"
-        ? router.push("/mines")
-        : router.push({ path: "/manage", query: { storyId: chapterO.storyId } });
-
-      const msg = route.name === "edit" ? "updated" : "published";
-      showNotification(`Chapter ${msg} successfully!`, "positive");
-    })
-    .catch((error: unknown) => {
-      console.error(error);
-      showNotification(
-        "An error occurred while trying to save the chapter. Please try again later.",
-        "negative"
-      );
-    });
+  if (route.name == "add") {
+    createChapter(chapterO)
+      .then(() => {
+        router.push("/mines");
+        showNotification(`Chapter published successfully!`, "positive");
+      })
+      .catch((error: unknown) => {
+        console.error(error);
+        showNotification(
+          "An error occurred while trying to save the chapter. Please try again later.",
+          "negative"
+        );
+      });
+  } else {
+    editChapter(chapterO)
+      .then(() => {
+        router.push({
+          path: "/manage",
+          query: { storyId: chapterO.storyId },
+        });
+        showNotification(`Chapter updated successfully!`, "positive");
+      })
+      .catch((error: unknown) => {
+        console.error(error);
+        showNotification(
+          "An error occurred while trying to save the chapter. Please try again later.",
+          "negative"
+        );
+      });
+  }
 };
 
 const existingChapter: Ref<Chapter | null> = ref(null);
@@ -105,9 +132,9 @@ onMounted(() => {
   }
 });
 
-function createChapterObject() : Omit<Chapter, "id"> {
-  let c = null
-  const date = new Date().toISOString()
+function createChapterObject(): Omit<Chapter, "id"> {
+  let c = null;
+  const date = new Date().toISOString();
   if (route.name === "add") {
     c = {
       chapterTitle: chapterTitle.value,
@@ -130,11 +157,29 @@ function createChapterObject() : Omit<Chapter, "id"> {
   return c;
 }
 
-
 /* prevents saving a chapter when it has only html tags, no real text */
 function isHtmlContentEmpty(html: string) {
   const div = document.createElement("div");
   div.innerHTML = html;
   return div.innerText.trim().length === 0;
 }
+
+function wrapFirstTextInParagraph(html: string): string {
+  return html.replace(/^([^<]+)(?=<|$)/, (match, firstText) => {
+    return firstText.trim() ? `<div>${firstText.trim()}</div>` : match;
+  });
+}
+
+function convertToSmartQuotesEN(text: string) : string {
+  return text
+    .replace(/(^|[^\\])'([^']+)'/g, '$1\u2018$2\u2019')
+    .replace(/(^|[^\\])"([^"]+)"/g, '$1\u201c$2\u201d');
+}
+
+function convertToSmartQuotesPL(text: string) : string {
+  return text
+  .replace(/(^|[^\\])'([^']+)'/g, '$1\u201E$2\u201D')
+  .replace(/(^|[^\\])"([^"]+)"/g, '$1\u201E$2\u201D');
+}
+
 </script>

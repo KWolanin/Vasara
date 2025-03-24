@@ -13,4 +13,5 @@ export interface Story {
   rating: string;
   comment: boolean;
   guestComment: boolean;
+  chaptersTitles: string[];
 }

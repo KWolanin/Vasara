@@ -1,10 +1,25 @@
 <template>
   <main-menu />
   <div v-if="data">
-    <navigation-button :storyId="sId" :chapterNo="cNo" :next="data.next" :previous="data.previous">
-      <font-size @decrease="decreaseFont" @increase="increaseFont" />
+    <navigation-button
+      :storyId="sId"
+      :chapterNo="cNo"
+      :next="data.next"
+      :previous="data.previous"
+    >
+      <q-select
+        v-model="currentChapter"
+        :options="chapterList"
+        label=""
+        dense
+        color="burgund"
+        flat
+        style="width: 40%; margin: auto"
+      />
     </navigation-button>
-
+    <div class="row justify-center">
+      <font-size @decrease="decreaseFont" @increase="increaseFont" />
+    </div>
     <chapter-content
       :data="data"
       :fontSize="fontSize"
@@ -18,6 +33,15 @@
     Loading...
     <q-spinner-hearts size="50px" color="gold" />
   </q-inner-loading>
+
+  <navigation-button
+    v-if="isEndReached"
+    :storyId="sId"
+    :chapterNo="cNo"
+    :next="data.next"
+    :previous="data.previous"
+  >
+  </navigation-button>
 
   <div class="row justify-center q-ma-md">
     <div class="col-10 row justify-end q-mb-lg">
@@ -53,7 +77,7 @@
 <script setup lang="ts">
 import { nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { fetchChapterWithParagraphs } from "../services/chapterservice";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { Chapter } from "../types/Chapter";
 import { ReadingProgress } from "src/types/ReadingProgress";
 
@@ -63,6 +87,8 @@ import FontSize from "src/utils/FontSize.vue";
 import NavigationButton from "src/utils/NavigationButton.vue";
 import ChapterContent from "./ChapterContent.vue";
 import CommentSection from "src/comment/CommentSection.vue";
+
+const router = useRouter();
 
 const data = ref<Chapter>(null);
 
@@ -89,6 +115,17 @@ const offset = ref<number>(0);
 const limit: number = 30;
 const isLoading = ref<boolean>(false);
 const isEndReached = ref<boolean>(false);
+
+const currentChapter = ref<string>("");
+const chapterList = ref<string[]>([]);
+
+watch(currentChapter, () => {
+  if (route.query.chapterNo === currentChapter.value.charAt(0)) return;
+  router.push({
+    path: "/read",
+    query: { storyId: data.value.storyDTO.id, chapterNo: currentChapter.value.charAt(0) },
+  })
+});
 
 onMounted(() => {
   loadChapter();
@@ -150,7 +187,8 @@ const loadChapter = async () => {
     );
     data.value = { ...response, paragraphs: response.paragraphs };
     offset.value += response.paragraphs.length;
-
+    currentChapter.value = `${data.value.chapterNo}. ${data.value.chapterTitle}`;
+    chapterList.value = data.value.storyDTO.chaptersTitles;
     await ensureLastReadParagraphLoaded();
   } catch (error) {
     console.error("Chapter loading error:", error);
@@ -204,10 +242,9 @@ const saveReadingProgress = (paragraphId: number) => {
   if (data.value.storyDTO) {
     const progressList = JSON.parse(
       localStorage.getItem("readingProgress") || "[]"
-    )
+    );
     const existingProgressIndex = progressList.findIndex(
-      (progress: ReadingProgress) =>
-        progress.storyId === data.value.storyDTO.id
+      (progress: ReadingProgress) => progress.storyId === data.value.storyDTO.id
     );
 
     if (existingProgressIndex !== -1) {
@@ -224,14 +261,19 @@ const saveReadingProgress = (paragraphId: number) => {
       });
     }
     localStorage.setItem("readingProgress", JSON.stringify(progressList));
-}};
+  }
+};
 
 const getReadingProgress = (): ReadingProgress | null => {
-  const progressList = JSON.parse(localStorage.getItem("readingProgress") || "[]");
-  return progressList.find(
-    (progress: ReadingProgress) =>
-      progress.storyId === data.value.storyDTO?.id
-  ) || null;
+  const progressList = JSON.parse(
+    localStorage.getItem("readingProgress") || "[]"
+  );
+  return (
+    progressList.find(
+      (progress: ReadingProgress) =>
+        progress.storyId === data.value.storyDTO?.id
+    ) || null
+  );
 };
 
 // comment section
