@@ -1,21 +1,17 @@
 package com.kai.Vasara.service.author;
 
-
 import com.kai.Vasara.entity.author.Author;
 import com.kai.Vasara.exception.author.AuthorError;
 import com.kai.Vasara.exception.author.AuthorException;
 import com.kai.Vasara.model.author.AuthorDTO;
 import com.kai.Vasara.repository.author.AuthorRepository;
-import com.kai.Vasara.service.story.StoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
@@ -27,24 +23,24 @@ public class AuthorService {
 
     private final AuthorRepository authorRepository;
     private final PasswordEncoder passwordEncoder;
-    private final StoryService storyService;
+    private final AuthorMapper authorMapper;
 
     @Autowired
-    public AuthorService(AuthorRepository authorRepository, PasswordEncoder passwordEncoder, @Lazy StoryService storyService) {
+    public AuthorService(AuthorRepository authorRepository, PasswordEncoder passwordEncoder, AuthorMapper authorMapper) {
         this.authorRepository = authorRepository;
         this.passwordEncoder = passwordEncoder;
-        this.storyService = storyService;
+        this.authorMapper = authorMapper;
     }
 
     public List<AuthorDTO> getAll() {
         return authorRepository.findAll()
                 .stream()
-                .map(this::from)
+                .map(authorMapper::from)
                 .collect(Collectors.toList());
     }
 
     public AuthorDTO getAuthor(Long id) {
-        return authorRepository.findById(id).map(this::from)
+        return authorRepository.findById(id).map(authorMapper::from)
                 .orElseThrow(() -> new AuthorException(AuthorError.AUTHOR_NOT_FOUND));
     }
 
@@ -62,27 +58,6 @@ public class AuthorService {
                         .orElseThrow(() -> new AuthorException(AuthorError.AUTHOR_DETAILS_NOT_FOUND));
     }
 
-    public AuthorDTO from(Author author) {
-        AuthorDTO authorDTO = new AuthorDTO();
-        authorDTO.setId(author.getId());
-        authorDTO.setLogin(author.getLogin());
-        authorDTO.setUsername(author.getUsername());
-        authorDTO.setEmail(author.getEmail());
-        authorDTO.setDescription(author.getDescription());
-        authorDTO.setStories(new ArrayList<>());
-        author.getStories().forEach(story -> authorDTO.getStories().add(storyService.from(story)));
-        return authorDTO;
-    }
-    public Author from(AuthorDTO authorDTO) {
-        Author author = new Author();
-        author.setId(authorDTO.getId());
-        author.setUsername(authorDTO.getUsername());
-        author.setEmail(authorDTO.getEmail());
-        author.setDescription(authorDTO.getDescription());
-        author.setStories(new ArrayList<>());
-        authorDTO.getStories().forEach(storyDAO -> author.getStories().add(storyService.from(storyDAO)));
-        return author;
-    }
 
     public Author register(Author author) {
         if (authorRepository.existsByLogin(author.getLogin())) {
@@ -118,7 +93,7 @@ public class AuthorService {
         if (!passwordEncoder.matches(rawPassword, author.getPassword())) {
             throw new AuthorException(AuthorError.AUTHOR_INVALID_CREDENTIALS);
         }
-        return from(author);
+        return authorMapper.from(author);
     }
 
 

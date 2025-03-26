@@ -2,7 +2,6 @@ package com.kai.Vasara.model.story;
 
 import com.kai.Vasara.model.chapter.ChapterDTO;
 import com.kai.Vasara.model.StoryRating;
-import com.kai.Vasara.model.author.AuthorDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -30,7 +29,6 @@ public class StoryDTO {
     private int chaptersNumber;
     private List<ChapterDTO> chapters; // todo: check if can be removed safely
     private List<String> chaptersTitles;
-    private AuthorDTO author;
     private StoryRating rating = StoryRating.KIDS;
     private boolean comment;
     private boolean guestComment;

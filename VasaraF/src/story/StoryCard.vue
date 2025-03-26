@@ -94,14 +94,14 @@
 
 <script setup lang="ts">
 import { format } from "date-fns";
-import { Story } from "src/types/Story";
+import { StoryInfo } from "src/types/StoryInfo";
 import { useRouter } from "vue-router";
 import { computed } from "vue";
 
 const router = useRouter();
 
 const props = defineProps<{
-  story: Story;
+  story: StoryInfo;
   bordered?: boolean;
 }>();
 

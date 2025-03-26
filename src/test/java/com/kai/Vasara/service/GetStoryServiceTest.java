@@ -5,13 +5,13 @@ import com.kai.Vasara.entity.author.Author;
 import com.kai.Vasara.entity.story.Story;
 import com.kai.Vasara.model.SearchCriteria;
 import com.kai.Vasara.model.story.StoryDTO;
+import com.kai.Vasara.model.story.StoryInfo;
 import com.kai.Vasara.repository.chapter.ChapterRepository;
 import com.kai.Vasara.repository.story.StoryRepository;
+import com.kai.Vasara.service.author.AuthorService;
 import com.kai.Vasara.service.chapter.GetWholeChapterService;
-import com.kai.Vasara.service.story.FavoriteServiceStory;
-import com.kai.Vasara.service.story.FollowServiceStory;
-import com.kai.Vasara.service.story.ReadLaterService;
-import com.kai.Vasara.service.story.StoryService;
+import com.kai.Vasara.service.story.*;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -31,31 +31,40 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-public class StoryServiceTest {
+public class GetStoryServiceTest {
 
-    @InjectMocks
-    StoryService storyService;
-
+    @Mock
+    GetStoryService getStoryService;
+    @Mock
+    GetStoryAccordingToCriteria getStoryAccordingToCriteria;
     @Mock
     StoryRepository storyRepository;
-
     @Mock
     ChapterRepository chapterRepository;
-
-    @Mock
-    GetWholeChapterService getWholeChapterService;
-
     @Mock
     ObjectMapper objectMapper;
-
     @Mock
     FavoriteServiceStory favoriteService;
-
     @Mock
     FollowServiceStory followingService;
-
     @Mock
     ReadLaterService readService;
+    @Mock
+    private EditStoryService editStoryService;
+    @Mock
+    private StoryMapper mapper;
+    @Mock
+    private GetWholeChapterService getWholeChapterService;
+    @Mock
+    private AuthorService authorService;
+
+    @BeforeEach
+    void setUp() {
+        mapper = new StoryMapper(getWholeChapterService, authorService);
+        editStoryService = new EditStoryService(storyRepository, mapper);
+        getStoryService = new GetStoryService(storyRepository, mapper);
+        getStoryAccordingToCriteria = new GetStoryAccordingToCriteria(getStoryService);
+    }
 
 
     @Test
@@ -65,7 +74,7 @@ public class StoryServiceTest {
         storyDTO.setTags(Arrays.asList("A", "B", "C"));
         storyDTO.setFandoms(Arrays.asList("X", "Y", "Z"));
 
-        storyService.updateStoryTagsAndFandoms(story, storyDTO);
+        mapper.updateStoryTagsAndFandoms(story, storyDTO);
 
         assertEquals("[\"A\",\"B\",\"C\"]", story.getTags());
         assertEquals("[\"X\",\"Y\",\"Z\"]", story.getFandoms());
@@ -78,7 +87,7 @@ public class StoryServiceTest {
         storyDTO.setTags(List.of(""));
         storyDTO.setFandoms(null);
 
-        storyService.updateStoryTagsAndFandoms(story, storyDTO);
+        mapper.updateStoryTagsAndFandoms(story, storyDTO);
 
         assertEquals("[\"\"]", story.getTags());
         assertEquals("[\"\"]", story.getFandoms());
@@ -88,7 +97,7 @@ public class StoryServiceTest {
     void splitAndRemoveQuotes_test() {
         String input = "[\"A\",\"B\",\"C\"]";
 
-        List<String> results = StoryService.splitAndRemoveQuotes(input);
+        List<String> results = mapper.splitAndRemoveQuotes(input);
 
         assertEquals(3, results.size());
         assertEquals("A", results.get(0));
@@ -99,15 +108,15 @@ public class StoryServiceTest {
     @Test
     void splitAndRemoveQuotes_test_no_tag() {
         String input = "[]";
-        List<String> results = StoryService.splitAndRemoveQuotes(input);
+        List<String> results = mapper.splitAndRemoveQuotes(input);
         assertTrue(results.isEmpty());
 
         input = "";
-        results = StoryService.splitAndRemoveQuotes(input);
+        results = mapper.splitAndRemoveQuotes(input);
         assertTrue(results.isEmpty());
 
         input = null;
-        results = StoryService.splitAndRemoveQuotes(input);
+        results = mapper.splitAndRemoveQuotes(input);
         assertTrue(results.isEmpty());
     }
 
@@ -115,15 +124,15 @@ public class StoryServiceTest {
     @Test
     void joinAndAddQuotes_test() {
         List<String> tags = new ArrayList<>(Arrays.asList("A", "B", "C", "D"));
-        String result = StoryService.joinAndAddQuotes(tags);
+        String result = mapper.joinAndAddQuotes(tags);
         assertEquals("[\"A\",\"B\",\"C\",\"D\"]", result);
     }
 
     @Test
     void joinAndAddQuotes_test_null_empty() {
-        String result = StoryService.joinAndAddQuotes(null);
+        String result = mapper.joinAndAddQuotes(null);
         assertEquals("[]", result);
-        result = StoryService.joinAndAddQuotes(new ArrayList<>());
+        result = mapper.joinAndAddQuotes(new ArrayList<>());
         assertEquals("[]", result);
     }
 
@@ -143,7 +152,7 @@ public class StoryServiceTest {
 
         when(storyRepository.findAll()).thenReturn(List.of(story1, story2));
 
-        List<StoryDTO> result = storyService.getAll();
+        List<StoryDTO> result = getStoryService.getAll();
 
         assertNotNull(result);
         assertEquals(2, result.size());
@@ -168,7 +177,7 @@ public class StoryServiceTest {
         Page<Story> page = new PageImpl<>(List.of(story1), PageRequest.of(0, 1), 1);
         when(storyRepository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(page);
 
-        Page<StoryDTO> result = storyService.getPage(1, 1, searchCriteria, "title");
+        Page<StoryInfo> result = getStoryAccordingToCriteria.getPage(1, 1, searchCriteria, "title");
 
         assertNotNull(result);
         assertEquals(1, result.getTotalElements());
@@ -189,7 +198,7 @@ public class StoryServiceTest {
         Page<Story> page = new PageImpl<>(List.of(story1), PageRequest.of(0, 1), 1);
         when(storyRepository.findAllWithChapters(any(Pageable.class))).thenReturn(page);
 
-        Page<StoryDTO> result = storyService.getPage(1, 1, searchCriteria, "title");
+        Page<StoryInfo> result = getStoryAccordingToCriteria.getPage(1, 1, searchCriteria, "title");
 
         assertNotNull(result);
         assertEquals(1, result.getTotalElements());
@@ -211,7 +220,7 @@ public class StoryServiceTest {
         Page<Story> page = new PageImpl<>(List.of(story1), PageRequest.of(0, 1, sort), 1);
         when(storyRepository.findAllByAuthorId(eq(1L), any(Pageable.class))).thenReturn(page);
 
-        Page<StoryDTO> result = storyService.getMyStories(1L, 1, 1);
+        Page<StoryInfo> result = getStoryService.getMyStories(1L, 1, 1);
 
         assertNotNull(result);
         assertEquals(1, result.getTotalElements());
@@ -230,7 +239,7 @@ public class StoryServiceTest {
 
         when(storyRepository.findById(1L)).thenReturn(Optional.of(story));
 
-        StoryDTO result = storyService.getStory(1L);
+        StoryDTO result = getStoryService.getStory(1L);
 
         assertNotNull(result);
         assertEquals("Story 1", result.getTitle());
@@ -246,12 +255,11 @@ public class StoryServiceTest {
 
         when(storyRepository.save(any(Story.class))).thenReturn(new Story());
 
-    storyService.saveStory(storyDTO);
+        editStoryService.saveStory(storyDTO);
 
         verify(storyRepository).save(any(Story.class));
         verifyNoMoreInteractions(storyRepository);
     }
-
 
 
     @Test
@@ -267,7 +275,7 @@ public class StoryServiceTest {
         when(storyRepository.findById(1L)).thenReturn(Optional.of(existingStory));
         when(storyRepository.save(existingStory)).thenReturn(existingStory);
 
-        storyService.editStory(storyDTO);
+        editStoryService.editStory(storyDTO);
 
         assertEquals("Updated Story", existingStory.getTitle());
         verify(storyRepository).findById(1L);
@@ -283,7 +291,7 @@ public class StoryServiceTest {
 
         when(storyRepository.findById(1L)).thenReturn(Optional.empty());
 
-        storyService.editStory(storyDTO);
+        editStoryService.editStory(storyDTO);
 
         verify(storyRepository).findById(1L);
         verifyNoMoreInteractions(storyRepository);
@@ -293,7 +301,7 @@ public class StoryServiceTest {
     void count_returnsTotalStoryCount() {
         when(storyRepository.count()).thenReturn(100L);
 
-        long result = storyService.count();
+        long result = getStoryService.count();
 
         assertEquals(100L, result);
         verify(storyRepository).count();
@@ -304,13 +312,12 @@ public class StoryServiceTest {
     void countMine_returnsCountOfAuthorsStories() {
         when(storyRepository.countMine(1L)).thenReturn(5L);
 
-        long result = storyService.countMine(1L);
+        long result = getStoryService.countMine(1L);
 
         assertEquals(5L, result);
         verify(storyRepository).countMine(1L);
         verifyNoMoreInteractions(storyRepository);
     }
-
 
 
 }

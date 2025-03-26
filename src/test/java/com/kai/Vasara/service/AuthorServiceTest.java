@@ -4,7 +4,10 @@ import com.kai.Vasara.entity.author.Author;
 import com.kai.Vasara.exception.author.AuthorException;
 import com.kai.Vasara.model.author.AuthorDTO;
 import com.kai.Vasara.repository.author.AuthorRepository;
+import com.kai.Vasara.service.author.AuthorMapper;
 import com.kai.Vasara.service.author.AuthorService;
+import com.kai.Vasara.service.story.StoryMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -32,6 +35,18 @@ class AuthorServiceTest {
 
     @Mock
     private  PasswordEncoder passwordEncoder;
+
+    @Mock
+    private AuthorMapper authorMapper;
+    @Mock
+    private StoryMapper storyMapper;
+
+    @BeforeEach
+    void setUp() {
+        authorMapper = new AuthorMapper(storyMapper);
+        authorService = new AuthorService(authorRepository, passwordEncoder, authorMapper);
+    }
+
 
 
     @Test
@@ -88,7 +103,7 @@ class AuthorServiceTest {
     @Test
     void from_authorToAuthorDAO_returnsCorrectAuthorDAO() {
         Author author = Author.builder().id(1L).login("login").stories(Collections.emptyList()).username("username").build();
-        AuthorDTO result = authorService.from(author);
+        AuthorDTO result = authorMapper.from(author);
         assertNotNull(result);
         assertEquals(author.getId(), result.getId());
         assertEquals(author.getUsername(), result.getUsername());
@@ -98,7 +113,7 @@ class AuthorServiceTest {
     @Test
     void from_authorDAOToAuthor_returnsCorrectAuthor() {
         AuthorDTO authorDTO = AuthorDTO.builder().id(1L).username("username").email("e@e.com").stories(Collections.emptyList()).build();
-        Author result = authorService.from(authorDTO);
+        Author result = authorMapper.from(authorDTO);
         assertNotNull(result);
         assertEquals(authorDTO.getId(), result.getId());
         assertEquals(authorDTO.getUsername(), result.getUsername());

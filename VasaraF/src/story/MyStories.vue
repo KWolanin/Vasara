@@ -61,12 +61,12 @@ import { fetchMyStories, countMines } from "../services/storyservice";
 import { onMounted, ref, computed } from "vue";
 import StoryCard from "../story/StoryCard.vue";
 import EditStoryMenu from "../story/EditStoryMenu.vue";
-import { Story } from "src/types/Story";
+import { StoryInfo } from "src/types/StoryInfo";
 import { useRouter } from "vue-router";
 import { showNotification } from "src/utilsTS/notify";
 
 const router = useRouter();
-const stories = ref<Story[]>([]);
+const stories = ref<StoryInfo[]>([]);
 const loading = ref<boolean>(true);
 
 const storiesAmount = ref<number>(0);

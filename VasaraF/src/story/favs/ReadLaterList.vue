@@ -49,7 +49,7 @@
 
 <script setup lang="ts">
 import { findMyReads, countReads } from "src/services/readservice";
-import { Story } from "src/types/Story";
+import { StoryInfo } from "src/types/StoryInfo";
 import { computed, onMounted, ref } from "vue";
 import { useUserStore } from "src/stores/user";
 import StoryCard from "../StoryCard.vue";
@@ -62,7 +62,7 @@ const storiesAmount = ref<number>(0);
 const storiesPerPage: number = 5;
 const currentPage = ref<number>(1);
 
-const myReads = ref<Story[]>([]);
+const myReads = ref<StoryInfo[]>([]);
 
 onMounted(() => {
   loading.value = true;

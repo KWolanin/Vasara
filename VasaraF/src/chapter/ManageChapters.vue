@@ -60,19 +60,20 @@ import {
 } from "../services/chapterservice";
 import { VueDraggable } from "vue-draggable-plus";
 import ChapterCard from "./ChapterCard.vue";
-import { Chapter } from "../types/Chapter";
 import { showNotification } from "src/utilsTS/notify";
+import { ChapterInfo } from "src/types/ChapterInfo";
 
 const route = useRoute();
 
 const currentStory = ref<number>(0);
-const currentChapters = ref<Chapter[]>([]);
+const currentChapters = ref<ChapterInfo[]>([]);
 const deleteDialogVisible = ref<boolean>(false);
 const chapterToDelete = ref<number>(0);
 
 onMounted(() => {
   currentStory.value = Number(route.query.storyId);
   fetchChaptersForStory(currentStory.value).then((chapters) => {
+    console.log(chapters);
     chapters.sort((a, b) => a.chapterNo - b.chapterNo);
     currentChapters.value = chapters;
   });

@@ -28,6 +28,7 @@ public class AuthorController {
 
     @GetMapping("/{id}")
     public ResponseEntity<AuthorDTO> getAuthor(@PathVariable Long id) {
+        // todo: change to AuthorInfo
         return new ResponseEntity<>(authorService.getAuthor(id), HttpStatus.OK);
     }
 

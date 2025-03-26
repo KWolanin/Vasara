@@ -50,7 +50,7 @@
 
 <script setup lang="ts">
 import { countFollows, findMyFollows } from "src/services/followservice";
-import { Story } from "src/types/Story";
+import { StoryInfo } from "src/types/StoryInfo";
 import { computed, onMounted, ref } from "vue";
 import { useUserStore } from "src/stores/user";
 import StoryCard from "../StoryCard.vue";
@@ -65,7 +65,7 @@ const storiesAmount = ref<number>(0);
 const storiesPerPage: number = 5;
 const currentPage = ref<number>(1);
 
-const myFollows = ref<Story[]>([]);
+const myFollows = ref<StoryInfo[]>([]);
 
 onMounted(() => {
   loading.value = true;

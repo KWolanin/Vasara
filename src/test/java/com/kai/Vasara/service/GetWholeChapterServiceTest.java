@@ -1,20 +1,15 @@
 package com.kai.Vasara.service;
 
-
 import com.kai.Vasara.entity.chapter.Chapter;
-import com.kai.Vasara.model.chapter.ChapterDTO;
+import com.kai.Vasara.model.chapter.ChapterInfo;
 import com.kai.Vasara.repository.chapter.ChapterRepository;
-
 import com.kai.Vasara.service.chapter.EditChapterService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import java.util.Arrays;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.when;
@@ -30,11 +25,11 @@ class GetWholeChapterServiceTest {
 
     @Test
     void editChaptersOrder() {
-        ChapterDTO shouldBeFirst = ChapterDTO.builder()
+        ChapterInfo shouldBeFirst = ChapterInfo.builder()
                 .id(2)
                 .chapterNo(1)
                 .chapterTitle("Published as 2nd, should be 1st").build();
-        ChapterDTO shouldBeSecond = ChapterDTO.builder()
+        ChapterInfo shouldBeSecond = ChapterInfo.builder()
                 .id(1)
                 .chapterNo(2)
                 .chapterTitle("Published as 1st, should be 2nd").build();

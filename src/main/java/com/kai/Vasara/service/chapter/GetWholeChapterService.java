@@ -1,6 +1,7 @@
 package com.kai.Vasara.service.chapter;
 
 import com.kai.Vasara.model.chapter.ChapterDTO;
+import com.kai.Vasara.model.chapter.ChapterInfo;
 import com.kai.Vasara.repository.chapter.ChapterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,12 +13,12 @@ import java.util.List;
 public class GetWholeChapterService {
 
     private final ChapterRepository chapterRepository;
-    private final MapperService mapperService;
+    private final ChapterMapper chapterMapper;
 
     @Autowired
-    public GetWholeChapterService(ChapterRepository chapterRepository, MapperService mapperService) {
+    public GetWholeChapterService(ChapterRepository chapterRepository, ChapterMapper chapterMapper) {
         this.chapterRepository = chapterRepository;
-        this.mapperService = mapperService;
+        this.chapterMapper = chapterMapper;
     }
 
     public int getChapterNumber(Long storyId) {
@@ -26,14 +27,14 @@ public class GetWholeChapterService {
 
     @Transactional
     public ChapterDTO getWholeChapter(Long storyId, Long chapterNo) {
-        return mapperService.from(chapterRepository.findByStoryIdAndChapterNo(storyId, chapterNo));
+        return chapterMapper.from(chapterRepository.findByStoryIdAndChapterNo(storyId, chapterNo));
     }
 
     @Transactional
-    public List<ChapterDTO> getChapters(Long storyId) {
+    public List<ChapterInfo> getChaptersInfo(Long storyId) {
         return chapterRepository.findChaptersDataByStoryId(storyId)
                 .stream()
-                .map(mapperService::from)
+                .map(ChapterInfo::from)
                 .toList();
     }
 

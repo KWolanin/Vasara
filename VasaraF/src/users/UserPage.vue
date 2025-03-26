@@ -41,7 +41,7 @@
 import { ref, onMounted, computed } from "vue";
 import { useRoute } from "vue-router";
 import { getAuthor } from "src/services/authorservice";
-import { Story } from "src/types/Story";
+import { StoryInfo } from "src/types/StoryInfo";
 import StoryCard from "src/story/StoryCard.vue";
 import { useUserStore } from "src/stores/user";
 import FavAndFollow from "../utils/FavAndFollow.vue";
@@ -54,7 +54,7 @@ const isLoggedIn = computed(() => !!userStore.id);
 const route = useRoute();
 
 const username = ref<string>("");
-const stories = ref<Story[]>([]);
+const stories = ref<StoryInfo[]>([]);
 const description = ref<string>("");
 
 onMounted(() => {

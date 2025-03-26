@@ -10,12 +10,12 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class MapperService {
+public class ChapterMapper {
 
-    // todo: implement mapstruck
+    // temporary solution; todo: implement mapstruck
     private final StoryRepository storyRepository;
 
-    public MapperService(StoryRepository storyRepository) {
+    public ChapterMapper(StoryRepository storyRepository) {
         this.storyRepository = storyRepository;
     }
 

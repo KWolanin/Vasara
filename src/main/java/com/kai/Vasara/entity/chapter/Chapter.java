@@ -25,6 +25,7 @@ public class Chapter {
     @Column(name = "chaptertitle")
     private String chapterTitle;
     @Lob
+    @Basic(fetch = FetchType.LAZY)
     private String content;
     @Column(name = "published")
     private ZonedDateTime published;
@@ -34,6 +35,7 @@ public class Chapter {
     @JoinColumn(name = "storyid", nullable = false)
     private Story story;
 
+    // todo: check if can be removed safely
     public Chapter(Long id, int chapterNo, String chapterTitle, String content, Long storyId, ZonedDateTime published, ZonedDateTime updated) {
         this.id = id;
         this.chapterNo = chapterNo;

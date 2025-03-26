@@ -1,6 +1,6 @@
 package com.kai.Vasara.controller.story;
 
-import com.kai.Vasara.model.story.StoryDTO;
+import com.kai.Vasara.model.story.StoryInfo;
 import com.kai.Vasara.service.story.ReadLaterService;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +32,8 @@ public class ReadLaterController {
     }
 
     @GetMapping("/my/{id}")
-    public ResponseEntity<Page<StoryDTO>> myReads(@RequestParam(defaultValue = "1") int page,
-                                                  @RequestParam(defaultValue = "5") int size, @PathVariable long id) {
+    public ResponseEntity<Page<StoryInfo>> myReads(@RequestParam(defaultValue = "1") int page,
+                                                   @RequestParam(defaultValue = "5") int size, @PathVariable long id) {
         return new ResponseEntity<>(readService.get(page, size, id), HttpStatus.OK);
     }
 

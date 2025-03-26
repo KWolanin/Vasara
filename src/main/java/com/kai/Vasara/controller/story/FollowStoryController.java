@@ -1,6 +1,6 @@
 package com.kai.Vasara.controller.story;
 
-import com.kai.Vasara.model.story.StoryDTO;
+import com.kai.Vasara.model.story.StoryInfo;
 import com.kai.Vasara.service.story.FollowServiceStory;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +30,8 @@ public class FollowStoryController {
     }
 
     @GetMapping("/my/{id}")
-    public ResponseEntity<Page<StoryDTO>> myFollows(@RequestParam(defaultValue = "1") int page,
-                                                    @RequestParam(defaultValue = "5") int size, @PathVariable long id) {
+    public ResponseEntity<Page<StoryInfo>> myFollows(@RequestParam(defaultValue = "1") int page,
+                                                     @RequestParam(defaultValue = "5") int size, @PathVariable long id) {
         return new ResponseEntity<>(followingService.get(page, size, id), HttpStatus.OK);
     }
 

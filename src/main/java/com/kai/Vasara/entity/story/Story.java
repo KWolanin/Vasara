@@ -41,7 +41,7 @@ public class Story {
     @Column(name = "updatedt")
     private ZonedDateTime updateDt;
 
-    @OneToMany(mappedBy = "story", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "story", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Chapter> chapters = new ArrayList<>();
 
     @ManyToOne

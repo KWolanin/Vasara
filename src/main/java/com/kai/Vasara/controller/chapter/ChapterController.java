@@ -1,9 +1,8 @@
 package com.kai.Vasara.controller.chapter;
 
-import com.kai.Vasara.entity.chapter.Chapter;
 import com.kai.Vasara.model.chapter.ChapterDTO;
+import com.kai.Vasara.model.chapter.ChapterInfo;
 import com.kai.Vasara.model.chapter.ChapterWithParagraphsDTO;
-import com.kai.Vasara.model.story.StoryDTO;
 import com.kai.Vasara.service.chapter.GetWholeChapterService;
 import com.kai.Vasara.service.chapter.GetSplitChapterService;
 import com.kai.Vasara.service.chapter.EditChapterService;
@@ -58,14 +57,14 @@ public class ChapterController {
     }
 
     @PatchMapping("/order")
-    public ResponseEntity<?> editChaptersOrder(@RequestBody List<ChapterDTO> chapters) {
+    public ResponseEntity<?> editChaptersOrder(@RequestBody List<ChapterInfo> chapters) {
         editChapterService.editChaptersOrder(chapters);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/all/{storyId}")
-    public ResponseEntity<List<ChapterDTO>> getChaptersForStory(@PathVariable Long storyId) {
-        return new ResponseEntity<>(getWholeChapterService.getChapters(storyId), HttpStatus.OK);
+    public ResponseEntity<List<ChapterInfo>> getChaptersInfoForStory(@PathVariable Long storyId) {
+        return new ResponseEntity<>(getWholeChapterService.getChaptersInfo(storyId), HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{chapterId}")

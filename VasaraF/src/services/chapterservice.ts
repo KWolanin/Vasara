@@ -1,3 +1,4 @@
+import { ChapterInfo } from "src/types/ChapterInfo";
 import { api } from "../boot/axios";
 import { Chapter } from "../types/Chapter";
 
@@ -58,7 +59,7 @@ export const fetchChapterWithParagraphs = async (
 
 export const fetchChaptersForStory = async (
   storyId: number
-): Promise<Chapter[]> => {
+): Promise<ChapterInfo[]> => {
   try {
     const response = await api.get(`/chapters/all/${storyId}`);
     return response.data;
@@ -68,7 +69,7 @@ export const fetchChaptersForStory = async (
   }
 };
 
-export const updateChaptersOrder = async (chapters: Chapter[]) : Promise<void> => {
+export const updateChaptersOrder = async (chapters: ChapterInfo[]) : Promise<void> => {
   try {
     await api.patch("/chapters/order", chapters);
   } catch (error) {

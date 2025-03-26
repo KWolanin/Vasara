@@ -8,7 +8,7 @@ import com.kai.Vasara.exception.author.AuthorError;
 import com.kai.Vasara.exception.author.AuthorException;
 import com.kai.Vasara.exception.story.StoryError;
 import com.kai.Vasara.exception.story.StoryException;
-import com.kai.Vasara.model.story.StoryDTO;
+import com.kai.Vasara.model.story.StoryInfo;
 import com.kai.Vasara.repository.author.AuthorRepository;
 import com.kai.Vasara.repository.story.FavoriteStoryRepository;
 import com.kai.Vasara.repository.story.StoryRepository;
@@ -21,6 +21,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -36,16 +37,14 @@ public class FavoriteServiceStory implements StoryActionService<FavoriteStory> {
     private final StoryRepository storyRepository;
     private final FavoriteStoryRepository favoriteStoryRepository;
     private final AuthorService authorService;
-    private final StoryService storyService;
 
     @Autowired
     public FavoriteServiceStory(AuthorRepository authorRepository, StoryRepository storyRepository, FavoriteStoryRepository favoriteStoryRepository,
-                                AuthorService authorService, StoryService storyService) {
+                                AuthorService authorService) {
         this.authorRepository = authorRepository;
         this.storyRepository = storyRepository;
         this.favoriteStoryRepository = favoriteStoryRepository;
         this.authorService = authorService;
-        this.storyService = storyService;
     }
 
     @Override
@@ -79,15 +78,16 @@ public class FavoriteServiceStory implements StoryActionService<FavoriteStory> {
     }
 
     @Override
-    public Page<StoryDTO> get(int page, int size, long id) {
+    @Transactional(readOnly = true)
+    public Page<StoryInfo> get(int page, int size, long id) {
         Pageable pageable = PageRequest.of(page -1, size);
-        List<Story> favStories;
-        List<StoryDTO> daos = new ArrayList<>();
+         List<StoryInfo> daos = new ArrayList<>();
         Optional<Author> author = authorService.find(id);
         if (author.isPresent()) {
-            favStories = favoriteStoryRepository.findByAuthor(author.get(), pageable).stream().map(FavoriteStory::getStory).toList();
-            favStories.forEach(story -> daos.add(storyService.from(story)));
-            return  new PageImpl<>(daos, pageable, favStories.size());
+            Page<FavoriteStory> favoriteStories = favoriteStoryRepository.findByAuthor(author.get(), pageable);
+           List<Story> favStories = favoriteStories.stream().map(FavoriteStory::getStory).toList();
+           daos.addAll(favStories.stream().map(StoryInfo::from).toList());
+           return new PageImpl<>(daos, pageable, favStories.size());
         }
         return  new PageImpl<>(daos, pageable, 0);
         }

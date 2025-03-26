@@ -7,7 +7,7 @@ import com.kai.Vasara.exception.author.AuthorError;
 import com.kai.Vasara.exception.author.AuthorException;
 import com.kai.Vasara.exception.story.StoryError;
 import com.kai.Vasara.exception.story.StoryException;
-import com.kai.Vasara.model.story.StoryDTO;
+import com.kai.Vasara.model.story.StoryInfo;
 import com.kai.Vasara.repository.author.AuthorRepository;
 import com.kai.Vasara.repository.story.FollowStoryRepository;
 import com.kai.Vasara.repository.story.StoryRepository;
@@ -20,6 +20,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -36,16 +37,14 @@ public class FollowServiceStory implements StoryActionService<FollowStory> {
     private final StoryRepository storyRepository;
     private final FollowStoryRepository followStoryRepository;
     private final AuthorService authorService;
-    private final StoryService storyService;
 
     @Autowired
     public FollowServiceStory(AuthorRepository authorRepository, StoryRepository storyRepository, FollowStoryRepository followStoryRepository,
-                              AuthorService authorService, StoryService storyService) {
+                              AuthorService authorService) {
         this.authorRepository = authorRepository;
         this.storyRepository = storyRepository;
         this.followStoryRepository = followStoryRepository;
         this.authorService = authorService;
-        this.storyService = storyService;
     }
 
     @Override
@@ -80,14 +79,15 @@ public class FollowServiceStory implements StoryActionService<FollowStory> {
     }
 
     @Override
-    public Page<StoryDTO> get(int page, int size, long id) {
+    @Transactional(readOnly = true)
+    public Page<StoryInfo> get(int page, int size, long id) {
         Pageable pageable = PageRequest.of(page -1, size);
         List<Story> followStories;
-        List<StoryDTO> daos = new ArrayList<>();
+        List<StoryInfo> daos = new ArrayList<>();
         Optional<Author> author = authorService.find(id);
         if (author.isPresent()) {
             followStories = followStoryRepository.findByAuthor(author.get(), pageable).stream().map(FollowStory::getStory).toList();
-            followStories.forEach(story -> daos.add(storyService.from(story)));
+            daos.addAll(followStories.stream().map(StoryInfo::from).toList());
             return  new PageImpl<>(daos, pageable, followStories.size());
         }
         return new PageImpl<>(daos, pageable, 0);

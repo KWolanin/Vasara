@@ -55,7 +55,7 @@ import { fetchStories, count } from "../services/storyservice";
 import { onMounted, ref, computed } from "vue";
 import StoryCard from "../story/StoryCard.vue";
 import SortAndFilter from "src/utils/SortAndFilter.vue";
-import { Story } from "src/types/Story";
+import { StoryInfo } from "src/types/StoryInfo";
 import { Criteria } from "../types/Criteria";
 import FavAndFollow from "../utils/FavAndFollow.vue";
 import { useUserStore } from "src/stores/user";
@@ -65,7 +65,7 @@ import { countReads } from "src/services/readservice";
 const userStore = useUserStore();
 const isLoggedIn = computed(() => !!userStore.id);
 
-const stories = ref<Story[]>([]);
+const stories = ref<StoryInfo[]>([]);
 const loading = ref<boolean>(true);
 const storiesAmount = ref<number>(0);
 const storiesPerPage: number = 5;

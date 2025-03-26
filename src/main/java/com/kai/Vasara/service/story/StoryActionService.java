@@ -1,6 +1,6 @@
 package com.kai.Vasara.service.story;
 
-import com.kai.Vasara.model.story.StoryDTO;
+import com.kai.Vasara.model.story.StoryInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
@@ -15,7 +15,7 @@ public interface StoryActionService<T> {
 
     boolean is(long authorId, long storyId);
 
-    Page<StoryDTO> get(int page, int size, long id);
+    Page<StoryInfo> get(int page, int size, long id);
 
     void delete(long id);
 

@@ -1,7 +1,7 @@
-import { Story } from "./Story";
+import { StoryInfo } from "./StoryInfo";
 
 export interface StoryPage {
-  content: Story[];
+  content: StoryInfo[];
   totalPages: number;
   totalElements: number;
   size: number;

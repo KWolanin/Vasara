@@ -1,9 +1,9 @@
-import { Story } from "./Story";
+import { StoryInfo } from "./StoryInfo";
 
 export interface Author {
   id: number;
   username: string;
   email: string;
-  stories?: Story[];
+  stories?: StoryInfo[];
   description?: string;
 }

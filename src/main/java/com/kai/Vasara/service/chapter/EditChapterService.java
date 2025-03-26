@@ -3,6 +3,7 @@ package com.kai.Vasara.service.chapter;
 import com.kai.Vasara.entity.chapter.Chapter;
 import com.kai.Vasara.entity.story.Story;
 import com.kai.Vasara.model.chapter.ChapterDTO;
+import com.kai.Vasara.model.chapter.ChapterInfo;
 import com.kai.Vasara.repository.chapter.ChapterRepository;
 import com.kai.Vasara.repository.story.StoryRepository;
 import com.kai.Vasara.service.EmailService;
@@ -23,15 +24,15 @@ public class EditChapterService {
 
     private final ChapterRepository chapterRepository;
     private final EmailService emailService;
-    private final MapperService mapperService;
+    private final ChapterMapper chapterMapper;
     private final CommentService commentService;
     private final StoryRepository storyRepository;
 
     public EditChapterService(ChapterRepository chapterRepository, EmailService emailService,
-                              MapperService mapperService, CommentService commentService, StoryRepository storyRepository) {
+                              ChapterMapper chapterMapper, CommentService commentService, StoryRepository storyRepository) {
         this.chapterRepository = chapterRepository;
         this.emailService = emailService;
-        this.mapperService = mapperService;
+        this.chapterMapper = chapterMapper;
         this.commentService = commentService;
         this.storyRepository = storyRepository;
     }
@@ -42,7 +43,7 @@ public class EditChapterService {
     })
     @Transactional
     public void saveChapter(ChapterDTO chapterDTO) {
-        Chapter chapter = mapperService.from(chapterDTO);
+        Chapter chapter = chapterMapper.from(chapterDTO);
         chapterRepository.save(chapter);
         if (chapter.getStory() != null) {
             Story story = chapter.getStory();
@@ -80,17 +81,17 @@ public class EditChapterService {
     }
 
     @Transactional
-    public void editChaptersOrder(List<ChapterDTO> chapters) {
+    public void editChaptersOrder(List<ChapterInfo> chapters) {
         List<Long> chapterIds = chapters.stream()
-                .map(ChapterDTO::getId)
+                .map(ChapterInfo::getId)
                 .collect(Collectors.toList());
         List<Chapter> existingChapters = chapterRepository.findAllById(chapterIds);
         existingChapters.forEach(existingChapter -> chapters.stream()
-                .filter(chapterDTO -> chapterDTO.getId() == (existingChapter.getId()))
+                .filter(chapterInfo -> chapterInfo.getId() == (existingChapter.getId()))
                 .findFirst()
-                .ifPresent(chapterDTO -> {
-                    existingChapter.setChapterTitle(chapterDTO.getChapterTitle());
-                    existingChapter.setChapterNo(chapterDTO.getChapterNo());
+                .ifPresent(chapterInfo -> {
+                    existingChapter.setChapterTitle(chapterInfo.getChapterTitle());
+                    existingChapter.setChapterNo(chapterInfo.getChapterNo());
                 }));
         chapterRepository.saveAll(existingChapters);
     }

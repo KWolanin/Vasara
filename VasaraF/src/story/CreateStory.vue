@@ -89,6 +89,7 @@ import TagInput from "../utils/TagInput.vue";
 import { useRouter } from "vue-router";
 import { useUserStore } from "../stores/user";
 import { Story } from "src/types/Story";
+import { StoryInfo } from "src/types/StoryInfo";
 
 const userStore = useUserStore();
 
@@ -108,7 +109,7 @@ const router = useRouter();
 
 const createNewStory = (): void => {
   const id = userStore.id;
-  let story: Story | Omit<Story, "id">;
+  let story: StoryInfo | Omit<StoryInfo, "id">;
   if (!isEditing.value) {
     story = {
       authorId: id,
@@ -124,6 +125,7 @@ const createNewStory = (): void => {
       rating: rating.value,
       comment: comment.value,
       guestComment: guestComment.value,
+      chaptersTitles: []
     };
     createStory(story)
       .then(() => {
@@ -149,6 +151,7 @@ const createNewStory = (): void => {
       rating: rating.value,
       comment: comment.value,
       guestComment: guestComment.value,
+      chaptersTitles: []
     };
     updateStory(story)
       .then(() => {

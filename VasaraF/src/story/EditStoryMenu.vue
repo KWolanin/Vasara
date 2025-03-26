@@ -55,7 +55,7 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
 import { deleteStory } from "../services/storyservice";
-import { Story } from "src/types/Story";
+import { StoryInfo } from "src/types/StoryInfo";
 import { ref } from "vue";
 
 const router = useRouter();
@@ -63,7 +63,7 @@ const router = useRouter();
 const emit = defineEmits(["storyDeleted"]);
 
 const props = defineProps<{
-  story: Story;
+  story: StoryInfo;
 }>();
 
 const addChapter = (): void => {
