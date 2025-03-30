@@ -1,5 +1,10 @@
+import { StoryInfo } from "./StoryInfo";
 
 export interface AuthorInfo {
-  authorUsername: string;
-  authorId: number;
+  id: number;
+  username: string;
+  email: string;
+  description: String;
+  login: String;
+  stories: StoryInfo[];
 }

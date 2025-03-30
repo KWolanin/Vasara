@@ -1,6 +1,6 @@
 <template>
-  <div class="row justify-center q-ma-md">
-    <div class="col-5 column justify-center q-mb-lg" v-if="showCommentSection">
+  <div class="row justify-center q-ma-sm">
+    <div class="col-3 q-mb-lg" v-if="showCommentSection">
       <comment-list
         :chapterId="data.id"
         :trigger="trigger"

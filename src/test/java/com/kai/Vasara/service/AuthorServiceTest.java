@@ -2,11 +2,11 @@ package com.kai.Vasara.service;
 
 import com.kai.Vasara.entity.author.Author;
 import com.kai.Vasara.exception.author.AuthorException;
+import com.kai.Vasara.mapper.Mapper;
 import com.kai.Vasara.model.author.AuthorDTO;
+import com.kai.Vasara.model.author.AuthorInfo;
 import com.kai.Vasara.repository.author.AuthorRepository;
-import com.kai.Vasara.service.author.AuthorMapper;
 import com.kai.Vasara.service.author.AuthorService;
-import com.kai.Vasara.service.story.StoryMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,7 +18,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -36,46 +35,18 @@ class AuthorServiceTest {
     @Mock
     private  PasswordEncoder passwordEncoder;
 
-    @Mock
-    private AuthorMapper authorMapper;
-    @Mock
-    private StoryMapper storyMapper;
+    @Mock private Mapper mapper;
 
     @BeforeEach
     void setUp() {
-        authorMapper = new AuthorMapper(storyMapper);
-        authorService = new AuthorService(authorRepository, passwordEncoder, authorMapper);
-    }
-
-
-
-    @Test
-    void getAll_return_all_authors() {
-        List<Author> authors = List.of(
-                Author.builder().id(1L).username("John Doe").stories(Collections.emptyList()).build(),
-                Author.builder().id(2L).username("Jane Smith").stories(Collections.emptyList()).build()
-        );
-        when(authorRepository.findAll()).thenReturn(authors);
-        List<AuthorDTO> result = authorService.getAll();
-        assertEquals(2, result.size());
-        assertEquals("John Doe", result.get(0).getUsername());
-        assertEquals("Jane Smith", result.get(1).getUsername());
-        verify(authorRepository).findAll();
-    }
-
-    @Test
-    void getAll_return_empty_list() {
-        when(authorRepository.findAll()).thenReturn(Collections.emptyList());
-        List<AuthorDTO> result = authorService.getAll();
-        assertTrue(result.isEmpty());
-        verify(authorRepository).findAll();
+        authorService = new AuthorService(authorRepository, passwordEncoder, mapper);
     }
 
     @Test
     void getAuthor_exists() {
         Author author = Author.builder().id(1L).login("login").username("John Doe").stories(Collections.emptyList()).build();
         when(authorRepository.findById(1L)).thenReturn(Optional.of(author));
-        AuthorDTO result = authorService.getAuthor(1L);
+        AuthorInfo result = authorService.getAuthor(1L);
         assertNotNull(result);
         assertEquals("John Doe", result.getUsername());
     }
@@ -103,7 +74,7 @@ class AuthorServiceTest {
     @Test
     void from_authorToAuthorDAO_returnsCorrectAuthorDAO() {
         Author author = Author.builder().id(1L).login("login").stories(Collections.emptyList()).username("username").build();
-        AuthorDTO result = authorMapper.from(author);
+        AuthorDTO result = mapper.authorToAuthorDTO(author);
         assertNotNull(result);
         assertEquals(author.getId(), result.getId());
         assertEquals(author.getUsername(), result.getUsername());
@@ -113,7 +84,7 @@ class AuthorServiceTest {
     @Test
     void from_authorDAOToAuthor_returnsCorrectAuthor() {
         AuthorDTO authorDTO = AuthorDTO.builder().id(1L).username("username").email("e@e.com").stories(Collections.emptyList()).build();
-        Author result = authorMapper.from(authorDTO);
+        Author result = mapper.authorDTOToAuthor(authorDTO);
         assertNotNull(result);
         assertEquals(authorDTO.getId(), result.getId());
         assertEquals(authorDTO.getUsername(), result.getUsername());
@@ -327,22 +298,6 @@ class AuthorServiceTest {
         assertFalse(result.isPresent());
         verify(authorRepository).findById(authorId);
         verifyNoMoreInteractions(authorRepository);
-    }
-
-    @Test
-    void findById_success() {
-        Author author = new Author();
-        when(authorRepository.findById(1L)).thenReturn(Optional.of(author));
-        Optional<Author> a = authorService.findById(1L);
-        assertTrue(a.isPresent());
-        assertSame(a.get(), author);
-    }
-
-    @Test
-    void findById_none() {
-        when(authorRepository.findById(1L)).thenReturn(Optional.empty());
-        Optional<Author> a = authorService.findById(1L);
-        assertFalse(a.isPresent());
     }
 
     @Test

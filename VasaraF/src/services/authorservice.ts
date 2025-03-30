@@ -1,7 +1,7 @@
+import { AuthorInfo } from "src/types/AuthorInfo";
 import { api } from "../boot/axios";
-import { Author } from "../types/Author";
 
-export const getAuthor = async (id: number): Promise<Author> => {
+export const getAuthor = async (id: number): Promise<AuthorInfo> => {
   try {
     const response = await api.get(`/authors/${id}`);
     return response.data;

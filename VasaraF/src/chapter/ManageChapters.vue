@@ -7,6 +7,7 @@
         Drag and drop to change chapter's order. Edit its content or rename it.
         If you want to edit chapter's content save other changes first.
       </p>
+      <q-btn class="q-mt-md save" @click="saveChanges" icon="sync" flat>Save order</q-btn>
       <VueDraggable v-model="currentChapters" @end="changeOrder">
         <div v-for="chapter in currentChapters" :key="chapter.chapterNo">
           <chapter-card
@@ -16,8 +17,6 @@
           />
         </div>
       </VueDraggable>
-      <q-space />
-      <q-btn class="q-mt-md save" @click="saveChanges" icon="sync" flat>Save order</q-btn>
     </q-card>
   </div>
 
@@ -73,7 +72,6 @@ const chapterToDelete = ref<number>(0);
 onMounted(() => {
   currentStory.value = Number(route.query.storyId);
   fetchChaptersForStory(currentStory.value).then((chapters) => {
-    console.log(chapters);
     chapters.sort((a, b) => a.chapterNo - b.chapterNo);
     currentChapters.value = chapters;
   });

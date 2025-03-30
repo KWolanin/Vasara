@@ -15,7 +15,6 @@ public class EnvironmentService {
         this.entityManager = entityManager;
     }
 
-
     public boolean isLocalhost() {
         try (Socket ignored = new Socket("127.0.0.1", 9000)) {
             return true;

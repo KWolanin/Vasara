@@ -3,6 +3,7 @@ package com.kai.Vasara.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kai.Vasara.entity.author.Author;
 import com.kai.Vasara.entity.story.Story;
+import com.kai.Vasara.mapper.Mapper;
 import com.kai.Vasara.model.SearchCriteria;
 import com.kai.Vasara.model.story.StoryDTO;
 import com.kai.Vasara.model.story.StoryInfo;
@@ -14,7 +15,6 @@ import com.kai.Vasara.service.story.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.*;
@@ -52,53 +52,23 @@ public class GetStoryServiceTest {
     @Mock
     private EditStoryService editStoryService;
     @Mock
-    private StoryMapper mapper;
-    @Mock
     private GetWholeChapterService getWholeChapterService;
     @Mock
     private AuthorService authorService;
+    @Mock
+    private Mapper mapper;
 
     @BeforeEach
     void setUp() {
-        mapper = new StoryMapper(getWholeChapterService, authorService);
         editStoryService = new EditStoryService(storyRepository, mapper);
         getStoryService = new GetStoryService(storyRepository, mapper);
         getStoryAccordingToCriteria = new GetStoryAccordingToCriteria(getStoryService);
     }
 
-
-    @Test
-    void updateStoryTagsAndFandoms_test() {
-        Story story = new Story();
-        StoryDTO storyDTO = new StoryDTO();
-        storyDTO.setTags(Arrays.asList("A", "B", "C"));
-        storyDTO.setFandoms(Arrays.asList("X", "Y", "Z"));
-
-        mapper.updateStoryTagsAndFandoms(story, storyDTO);
-
-        assertEquals("[\"A\",\"B\",\"C\"]", story.getTags());
-        assertEquals("[\"X\",\"Y\",\"Z\"]", story.getFandoms());
-    }
-
-    @Test
-    void updateStoryTagsAndFandoms_test_no_tags() {
-        Story story = new Story();
-        StoryDTO storyDTO = new StoryDTO();
-        storyDTO.setTags(List.of(""));
-        storyDTO.setFandoms(null);
-
-        mapper.updateStoryTagsAndFandoms(story, storyDTO);
-
-        assertEquals("[\"\"]", story.getTags());
-        assertEquals("[\"\"]", story.getFandoms());
-    }
-
     @Test
     void splitAndRemoveQuotes_test() {
         String input = "[\"A\",\"B\",\"C\"]";
-
         List<String> results = mapper.splitAndRemoveQuotes(input);
-
         assertEquals(3, results.size());
         assertEquals("A", results.get(0));
         assertEquals("B", results.get(1));
@@ -134,32 +104,6 @@ public class GetStoryServiceTest {
         assertEquals("[]", result);
         result = mapper.joinAndAddQuotes(new ArrayList<>());
         assertEquals("[]", result);
-    }
-
-    @Test
-    void getAll_returnsListOfStoryDAO() {
-        Story story1 = new Story();
-        story1.setId(1L);
-        story1.setTitle("Story 1");
-        story1.setAuthor(Author.builder().id(1L).username("username").build());
-
-
-        Story story2 = new Story();
-        story2.setId(2L);
-        story2.setTitle("Story 2");
-        story2.setAuthor(Author.builder().id(1L).username("username").build());
-
-
-        when(storyRepository.findAll()).thenReturn(List.of(story1, story2));
-
-        List<StoryDTO> result = getStoryService.getAll();
-
-        assertNotNull(result);
-        assertEquals(2, result.size());
-        assertEquals("Story 1", result.get(0).getTitle());
-        assertEquals("Story 2", result.get(1).getTitle());
-        verify(storyRepository).findAll();
-        verifyNoMoreInteractions(storyRepository);
     }
 
     @Test
@@ -228,25 +172,6 @@ public class GetStoryServiceTest {
         verify(storyRepository).findAllByAuthorId(1L, PageRequest.of(0, 1, sort));
         verifyNoMoreInteractions(storyRepository);
     }
-
-    @Test
-    void getStory_storyExists_returnsStoryDAO() {
-        Story story = new Story();
-        story.setId(1L);
-        story.setTitle("Story 1");
-        story.setAuthor(Author.builder().id(1L).username("username").build());
-
-
-        when(storyRepository.findById(1L)).thenReturn(Optional.of(story));
-
-        StoryDTO result = getStoryService.getStory(1L);
-
-        assertNotNull(result);
-        assertEquals("Story 1", result.getTitle());
-        verify(storyRepository).findById(1L);
-        verifyNoMoreInteractions(storyRepository);
-    }
-
 
     @Test
     void saveStory_validStory_returnsTrue() {

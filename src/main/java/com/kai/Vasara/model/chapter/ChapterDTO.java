@@ -22,5 +22,4 @@ public class ChapterDTO {
     private long storyId;
     private ZonedDateTime published;
     private ZonedDateTime updated;
-    private StoryDTO storyDTO;
 }

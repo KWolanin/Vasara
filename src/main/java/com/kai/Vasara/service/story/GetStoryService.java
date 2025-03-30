@@ -1,10 +1,8 @@
 package com.kai.Vasara.service.story;
 
 import com.kai.Vasara.entity.story.Story;
-import com.kai.Vasara.exception.story.StoryError;
-import com.kai.Vasara.exception.story.StoryException;
+import com.kai.Vasara.mapper.Mapper;
 import com.kai.Vasara.model.SearchCriteria;
-import com.kai.Vasara.model.story.StoryDTO;
 import com.kai.Vasara.model.story.StoryInfo;
 import com.kai.Vasara.repository.story.StoryRepository;
 import jakarta.persistence.criteria.Predicate;
@@ -19,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Component
@@ -27,20 +24,13 @@ import java.util.stream.Collectors;
 public class GetStoryService {
 
     private final StoryRepository storyRepository;
-    private final StoryMapper mapper;
+    private final Mapper mapper;
+
 
     @Autowired
-    public GetStoryService(StoryRepository storyRepository,
-                           StoryMapper mapper) {
+    public GetStoryService(StoryRepository storyRepository, Mapper mapper) {
         this.storyRepository = storyRepository;
         this.mapper = mapper;
-    }
-
-    public List<StoryDTO> getAll() {
-        return storyRepository.findAll()
-                .stream()
-                .map(mapper::from)
-                .collect(Collectors.toList());
     }
 
     @Transactional
@@ -140,12 +130,6 @@ public class GetStoryService {
         Page<Story> stories = storyRepository.findAllByAuthorId(id, pageable);
         List<StoryInfo> daos = new ArrayList<>(stories.stream().map(StoryInfo::from).toList());
         return new PageImpl<>(daos, pageable, stories.getTotalElements());
-    }
-
-    public StoryDTO getStory(Long id) {
-        return storyRepository.findById(id)
-                .map(mapper::from)
-                .orElseThrow(() -> new StoryException(StoryError.STORY_NOT_FOUND));
     }
 
     public long count() {

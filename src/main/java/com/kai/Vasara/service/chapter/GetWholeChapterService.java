@@ -1,5 +1,6 @@
 package com.kai.Vasara.service.chapter;
 
+import com.kai.Vasara.mapper.Mapper;
 import com.kai.Vasara.model.chapter.ChapterDTO;
 import com.kai.Vasara.model.chapter.ChapterInfo;
 import com.kai.Vasara.repository.chapter.ChapterRepository;
@@ -13,12 +14,12 @@ import java.util.List;
 public class GetWholeChapterService {
 
     private final ChapterRepository chapterRepository;
-    private final ChapterMapper chapterMapper;
+    private final Mapper mapper;
 
     @Autowired
-    public GetWholeChapterService(ChapterRepository chapterRepository, ChapterMapper chapterMapper) {
+    public GetWholeChapterService(ChapterRepository chapterRepository, Mapper mapper) {
         this.chapterRepository = chapterRepository;
-        this.chapterMapper = chapterMapper;
+        this.mapper = mapper;
     }
 
     public int getChapterNumber(Long storyId) {
@@ -27,7 +28,7 @@ public class GetWholeChapterService {
 
     @Transactional
     public ChapterDTO getWholeChapter(Long storyId, Long chapterNo) {
-        return chapterMapper.from(chapterRepository.findByStoryIdAndChapterNo(storyId, chapterNo));
+        return mapper.chapterToChapterDTO(chapterRepository.findByStoryIdAndChapterNo(storyId, chapterNo));
     }
 
     @Transactional

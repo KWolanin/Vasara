@@ -2,6 +2,7 @@ package com.kai.Vasara.service.chapter;
 
 import com.kai.Vasara.entity.chapter.Chapter;
 import com.kai.Vasara.entity.story.Story;
+import com.kai.Vasara.mapper.Mapper;
 import com.kai.Vasara.model.chapter.ChapterDTO;
 import com.kai.Vasara.model.chapter.ChapterInfo;
 import com.kai.Vasara.repository.chapter.ChapterRepository;
@@ -24,17 +25,16 @@ public class EditChapterService {
 
     private final ChapterRepository chapterRepository;
     private final EmailService emailService;
-    private final ChapterMapper chapterMapper;
     private final CommentService commentService;
     private final StoryRepository storyRepository;
+    private final Mapper mapper;
 
-    public EditChapterService(ChapterRepository chapterRepository, EmailService emailService,
-                              ChapterMapper chapterMapper, CommentService commentService, StoryRepository storyRepository) {
+    public EditChapterService(ChapterRepository chapterRepository, EmailService emailService, CommentService commentService, StoryRepository storyRepository, Mapper mapper) {
         this.chapterRepository = chapterRepository;
         this.emailService = emailService;
-        this.chapterMapper = chapterMapper;
         this.commentService = commentService;
         this.storyRepository = storyRepository;
+        this.mapper = mapper;
     }
 
     @Caching(evict = {
@@ -43,7 +43,7 @@ public class EditChapterService {
     })
     @Transactional
     public void saveChapter(ChapterDTO chapterDTO) {
-        Chapter chapter = chapterMapper.from(chapterDTO);
+        Chapter chapter = mapper.chapterDTOToChapter(chapterDTO);
         chapterRepository.save(chapter);
         if (chapter.getStory() != null) {
             Story story = chapter.getStory();

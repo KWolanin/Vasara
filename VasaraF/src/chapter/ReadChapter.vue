@@ -188,7 +188,10 @@ const loadChapter = async () => {
     data.value = { ...response, paragraphs: response.paragraphs };
     offset.value += response.paragraphs.length;
     currentChapter.value = `${data.value.chapterNo}. ${data.value.chapterTitle}`;
-    chapterList.value = data.value.storyDTO.chaptersTitles;
+    if (response.paragraphs.length < limit) {
+      isEndReached.value = true;
+    }
+    chapterList.value = data.value.storyDTO.chaptersTitles.sort();
     await ensureLastReadParagraphLoaded();
   } catch (error) {
     console.error("Chapter loading error:", error);
@@ -198,7 +201,6 @@ const loadChapter = async () => {
 
 const ensureLastReadParagraphLoaded = async () => {
   const progress = getReadingProgress();
-
   if (
     !progress ||
     progress.storyId !== data.value.storyDTO.id ||

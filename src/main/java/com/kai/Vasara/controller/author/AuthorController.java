@@ -3,6 +3,7 @@ package com.kai.Vasara.controller.author;
 import com.kai.Vasara.JwtTokenProvider;
 import com.kai.Vasara.entity.author.Author;
 import com.kai.Vasara.model.author.AuthorDTO;
+import com.kai.Vasara.model.author.AuthorInfo;
 import com.kai.Vasara.service.author.AuthorService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -27,8 +28,7 @@ public class AuthorController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AuthorDTO> getAuthor(@PathVariable Long id) {
-        // todo: change to AuthorInfo
+    public ResponseEntity<AuthorInfo> getAuthor(@PathVariable Long id) {
         return new ResponseEntity<>(authorService.getAuthor(id), HttpStatus.OK);
     }
 

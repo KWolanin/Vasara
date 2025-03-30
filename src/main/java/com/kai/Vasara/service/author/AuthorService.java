@@ -3,19 +3,20 @@ package com.kai.Vasara.service.author;
 import com.kai.Vasara.entity.author.Author;
 import com.kai.Vasara.exception.author.AuthorError;
 import com.kai.Vasara.exception.author.AuthorException;
+import com.kai.Vasara.mapper.Mapper;
 import com.kai.Vasara.model.author.AuthorDTO;
+import com.kai.Vasara.model.author.AuthorInfo;
 import com.kai.Vasara.repository.author.AuthorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 @Service
 @Component
@@ -23,24 +24,18 @@ public class AuthorService {
 
     private final AuthorRepository authorRepository;
     private final PasswordEncoder passwordEncoder;
-    private final AuthorMapper authorMapper;
+    private final Mapper mapper;
 
     @Autowired
-    public AuthorService(AuthorRepository authorRepository, PasswordEncoder passwordEncoder, AuthorMapper authorMapper) {
+    public AuthorService(AuthorRepository authorRepository, PasswordEncoder passwordEncoder, Mapper mapper) {
         this.authorRepository = authorRepository;
         this.passwordEncoder = passwordEncoder;
-        this.authorMapper = authorMapper;
+        this.mapper = mapper;
     }
 
-    public List<AuthorDTO> getAll() {
-        return authorRepository.findAll()
-                .stream()
-                .map(authorMapper::from)
-                .collect(Collectors.toList());
-    }
-
-    public AuthorDTO getAuthor(Long id) {
-        return authorRepository.findById(id).map(authorMapper::from)
+    @Transactional(readOnly = true)
+    public AuthorInfo getAuthor(Long id) {
+        return authorRepository.findById(id).map(AuthorInfo::from)
                 .orElseThrow(() -> new AuthorException(AuthorError.AUTHOR_NOT_FOUND));
     }
 
@@ -57,7 +52,6 @@ public class AuthorService {
         return authorRepository.findDescriptionById(id)
                         .orElseThrow(() -> new AuthorException(AuthorError.AUTHOR_DETAILS_NOT_FOUND));
     }
-
 
     public Author register(Author author) {
         if (authorRepository.existsByLogin(author.getLogin())) {
@@ -86,25 +80,18 @@ public class AuthorService {
         return false;
     }
 
-
+    @Transactional(readOnly = true)
     public AuthorDTO authenticate(String login, String rawPassword) {
         Author author = authorRepository.findByLogin(login)
                 .orElseThrow(() -> new AuthorException(AuthorError.AUTHOR_NOT_FOUND));
         if (!passwordEncoder.matches(rawPassword, author.getPassword())) {
             throw new AuthorException(AuthorError.AUTHOR_INVALID_CREDENTIALS);
         }
-        return authorMapper.from(author);
+        return mapper.authorToAuthorDTO(author);
     }
-
-
-
 
     public Optional<Author> find(long authorId) {
         return authorRepository.findById(authorId);
-    }
-
-    public Optional<Author> findById(long id) {
-        return authorRepository.findById(id);
     }
 
     @CacheEvict(value = { "userStoriesCache", "storiesCache" }, allEntries = true)
