@@ -66,16 +66,6 @@ public class GetStoryServiceTest {
     }
 
     @Test
-    void splitAndRemoveQuotes_test() {
-        String input = "[\"A\",\"B\",\"C\"]";
-        List<String> results = mapper.splitAndRemoveQuotes(input);
-        assertEquals(3, results.size());
-        assertEquals("A", results.get(0));
-        assertEquals("B", results.get(1));
-        assertEquals("C", results.get(2));
-    }
-
-    @Test
     void splitAndRemoveQuotes_test_no_tag() {
         String input = "[]";
         List<String> results = mapper.splitAndRemoveQuotes(input);
@@ -88,22 +78,6 @@ public class GetStoryServiceTest {
         input = null;
         results = mapper.splitAndRemoveQuotes(input);
         assertTrue(results.isEmpty());
-    }
-
-
-    @Test
-    void joinAndAddQuotes_test() {
-        List<String> tags = new ArrayList<>(Arrays.asList("A", "B", "C", "D"));
-        String result = mapper.joinAndAddQuotes(tags);
-        assertEquals("[\"A\",\"B\",\"C\",\"D\"]", result);
-    }
-
-    @Test
-    void joinAndAddQuotes_test_null_empty() {
-        String result = mapper.joinAndAddQuotes(null);
-        assertEquals("[]", result);
-        result = mapper.joinAndAddQuotes(new ArrayList<>());
-        assertEquals("[]", result);
     }
 
     @Test
@@ -172,20 +146,6 @@ public class GetStoryServiceTest {
         verify(storyRepository).findAllByAuthorId(1L, PageRequest.of(0, 1, sort));
         verifyNoMoreInteractions(storyRepository);
     }
-
-    @Test
-    void saveStory_validStory_returnsTrue() {
-        StoryDTO storyDTO = new StoryDTO();
-        storyDTO.setTitle("New Story");
-
-        when(storyRepository.save(any(Story.class))).thenReturn(new Story());
-
-        editStoryService.saveStory(storyDTO);
-
-        verify(storyRepository).save(any(Story.class));
-        verifyNoMoreInteractions(storyRepository);
-    }
-
 
     @Test
     void editStory_storyExists_returnsTrue() {

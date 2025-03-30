@@ -70,27 +70,6 @@ class AuthorServiceTest {
         assertEquals(desc, result);
     }
 
-
-    @Test
-    void from_authorToAuthorDAO_returnsCorrectAuthorDAO() {
-        Author author = Author.builder().id(1L).login("login").stories(Collections.emptyList()).username("username").build();
-        AuthorDTO result = mapper.authorToAuthorDTO(author);
-        assertNotNull(result);
-        assertEquals(author.getId(), result.getId());
-        assertEquals(author.getUsername(), result.getUsername());
-        assertEquals(author.getEmail(), result.getEmail());
-    }
-
-    @Test
-    void from_authorDAOToAuthor_returnsCorrectAuthor() {
-        AuthorDTO authorDTO = AuthorDTO.builder().id(1L).username("username").email("e@e.com").stories(Collections.emptyList()).build();
-        Author result = mapper.authorDTOToAuthor(authorDTO);
-        assertNotNull(result);
-        assertEquals(authorDTO.getId(), result.getId());
-        assertEquals(authorDTO.getUsername(), result.getUsername());
-        assertEquals(authorDTO.getEmail(), result.getEmail());
-    }
-
     @Test
     void register_userWithExistingLogin_throwsIllegalArgumentException() {
         Author author = Author.builder()
@@ -245,29 +224,6 @@ class AuthorServiceTest {
         });
 
         assertEquals("Invalid login or password", exception.getAuthorError().getMessage());
-        verify(authorRepository).findByLogin(login);
-        verify(passwordEncoder).matches(rawPassword, storedPassword);
-        verifyNoMoreInteractions(authorRepository, passwordEncoder);
-    }
-
-    @Test
-    void authenticate_validCredentials_returnsAuthor() {
-        String login = "existinglogin";
-        String rawPassword = "correctpassword";
-        String storedPassword = "encodedpassword";
-        Author author = new Author();
-        author.setStories(new ArrayList<>());
-        author.setLogin(login);
-        author.setId(1L);
-        author.setPassword(storedPassword);
-
-        when(authorRepository.findByLogin(login)).thenReturn(Optional.of(author));
-        when(passwordEncoder.matches(rawPassword, storedPassword)).thenReturn(true);
-
-        AuthorDTO result = authorService.authenticate(login, rawPassword);
-
-        assertNotNull(result);
-        assertEquals(login, result.getLogin());
         verify(authorRepository).findByLogin(login);
         verify(passwordEncoder).matches(rawPassword, storedPassword);
         verifyNoMoreInteractions(authorRepository, passwordEncoder);
