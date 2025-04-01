@@ -1,6 +1,6 @@
 <template>
   <main-menu />
-  <div class="row justify-center q-ml-md q-mb-sm">
+  <div class="row justify-center q-ml-md q-mr-md q-mb-sm">
     <q-card class="col-8 flex justify-start q-mt-xl card">
       <q-btn
         class="q-ma-sm btn q-pa-md btn"

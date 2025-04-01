@@ -3,7 +3,7 @@
     class="col-8 q-pt-sm q-pb-sm q-pr-md q-pl-md q-ma-xs card"
     :bordered="bordered"
   >
-    <div class="row no-wrap items-center q-mt-sm">
+    <div class="row wrap items-center q-mt-sm">
       <q-chip
         v-for="(fandom, index) in story.fandoms"
         :key="index"
@@ -74,7 +74,7 @@
     </div>
     <q-separator inset />
 
-    <div class="row no-wrap items-center">
+    <div class="row wrap items-center">
       <q-btn
         :disabled="story.chaptersNumber == 0"
         @click="readChapter"

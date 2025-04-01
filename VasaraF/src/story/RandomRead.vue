@@ -1,5 +1,9 @@
 <template>
   <q-card v-if="visible" class="header q-pa-md q-mr-md q-mb-md card">
+    <q-card-section class="row items-center q-pb-none">
+      <q-space />
+      <q-btn icon="close" flat round dense @click="hidePanel" />
+    </q-card-section>
     <q-card-section>
       <div>
         Random story from your <span class="read-later">Read later</span> list:
@@ -58,12 +62,15 @@ onMounted(() => {
 const removeFromRead = (): void => {
   addToReads(userStore.id, storyId.value)
     .then(() => {
-      showNotification("Story removed from Read later", "negative")
+      showNotification("Story removed from Read later", "negative");
       random();
     })
     .catch((err) => {
       console.error("Read later error:", err);
-      showNotification("Error occurred while adding or removing read later", "negative")
+      showNotification(
+        "Error occurred while adding or removing read later",
+        "negative"
+      );
     });
 };
 
@@ -77,6 +84,12 @@ const random = (): void => {
       visible.value = false;
     });
 };
+
+const hidePanel = () => {
+  visible.value = false;
+  showNotification("The random read panel will stay hidden until the page refreshes", "positive")
+}
+
 </script>
 
 <style scoped>
