@@ -34,7 +34,7 @@
         />
         <q-btn
           class="btn q-mt-md full-width"
-          color="gold"
+          color="yellow-4"
           text-color="black"
           unelevated
           type="submit"

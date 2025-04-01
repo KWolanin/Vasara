@@ -36,7 +36,7 @@
         stack-label
       />
       <q-btn-dropdown
-        color="gold"
+        color="yellow-4"
         label="Sort by"
         size="xs"
         text-color="black"

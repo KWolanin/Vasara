@@ -35,7 +35,7 @@
             /> -->
           <p class="paragraph" v-html="sanitized(paragraph.content)"></p>
         </div>
-        <q-spinner-hearts v-if="isLoading" size="50px" color="gold" />
+        <q-spinner-hearts v-if="isLoading" size="50px" color="yellow-4" />
       </q-card>
     </div>
   </div>

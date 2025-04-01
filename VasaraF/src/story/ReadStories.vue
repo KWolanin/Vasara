@@ -2,10 +2,10 @@
   <main-menu />
   <q-inner-loading :showing="loading">
     Loading...
-    <q-spinner-hearts size="50px" color="gold" />
+    <q-spinner-hearts size="50px" color="yellow-4" />
   </q-inner-loading>
   <div>
-    <div class="row justify-center q-pa-lg">
+    <div class="row justify-center q-pa-lg q-mt-lg">
       <div class="col-md-2">
         <random-read v-if="readsAvailable > 0" />
       </div>

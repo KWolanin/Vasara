@@ -7,7 +7,7 @@
           name="fav"
           icon="favorite"
           label="Favorite stories"
-          class="text-gold"
+          class="text-yellow-4"
         />
         <q-tab
           name="mail"

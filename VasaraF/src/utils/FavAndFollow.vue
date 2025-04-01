@@ -67,7 +67,7 @@ const props = withDefaults(
 const isFavourite = ref<Boolean>(false);
 
 const favColor = computed(() => {
-  return isFavourite.value ? "gold" : "black";
+  return isFavourite.value ? "yellow-4" : "black";
 });
 
 const favorite = (): void => {

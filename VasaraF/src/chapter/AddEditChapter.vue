@@ -3,7 +3,7 @@
   <div class="row justify-center">
     <q-card class="col-10 q-pa-md q-mb-md" flat>
       <form @submit.prevent.stop="saveChapter" class="q-gutter-md">
-        <q-btn class="bg-accent-gold btn" flat type="submit">
+        <q-btn class="bg-yellow-4 btn" flat type="submit">
           {{ route.name === "add" ? "Publish" : "Update" }}
         </q-btn>
         <q-input

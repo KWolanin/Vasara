@@ -65,7 +65,7 @@
             :label="isEditing ? 'Update' : 'Create'"
             type="submit"
             color="primary"
-            class="btn bg-accent-gold"
+            class="btn bg-yellow-4"
             flat
           />
           <q-btn

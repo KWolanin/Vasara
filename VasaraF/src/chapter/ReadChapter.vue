@@ -31,7 +31,7 @@
   </div>
   <q-inner-loading :showing="!data">
     Loading...
-    <q-spinner-hearts size="50px" color="gold" />
+    <q-spinner-hearts size="50px" color="yellow-4" />
   </q-inner-loading>
 
   <navigation-button

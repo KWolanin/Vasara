@@ -3,7 +3,7 @@
   Here is a list of all the stories you marked as "read later"
   <q-inner-loading :showing="loading">
     Loading...
-    <q-spinner-hearts size="50px" color="gold" />
+    <q-spinner-hearts size="50px" color="yellow-4" />
   </q-inner-loading>
   <div
     v-if="!loading"

@@ -4,7 +4,7 @@
   everytime one of these stories will be updated.
   <q-inner-loading :showing="loading">
     Loading...
-    <q-spinner-hearts size="50px" color="gold" />
+    <q-spinner-hearts size="50px" color="yellow-4" />
   </q-inner-loading>
   <div
     v-if="!loading"

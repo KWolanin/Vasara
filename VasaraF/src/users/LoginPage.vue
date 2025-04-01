@@ -19,7 +19,7 @@
             label="Login"
             type="submit"
             color="primary"
-            class="btn send"
+            class="btn bg-yellow-4"
             flat
           />
         </div>
@@ -88,10 +88,6 @@ const loginUser = () => {
 
 a:visited {
   color: #333;
-}
-
-.send {
-  background-color: gold !important;
 }
 
 .title {

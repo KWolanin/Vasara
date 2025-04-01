@@ -3,6 +3,7 @@
     :label="welcome"
     size="md"
     flat
+    unelevated
     text-color="black"
     class="q-ml-md welcome"
   >

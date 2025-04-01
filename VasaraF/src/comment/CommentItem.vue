@@ -3,7 +3,7 @@
     class="card q-pa-md q-ml-md q-mr-md q-mb-md"
     :style="{
   marginLeft: depth * 30 + 'px',
-  borderLeft: depth > 0 ? `solid ${depth + 1}px gold` : 'none'
+  borderLeft: depth > 0 ? `solid ${depth + 1}px yellow-4` : 'none'
 }"
     flat
   >

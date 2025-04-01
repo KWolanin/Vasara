@@ -12,26 +12,27 @@
         >{{ fandom }}</q-chip
       >
       <q-space />
-      <q-chip v-if="story.rating"
-       color="purple"
-       :icon="ratingIcon"
-       class="text-caption">{{
-        story.rating
-      }}</q-chip>
+      <q-chip
+        v-if="story.rating"
+        color="purple"
+        :icon="ratingIcon"
+        class="text-caption"
+        >{{ story.rating.toLocaleLowerCase() }}</q-chip
+      >
       <q-chip
         v-if="!story.finished"
         color="pink"
         icon="hourglass_bottom"
-        class="text-caption"
+        class="text-caption chirp"
       >
-        {{ "in progress".toUpperCase() }}
+        in progress
       </q-chip>
       <q-chip
         v-else
-        color="gold"
+        color="yellow-4"
         icon="assignment_turned_in"
-        class="text-caption"
-        >{{ "completed".toUpperCase() }}</q-chip
+        class="text-caption chirp"
+        >completed</q-chip
       >
     </div>
     <div>
@@ -120,7 +121,7 @@ const readChapter = (): void => {
 };
 
 const ratingIcon = computed(() => {
-  if (props.story.rating ==  "KIDS") {
+  if (props.story.rating == "KIDS") {
     return "crib";
   } else if (props.story.rating == "TEEN") {
     return "school";
@@ -139,5 +140,9 @@ const ratingIcon = computed(() => {
 
 img {
   width: 50px;
+}
+
+.chirp {
+  font-family: "Lato", sans-serif !important;
 }
 </style>
