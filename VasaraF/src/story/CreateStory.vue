@@ -1,7 +1,7 @@
 <template>
   <main-menu />
   <div class="row justify-center">
-    <q-card class="col-8 q-pa-md card" flat>
+    <q-card class="col-8 q-pa-md card" >
       <q-card-section>
         <div v-if="!isEditing" class="text-h2">Create a new story</div>
         <div v-else class="text-h2">Edit the story</div>

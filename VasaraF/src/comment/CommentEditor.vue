@@ -1,6 +1,6 @@
 <template>
   <div class="q-pa-md" v-if="allowComment">
-    <q-card class="card q-pa-md" flat>
+    <q-card class="card q-pa-md" >
       <div class="header">What do you think?</div>
       <div class="header" v-if="props.parentId > 0">Send reply to the comment</div>
       <q-form @submit="send">

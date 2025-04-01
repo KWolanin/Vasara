@@ -5,7 +5,6 @@
   marginLeft: depth * 30 + 'px',
   borderLeft: depth > 0 ? `solid ${depth + 1}px yellow-4` : 'none'
 }"
-    flat
   >
     <div class="row">
       <div class="text-weight-bold">{{ comment.name }}</div>
@@ -44,7 +43,7 @@
     />
 
   <q-dialog v-model="deleteDialogVisible" persistent>
-    <q-card class="q-ma-lg q-pa-sm" flat>
+    <q-card class="q-ma-lg q-pa-sm" >
       <q-card-section class="row items-center">
         <span class="q-ml-sm"
           >Are you sure you want to delete this comment? It cannot be

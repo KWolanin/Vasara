@@ -12,7 +12,7 @@
     >{{ data.storyDTO.authorName }}</router-link>
   </h6>
     <div class="content-wrapper">
-      <q-card class="q-pa-md q-mb-lg content" flat>
+      <q-card class="q-pa-md q-mb-lg content" >
         <div
           class="paragraph-container"
           v-for="paragraph in data.paragraphs"

@@ -1,7 +1,6 @@
 <template>
   <q-card
     class="col-8 q-pt-sm q-pb-sm q-pr-md q-pl-md q-ma-xs card"
-    flat
     :bordered="bordered"
   >
     <div class="row no-wrap items-center q-mt-sm">

@@ -1,7 +1,7 @@
 <template>
   <main-menu />
   <div div class="row justify-center q-pa-lg">
-    <q-card class="col-8 q-pa-lg card" flat>
+    <q-card class="col-8 q-pa-lg card" >
       <div class="q-ml-md col-4">
         <div class="text-body1">{{ username }}'s profile</div>
         <div class="text-body2">{{ description }}</div>

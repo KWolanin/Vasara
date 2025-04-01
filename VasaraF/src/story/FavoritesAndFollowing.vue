@@ -1,7 +1,7 @@
 <template>
   <main-menu />
   <div div class="row justify-center q-pa-lg">
-    <q-card class="col-8 q-pa-lg card" flat>
+    <q-card class="col-8 q-pa-lg card" >
       <q-tabs v-model="tab" class="text-teal">
         <q-tab
           name="fav"

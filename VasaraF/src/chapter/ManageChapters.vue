@@ -1,7 +1,7 @@
 <template>
   <main-menu />
   <div class="row justify-center">
-    <q-card class="col-8 q-pa-md card" flat>
+    <q-card class="col-8 q-pa-md card" >
       <p class="text-h4">Manage chapters</p>
       <p class="body-1">
         Drag and drop to change chapter's order. Edit its content or rename it.
@@ -21,7 +21,7 @@
   </div>
 
   <q-dialog v-model="deleteDialogVisible" persistent>
-    <q-card class="q-ma-lg q-pa-sm" flat>
+    <q-card class="q-ma-lg q-pa-sm" >
       <q-card-section class="row items-center">
         <span class="q-ml-sm"
           >Are you sure you want to delete this chapter? It cannot be

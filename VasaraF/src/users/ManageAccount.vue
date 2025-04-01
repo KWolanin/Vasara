@@ -1,7 +1,7 @@
 <template>
   <main-menu />
   <div div class="row justify-center q-pa-lg">
-    <q-card class="col-8 q-pa-lg card" flat>
+    <q-card class="col-8 q-pa-lg card" >
       <span class="q-ml-md q-mb-lg">Manage your account</span>
       <div v-if="msg" class="msg">{{ msg }}</div>
       <div v-if="msgSuccess" class="msg-success">{{ msgSuccess }}</div>

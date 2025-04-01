@@ -3,7 +3,7 @@
     <div class="text-center">
       <h3 class="title q-mb-lg q-pb-lg">Vasara</h3>
     </div>
-    <q-card class="q-pa-md card content" flat>
+    <q-card class="q-pa-md card content" >
       <q-form @submit="loginUser" class="q-gutter-md" autofocus>
         <div v-if="msg" class="msg">{{ msg }}</div>
         <q-input filled v-model="log" label="Login" color="burgund" />

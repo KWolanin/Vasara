@@ -1,5 +1,5 @@
 <template>
-  <q-card class="q-pa-md" dense flat bordered>
+  <q-card class="q-pa-md" dense  bordered>
     <p class="text-h6">
       <q-chip size="xs" flat square>
         {{ chapter.chapterNo }}

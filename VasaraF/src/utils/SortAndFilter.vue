@@ -1,5 +1,5 @@
 <template>
-  <q-card class="col-7 q-pa-lg card" flat>
+  <q-card class="col-7 q-pa-lg card">
     <div class="q-ma-sm ask flex justify-center">
       What do you want to read today?
     </div>

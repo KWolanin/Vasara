@@ -1,5 +1,5 @@
 <template>
-    <q-card flat>
+    <q-card class="q-mb-xl">
       <header class="row justify-center q-pa-xs">
         <RouterLink to="/" class="q-ma-sm btn row items-center">
           <img
@@ -29,6 +29,15 @@
         </p>
       </header>
     </q-card>
+    <q-img
+            src="../assets/background2.png"
+            class="responsive-img q-mb-sm"
+            width="100%"
+            height="200px"
+            alt="Background"
+            fit="scale-down"
+            :img-style="{filter: 'opacity(60%)'}"
+          />
 </template>
 
 

@@ -1,5 +1,5 @@
 <template>
-  <q-card v-if="visible" flat class="header q-pa-md q-mr-md q-mb-md card">
+  <q-card v-if="visible" class="header q-pa-md q-mr-md q-mb-md card">
     <q-card-section>
       <div>
         Random story from your <span class="read-later">Read later</span> list:

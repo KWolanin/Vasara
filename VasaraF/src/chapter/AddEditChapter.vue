@@ -1,7 +1,7 @@
 <template>
   <main-menu />
   <div class="row justify-center">
-    <q-card class="col-10 q-pa-md q-mb-md" flat>
+    <q-card class="col-10 q-pa-md q-mb-md" >
       <form @submit.prevent.stop="saveChapter" class="q-gutter-md">
         <q-btn class="bg-yellow-4 btn" flat type="submit">
           {{ route.name === "add" ? "Publish" : "Update" }}

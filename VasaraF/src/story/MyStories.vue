@@ -1,16 +1,16 @@
 <template>
   <main-menu />
   <div class="row justify-center q-ml-md q-mb-sm">
-    <div class="col-8 flex justify-start">
+    <q-card class="col-8 flex justify-start q-mt-xl card">
       <q-btn
-        class="q-ma-sm q-mt-xl btn q-pa-md btn"
-        unelevated
+        class="q-ma-sm btn q-pa-md btn"
+        flat
         icon="add_circle_outline"
         @click="addNew"
-        label="ADD"
+        label="Add new"
       >
       </q-btn>
-    </div>
+    </q-card>
   </div>
 
   <q-inner-loading :showing="loading">
@@ -30,7 +30,7 @@
       </story-card>
     </div>
     <div class="row justify-center" v-if="!stories.length">
-      <q-card class="q-pa-md card content card" flat>
+      <q-card class="q-pa-md card content card" >
         <p>No Stories Found</p>
         <p>Maybe you should add a new story?</p>
       </q-card>
