@@ -22,10 +22,6 @@ public class GetWholeChapterService {
         this.mapper = mapper;
     }
 
-    public int getChapterNumber(Long storyId) {
-        return chapterRepository.countByStoryId(storyId);
-    }
-
     @Transactional
     public ChapterDTO getWholeChapter(Long storyId, Long chapterNo) {
         return mapper.chapterToChapterDTO(chapterRepository.findByStoryIdAndChapterNo(storyId, chapterNo));

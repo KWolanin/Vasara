@@ -102,7 +102,7 @@ public class EmailService {
         sendMailsToAuthorFollowers(message);
     }
 
-    private void sendMailsToAuthorFollowers(StoryEmailStructure message) {
+    void sendMailsToAuthorFollowers(StoryEmailStructure message) {
         List<FollowAuthor> authors = followAuthorRepository.findAllByFollowedAuthor_Id(message.getAuthorId());
         authors.forEach(author -> {
             String email = author.getFollowingAuthor().getEmail();
@@ -127,7 +127,7 @@ public class EmailService {
         return String.format("New story from %s published [Vasara]", username);
     }
 
-    private void sendMailsToStoryFollowers(ChapterEmailStructure message) {
+    void sendMailsToStoryFollowers(ChapterEmailStructure message) {
         List<FollowStory> stories = followStoryRepository.findByStoryId(Long.parseLong(message.getStoryId()));
         stories.forEach(story -> {
             String email = story.getAuthor().getEmail();

@@ -3,7 +3,6 @@ package com.kai.Vasara.service;
 import com.kai.Vasara.entity.author.Author;
 import com.kai.Vasara.exception.author.AuthorException;
 import com.kai.Vasara.mapper.Mapper;
-import com.kai.Vasara.model.author.AuthorDTO;
 import com.kai.Vasara.model.author.AuthorInfo;
 import com.kai.Vasara.repository.author.AuthorRepository;
 import com.kai.Vasara.service.author.AuthorService;
@@ -16,7 +15,6 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Optional;
 
