@@ -4,7 +4,7 @@ import { useUserStore } from "src/stores/user";
 import { showNotification } from "src/utilsTS/notify";
 
 const api = axios.create({
-  baseURL: process.env.VUE_APP_API_URL,
+  baseURL: 'http://localhost:8080/api',
   headers: {
     "Content-Type": "application/json",
   },
