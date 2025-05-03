@@ -3,9 +3,8 @@
 
 Because writing stories is my personal hobby I'm using many different writing platforms and I decived to create my own as my personal project.
 
-(Vasara is still under development)
 
-User currently can:
+User can:
 - register & login
 - publish new story under selected username
 - add chapters as full customizable html text
@@ -35,18 +34,17 @@ User currently can:
 - String, Spring Boot, Spring Web & Cache
 -  Railway (build and deploy service)
 -  RabbitMQ
+-  Docker
 
 # Try Vasara
-You can use Vasara here:
-[Vasara app](https://vasaraf-production.up.railway.app/#/) 
-Use guest account (login: guest; password: guest) and feel free to play with Vasara publishing platform!
+Use:
+```
+docker-compose up --build
+```
+and go to:
+```http://localhost:8081/#/```
+
+
 ![08e4b9accb91bf](https://github.com/user-attachments/assets/a861743b-5667-49d6-b4d6-e7c480fd5b57)
 
 ![Screenshot Tool by cloudHQ 3 04 2025 14_54_27](https://github.com/user-attachments/assets/1b3eba85-a5a1-4d5c-9c1c-0bbb429472bc)
-
-
-
-
-Local dev:
-In application.properties there is commented out local H2 file database configuration; it can be used to check the project on local machine
-
